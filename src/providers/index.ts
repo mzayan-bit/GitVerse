@@ -1,1 +1,1 @@
-// Re-export all provider modules
+export { ThemeProvider } from './theme-provider';
