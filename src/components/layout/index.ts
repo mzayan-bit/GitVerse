@@ -1,1 +1,2 @@
-// Re-export all layout component modules
+export { Navbar } from './navbar';
+export { Footer } from './footer';
