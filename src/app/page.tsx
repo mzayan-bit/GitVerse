@@ -1,8 +1,7 @@
 'use client';
 
-import { Button, buttonVariants } from '@/components/ui/button';
-import { cn } from '@/lib/utils';
-import { Loader2, GitBranch, Compass } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Loader2 } from 'lucide-react';
 import dynamic from 'next/dynamic';
 
 // Dynamically import the 3D canvas with SSR disabled
@@ -17,58 +16,53 @@ const GitVerseCanvas = dynamic(() => import('@/components/canvas-wrapper'), {
 
 export default function Home() {
   return (
-    <div className="relative flex flex-1 flex-col overflow-hidden bg-black font-sans selection:bg-white/30 selection:text-white">
-      {/* 3D Universe Canvas Background */}
-      <GitVerseCanvas />
+    <main className="relative h-screen w-full overflow-hidden bg-black selection:bg-white/20">
+      {/* 3D Scene Background */}
+      <div className="absolute inset-0 z-0 pointer-events-auto">
+        <GitVerseCanvas />
+      </div>
 
-      {/* Glassmorphic Navigation */}
-      <header className="absolute inset-x-0 top-6 z-50 flex justify-center px-4 md:px-8">
-        <nav className="flex items-center gap-8 rounded-full border border-white/10 bg-white/[0.03] px-8 py-4 backdrop-blur-xl transition-all hover:bg-white/[0.05]">
-          <div className="flex items-center gap-2">
-            <Compass className="size-5 text-white" />
-            <span className="text-sm font-semibold tracking-widest text-white">
-              GITVERSE
-            </span>
+      {/* UI Overlay - Space OS */}
+      <div className="absolute inset-0 z-10 pointer-events-none flex flex-col items-center justify-between p-8 font-sans">
+        {/* Top Status Bar */}
+        <header className="w-full max-w-7xl flex items-center justify-between text-[11px] font-mono tracking-widest text-white/50 uppercase">
+          <div className="flex items-center gap-3">
+            <div className="w-2 h-2 rounded-full bg-emerald-500/80 animate-pulse" />
+            <span>System Online</span>
           </div>
-        </nav>
-      </header>
+          <div>
+            <span>GitVerse v0.1.0</span>
+          </div>
+        </header>
 
-      {/* Hero Content (Center-Bottom Aligned) */}
-      <main className="pointer-events-none relative z-10 flex flex-1 flex-col items-center justify-end pb-24 md:pb-32 px-4">
-        <div className="pointer-events-auto flex max-w-3xl flex-col items-center text-center rounded-2xl border border-white/10 bg-white/[0.03] p-8 md:p-12 backdrop-blur-xl shadow-2xl transition-all hover:bg-white/[0.04]">
-          <h1 className="text-4xl font-semibold leading-[1.1] tracking-wide text-white sm:text-5xl md:text-6xl lg:text-[64px]">
-            Explore the <br className="hidden sm:block" /> Code Cosmos
+        {/* Center Content - Floating gracefully */}
+        <div className="flex flex-col items-center justify-center translate-y-[-10%]">
+          <h1 className="text-5xl md:text-7xl font-light tracking-[-0.04em] text-white/90 select-none mb-4">
+            GitVerse
           </h1>
-
-          <p className="mt-6 max-w-xl text-lg leading-[1.6] text-gray-400 md:text-[18px]">
-            Visualize your open-source impact across a sprawling 3D star-map of
-            repositories. A cinematic universe for every commit.
+          <p className="text-sm md:text-base font-light tracking-[0.05em] text-white/50 max-w-md text-center leading-relaxed">
+            A cinematic operating system for your repositories.
           </p>
+        </div>
 
-          {/* Action Buttons */}
-          <div className="mt-10 flex w-full flex-col items-center justify-center gap-4 sm:flex-row">
+        {/* Bottom Dock */}
+        <div className="pointer-events-auto flex items-center justify-center mb-8">
+          <div className="flex items-center gap-4 px-6 py-4 rounded-3xl bg-white/[0.03] backdrop-blur-xl border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.4)] transition-all hover:bg-white/[0.05]">
             <Button
-              size="lg"
-              className="w-full sm:w-auto h-12 rounded-lg bg-white text-black hover:bg-white hover:shadow-[0_0_20px_rgba(255,255,255,0.4)] transition-all px-8 text-[15px] font-medium"
+              variant="outline"
+              className="rounded-2xl border-white/10 bg-white/5 hover:bg-white/10 text-white font-light tracking-wide px-8 py-6 h-auto transition-all"
             >
-              Launch Universe
+              Enter Universe
             </Button>
-
-            <a
-              href="https://github.com/mzayan-bit/GitVerse"
-              target="_blank"
-              rel="noopener noreferrer"
-              className={cn(
-                buttonVariants({ variant: 'outline', size: 'lg' }),
-                'w-full sm:w-auto h-12 rounded-lg border border-white/20 bg-transparent text-white hover:bg-white/10 transition-all px-8 text-[15px] font-medium'
-              )}
+            <Button
+              variant="ghost"
+              className="rounded-2xl text-white/50 hover:text-white hover:bg-white/5 px-6 py-6 h-auto font-light transition-all"
             >
-              <GitBranch className="mr-2 size-4" />
-              View on GitHub
-            </a>
+              Documentation
+            </Button>
           </div>
         </div>
-      </main>
-    </div>
+      </div>
+    </main>
   );
 }
