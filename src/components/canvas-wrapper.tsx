@@ -4,7 +4,12 @@ import { Suspense } from 'react';
 import { ErrorBoundary } from '@/components/ui/error-boundary';
 import { SceneCanvas } from '@/three';
 import { RootScene } from '@/scene';
-import { CameraController, SceneOrbitControls, StarManager } from '@/three';
+import {
+  CameraController,
+  SceneOrbitControls,
+  StarManager,
+  NebulaManager,
+} from '@/three';
 import { PerformanceManager } from '@/three';
 import {
   PostProcessing,
@@ -44,6 +49,7 @@ export default function GitVerseCanvas() {
 
               {/* Universe */}
               <StarManager />
+              <NebulaManager />
 
               {/* Post-Processing Pipeline */}
               <PostProcessing />

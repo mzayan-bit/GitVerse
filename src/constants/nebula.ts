@@ -1,0 +1,128 @@
+import { NebulaConfig, PerformanceTier } from '@/types/nebula';
+
+export const NEBULA_DENSITY_CONFIGS: Record<PerformanceTier, NebulaConfig> = {
+  ultra: {
+    layers: {
+      back: {
+        count: 3000,
+        radius: 250,
+        baseSize: 40,
+        opacity: 0.15,
+        colors: ['#1f005c', '#5b0060'],
+        driftSpeed: 0.1,
+        noiseScale: 0.005,
+      },
+      middle: {
+        count: 1500,
+        radius: 150,
+        baseSize: 60,
+        opacity: 0.2,
+        colors: ['#00008b', '#483d8b'],
+        driftSpeed: 0.2,
+        noiseScale: 0.01,
+      },
+      front: {
+        count: 500,
+        radius: 80,
+        baseSize: 100,
+        opacity: 0.3,
+        colors: ['#4b0082', '#9400d3'],
+        driftSpeed: 0.3,
+        noiseScale: 0.02,
+      },
+    },
+  },
+  high: {
+    layers: {
+      back: {
+        count: 1500,
+        radius: 250,
+        baseSize: 45,
+        opacity: 0.15,
+        colors: ['#1f005c', '#5b0060'],
+        driftSpeed: 0.1,
+        noiseScale: 0.005,
+      },
+      middle: {
+        count: 750,
+        radius: 150,
+        baseSize: 65,
+        opacity: 0.2,
+        colors: ['#00008b', '#483d8b'],
+        driftSpeed: 0.2,
+        noiseScale: 0.01,
+      },
+      front: {
+        count: 250,
+        radius: 80,
+        baseSize: 110,
+        opacity: 0.3,
+        colors: ['#4b0082', '#9400d3'],
+        driftSpeed: 0.3,
+        noiseScale: 0.02,
+      },
+    },
+  },
+  medium: {
+    layers: {
+      back: {
+        count: 500,
+        radius: 250,
+        baseSize: 55,
+        opacity: 0.15,
+        colors: ['#1f005c', '#5b0060'],
+        driftSpeed: 0.1,
+        noiseScale: 0.005,
+      },
+      middle: {
+        count: 250,
+        radius: 150,
+        baseSize: 75,
+        opacity: 0.2,
+        colors: ['#00008b', '#483d8b'],
+        driftSpeed: 0.2,
+        noiseScale: 0.01,
+      },
+      front: {
+        count: 100,
+        radius: 80,
+        baseSize: 130,
+        opacity: 0.3,
+        colors: ['#4b0082', '#9400d3'],
+        driftSpeed: 0.3,
+        noiseScale: 0.02,
+      },
+    },
+  },
+  low: {
+    layers: {
+      back: {
+        count: 100,
+        radius: 250,
+        baseSize: 80,
+        opacity: 0.15,
+        colors: ['#1f005c', '#5b0060'],
+        driftSpeed: 0.1,
+        noiseScale: 0.005,
+      },
+      middle: {
+        count: 50,
+        radius: 150,
+        baseSize: 100,
+        opacity: 0.2,
+        colors: ['#00008b', '#483d8b'],
+        driftSpeed: 0.2,
+        noiseScale: 0.01,
+      },
+      front: {
+        count: 25,
+        radius: 80,
+        baseSize: 150,
+        opacity: 0.3,
+        colors: ['#4b0082', '#9400d3'],
+        driftSpeed: 0.3,
+        noiseScale: 0.02,
+      },
+    },
+  },
+};

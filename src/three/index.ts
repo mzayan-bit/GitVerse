@@ -16,6 +16,9 @@ export type { RendererSetupProps } from './Renderer';
 // Stars
 export { StarManager } from './Stars';
 
+// Nebula
+export { NebulaManager } from './Nebula';
+
 // Performance
 export { PerformanceManager } from './Performance';
 export type { PerformanceManagerProps } from './Performance';

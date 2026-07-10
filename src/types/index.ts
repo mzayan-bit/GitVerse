@@ -20,4 +20,6 @@ export type {
   StarData,
 } from './stars';
 
+export type { NebulaConfig, NebulaLayerConfig } from './nebula';
+
 export { StarLayer } from './stars';

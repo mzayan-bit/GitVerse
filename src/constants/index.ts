@@ -9,3 +9,4 @@ export {
 } from './rendering';
 
 export { STAR_DENSITY_CONFIGS } from './stars';
+export { NEBULA_DENSITY_CONFIGS } from './nebula';
