@@ -9,6 +9,7 @@ import {
   SceneOrbitControls,
   StarManager,
   NebulaManager,
+  DynamicEffectsManager,
 } from '@/three';
 import { PerformanceManager } from '@/three';
 import {
@@ -50,6 +51,7 @@ export default function GitVerseCanvas() {
               {/* Universe */}
               <StarManager />
               <NebulaManager />
+              <DynamicEffectsManager />
 
               {/* Post-Processing Pipeline */}
               <PostProcessing />

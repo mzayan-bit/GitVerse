@@ -19,6 +19,9 @@ export { StarManager } from './Stars';
 // Nebula
 export { NebulaManager } from './Nebula';
 
+// Dynamic Effects
+export { DynamicEffectsManager } from './DynamicEffects';
+
 // Performance
 export { PerformanceManager } from './Performance';
 export type { PerformanceManagerProps } from './Performance';
