@@ -7,3 +7,5 @@ export {
   DEFAULT_ENVIRONMENT_CONFIG,
   DEFAULT_FOG_CONFIG,
 } from './rendering';
+
+export { STAR_DENSITY_CONFIGS } from './stars';
