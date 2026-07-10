@@ -13,6 +13,9 @@ export type { CameraControllerProps, SceneOrbitControlsProps } from './Camera';
 export { RendererSetup } from './Renderer';
 export type { RendererSetupProps } from './Renderer';
 
+// Stars
+export { StarManager } from './Stars';
+
 // Performance
 export { PerformanceManager } from './Performance';
 export type { PerformanceManagerProps } from './Performance';
