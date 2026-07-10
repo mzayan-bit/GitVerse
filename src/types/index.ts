@@ -6,7 +6,6 @@ export type {
   PerformanceData,
   PerformanceConfig,
   PostProcessingConfig,
-  BloomConfig,
   SceneState,
   SceneActions,
   EnvironmentConfig,

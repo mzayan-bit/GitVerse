@@ -138,23 +138,32 @@ export interface PerformanceConfig {
 /** Configuration for the post-processing pipeline */
 export interface PostProcessingConfig {
   /** Enable post-processing globally */
+  /** Master switch for post-processing */
   enabled: boolean;
-  /** Bloom settings */
-  bloom: BloomConfig;
-}
-
-/** Configuration for bloom effect */
-export interface BloomConfig {
-  /** Enable bloom */
-  enabled: boolean;
-  /** Bloom intensity */
-  intensity: number;
-  /** Luminance threshold */
-  luminanceThreshold: number;
-  /** Luminance smoothing */
-  luminanceSmoothing: number;
-  /** Mipmap blur */
-  mipmapBlur: boolean;
+  /** Configuration for bloom effect */
+  bloom: {
+    enabled: boolean;
+    intensity: number;
+    luminanceThreshold: number;
+    luminanceSmoothing: number;
+    mipmapBlur: boolean;
+  };
+  /** Configuration for cinematic vignette */
+  vignette: {
+    enabled: boolean;
+    offset: number;
+    darkness: number;
+  };
+  /** Configuration for subtle film grain noise */
+  noise: {
+    enabled: boolean;
+    opacity: number;
+  };
+  /** Configuration for chromatic aberration */
+  chromaticAberration: {
+    enabled: boolean;
+    offset: [number, number]; // [x, y]
+  };
 }
 
 // ---------------------------------------------------------------------------

@@ -75,10 +75,23 @@ export const DEFAULT_POST_PROCESSING_CONFIG: PostProcessingConfig = {
   enabled: true,
   bloom: {
     enabled: true,
-    intensity: 0.5,
-    luminanceThreshold: 0.8,
-    luminanceSmoothing: 0.3,
+    intensity: 1.5,
+    luminanceThreshold: 0.1,
+    luminanceSmoothing: 0.9,
     mipmapBlur: true,
+  },
+  vignette: {
+    enabled: true,
+    offset: 0.5,
+    darkness: 0.5,
+  },
+  noise: {
+    enabled: true,
+    opacity: 0.05,
+  },
+  chromaticAberration: {
+    enabled: true,
+    offset: [0.002, 0.002],
   },
 };
 
