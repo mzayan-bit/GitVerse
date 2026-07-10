@@ -3,7 +3,7 @@
 
 import { useThree, useFrame } from '@react-three/fiber';
 import { useEffect, useRef } from 'react';
-import { AdaptiveDpr, PerformanceMonitor } from '@react-three/drei';
+import { AdaptiveDpr, PerformanceMonitor, Stats } from '@react-three/drei';
 import type { PerformanceConfig, PerformanceTier } from '@/types/rendering';
 import { DEFAULT_PERFORMANCE_CONFIG } from '@/constants/rendering';
 import { useSceneStore } from '@/store/scene-store';
@@ -91,6 +91,10 @@ function PerformanceManager({ config }: PerformanceManagerProps) {
         onFallback={() => setPerformanceTier('low')}
       />
       {merged.adaptiveDpr && <AdaptiveDpr pixelated />}
+      {/* Development performance utilities */}
+      {process.env.NODE_ENV === 'development' && (
+        <Stats className="!absolute !right-4 !top-4 !left-auto" />
+      )}
     </>
   );
 }
