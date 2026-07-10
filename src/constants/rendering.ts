@@ -88,8 +88,10 @@ export const DEFAULT_POST_PROCESSING_CONFIG: PostProcessingConfig = {
 
 export const DEFAULT_ENVIRONMENT_CONFIG: EnvironmentConfig = {
   backgroundColor: '#000000',
-  ambientIntensity: 0.15,
+  ambientIntensity: 0.1,
   ambientColor: '#ffffff',
+  preset: 'night',
+  environmentIntensity: 0.5,
 };
 
 // ---------------------------------------------------------------------------

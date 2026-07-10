@@ -199,6 +199,10 @@ export interface EnvironmentConfig {
   ambientIntensity: number;
   /** Ambient light color */
   ambientColor: string;
+  /** Optional HDR preset for Image Based Lighting */
+  preset?: string;
+  /** Environment map intensity */
+  environmentIntensity?: number;
 }
 
 /** Configuration for fog */

@@ -1,5 +1,6 @@
 'use client';
 
+import { Environment } from '@react-three/drei';
 import type { EnvironmentConfig } from '@/types/rendering';
 import { DEFAULT_ENVIRONMENT_CONFIG } from '@/constants/rendering';
 
@@ -10,11 +11,6 @@ interface EnvironmentSetupProps {
 /**
  * Configures the scene environment — background colour and ambient lighting.
  * Must be a child of `<Canvas>`.
- *
- * Future extensions:
- *  - HDR environment maps
- *  - Skybox / skydome
- *  - Environment probes
  */
 function EnvironmentSetup({ config }: EnvironmentSetupProps) {
   const merged: EnvironmentConfig = {
@@ -25,10 +21,13 @@ function EnvironmentSetup({ config }: EnvironmentSetupProps) {
   return (
     <>
       <color attach="background" args={[merged.backgroundColor]} />
-      <ambientLight
-        intensity={merged.ambientIntensity}
-        color={merged.ambientColor}
-      />
+      {merged.preset && (
+        <Environment
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          preset={merged.preset as any}
+          environmentIntensity={merged.environmentIntensity}
+        />
+      )}
     </>
   );
 }
