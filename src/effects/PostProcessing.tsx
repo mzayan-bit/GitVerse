@@ -13,8 +13,12 @@ interface PostProcessingProps {
  * Wraps `@react-three/postprocessing`'s EffectComposer.
  * Must be a child of `<Canvas>`.
  *
- * Future effects (vignette, SSAO, film grain, etc.) should be added
- * as additional children of the EffectComposer here.
+ * Future effect pipeline extensions:
+ *  - Vignette
+ *  - SSAO (Screen Space Ambient Occlusion)
+ *  - Film grain / noise
+ *  - Depth of field
+ *  - Color grading / LUTs
  */
 function PostProcessing({ config }: PostProcessingProps) {
   const merged: PostProcessingConfig = {
