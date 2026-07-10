@@ -1,19 +1,26 @@
+import { createElement } from 'react';
 import { cn } from '@/lib/utils';
 
-interface SectionProps extends React.HTMLAttributes<HTMLElement> {
+interface SectionProps {
   as?: React.ElementType;
+  className?: string;
+  children?: React.ReactNode;
+  [key: string]: unknown;
 }
 
 function Section({
   className,
-  as: Component = 'section',
+  as: component = 'section',
   children,
   ...props
 }: SectionProps) {
-  return (
-    <Component className={cn('py-16 md:py-24', className)} {...props}>
-      {children}
-    </Component>
+  return createElement(
+    component,
+    {
+      className: cn('py-16 md:py-24', className),
+      ...props,
+    },
+    children
   );
 }
 

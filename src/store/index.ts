@@ -1,1 +1,1 @@
-// Re-export all store modules
+export { useSceneStore } from './scene-store';
