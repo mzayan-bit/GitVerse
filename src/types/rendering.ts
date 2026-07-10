@@ -44,6 +44,14 @@ export interface CameraConfig {
   position: [x: number, y: number, z: number];
   /** Look-at target [x, y, z] */
   target: [x: number, y: number, z: number];
+
+  // Future extensions
+  /** Cinematic fly-through support (placeholder) */
+  cinematicMode?: boolean;
+  /** Focus target for transitions (placeholder) */
+  focusTarget?: [x: number, y: number, z: number] | null;
+  /** Transition duration in seconds (placeholder) */
+  transitionDuration?: number;
 }
 
 /** Configuration for orbit controls */
