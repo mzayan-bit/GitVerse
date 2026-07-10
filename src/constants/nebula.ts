@@ -4,7 +4,7 @@ export const NEBULA_DENSITY_CONFIGS: Record<PerformanceTier, NebulaConfig> = {
   ultra: {
     layers: {
       back: {
-        count: 3000,
+        count: 1500,
         radius: 250,
         baseSize: 40,
         opacity: 0.15,
@@ -13,7 +13,7 @@ export const NEBULA_DENSITY_CONFIGS: Record<PerformanceTier, NebulaConfig> = {
         noiseScale: 0.005,
       },
       middle: {
-        count: 1500,
+        count: 750,
         radius: 150,
         baseSize: 60,
         opacity: 0.2,
@@ -22,7 +22,7 @@ export const NEBULA_DENSITY_CONFIGS: Record<PerformanceTier, NebulaConfig> = {
         noiseScale: 0.01,
       },
       front: {
-        count: 500,
+        count: 250,
         radius: 80,
         baseSize: 100,
         opacity: 0.3,
@@ -35,7 +35,7 @@ export const NEBULA_DENSITY_CONFIGS: Record<PerformanceTier, NebulaConfig> = {
   high: {
     layers: {
       back: {
-        count: 1500,
+        count: 750,
         radius: 250,
         baseSize: 45,
         opacity: 0.15,
@@ -44,7 +44,7 @@ export const NEBULA_DENSITY_CONFIGS: Record<PerformanceTier, NebulaConfig> = {
         noiseScale: 0.005,
       },
       middle: {
-        count: 750,
+        count: 350,
         radius: 150,
         baseSize: 65,
         opacity: 0.2,
@@ -53,7 +53,7 @@ export const NEBULA_DENSITY_CONFIGS: Record<PerformanceTier, NebulaConfig> = {
         noiseScale: 0.01,
       },
       front: {
-        count: 250,
+        count: 125,
         radius: 80,
         baseSize: 110,
         opacity: 0.3,
@@ -66,7 +66,7 @@ export const NEBULA_DENSITY_CONFIGS: Record<PerformanceTier, NebulaConfig> = {
   medium: {
     layers: {
       back: {
-        count: 500,
+        count: 300,
         radius: 250,
         baseSize: 55,
         opacity: 0.15,
@@ -75,7 +75,7 @@ export const NEBULA_DENSITY_CONFIGS: Record<PerformanceTier, NebulaConfig> = {
         noiseScale: 0.005,
       },
       middle: {
-        count: 250,
+        count: 150,
         radius: 150,
         baseSize: 75,
         opacity: 0.2,
@@ -84,7 +84,7 @@ export const NEBULA_DENSITY_CONFIGS: Record<PerformanceTier, NebulaConfig> = {
         noiseScale: 0.01,
       },
       front: {
-        count: 100,
+        count: 50,
         radius: 80,
         baseSize: 130,
         opacity: 0.3,

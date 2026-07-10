@@ -3,8 +3,47 @@ import { StarLayer, type StarConfig, type StarDensity } from '@/types/stars';
 export const STAR_DENSITY_CONFIGS: Record<StarDensity, StarConfig> = {
   low: {
     density: 'low',
-    colorTemperatureRange: [3000, 10000], // Red dwarf to Blue giant
+    colorTemperatureRange: [3000, 10000],
     twinkleFactor: 0.5,
+    layers: {
+      [StarLayer.Near]: {
+        count: 200,
+        radius: 50,
+        baseSize: 3.0,
+        opacity: 0.9,
+        driftSpeed: 1.0,
+        twinkleSpeed: 1.2,
+      },
+      [StarLayer.Medium]: {
+        count: 500,
+        radius: 150,
+        baseSize: 2.0,
+        opacity: 0.7,
+        driftSpeed: 0.5,
+        twinkleSpeed: 0.8,
+      },
+      [StarLayer.Far]: {
+        count: 1000,
+        radius: 400,
+        baseSize: 1.0,
+        opacity: 0.5,
+        driftSpeed: 0.2,
+        twinkleSpeed: 0.5,
+      },
+      [StarLayer.DeepSpace]: {
+        count: 2000,
+        radius: 800,
+        baseSize: 0.5,
+        opacity: 0.3,
+        driftSpeed: 0.05,
+        twinkleSpeed: 0.2,
+      },
+    },
+  },
+  medium: {
+    density: 'medium',
+    colorTemperatureRange: [3000, 10000],
+    twinkleFactor: 0.6,
     layers: {
       [StarLayer.Near]: {
         count: 500,
@@ -40,10 +79,10 @@ export const STAR_DENSITY_CONFIGS: Record<StarDensity, StarConfig> = {
       },
     },
   },
-  medium: {
-    density: 'medium',
+  high: {
+    density: 'high',
     colorTemperatureRange: [3000, 10000],
-    twinkleFactor: 0.6,
+    twinkleFactor: 0.7,
     layers: {
       [StarLayer.Near]: {
         count: 1000,
@@ -79,10 +118,10 @@ export const STAR_DENSITY_CONFIGS: Record<StarDensity, StarConfig> = {
       },
     },
   },
-  high: {
-    density: 'high',
+  ultra: {
+    density: 'ultra',
     colorTemperatureRange: [3000, 10000],
-    twinkleFactor: 0.7,
+    twinkleFactor: 0.8,
     layers: {
       [StarLayer.Near]: {
         count: 2000,
@@ -110,45 +149,6 @@ export const STAR_DENSITY_CONFIGS: Record<StarDensity, StarConfig> = {
       },
       [StarLayer.DeepSpace]: {
         count: 15000,
-        radius: 800,
-        baseSize: 0.5,
-        opacity: 0.3,
-        driftSpeed: 0.05,
-        twinkleSpeed: 0.2,
-      },
-    },
-  },
-  ultra: {
-    density: 'ultra',
-    colorTemperatureRange: [3000, 10000],
-    twinkleFactor: 0.8,
-    layers: {
-      [StarLayer.Near]: {
-        count: 4000,
-        radius: 50,
-        baseSize: 3.0,
-        opacity: 0.9,
-        driftSpeed: 1.0,
-        twinkleSpeed: 1.2,
-      },
-      [StarLayer.Medium]: {
-        count: 8000,
-        radius: 150,
-        baseSize: 2.0,
-        opacity: 0.7,
-        driftSpeed: 0.5,
-        twinkleSpeed: 0.8,
-      },
-      [StarLayer.Far]: {
-        count: 16000,
-        radius: 400,
-        baseSize: 1.0,
-        opacity: 0.5,
-        driftSpeed: 0.2,
-        twinkleSpeed: 0.5,
-      },
-      [StarLayer.DeepSpace]: {
-        count: 30000,
         radius: 800,
         baseSize: 0.5,
         opacity: 0.3,
