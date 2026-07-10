@@ -1,15 +1,26 @@
 import { Container } from '@/components/ui/container';
 import { Button, buttonVariants } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
-import { ArrowRight, Sparkles } from 'lucide-react';
+import { ArrowRight, Sparkles, Loader2 } from 'lucide-react';
+import dynamic from 'next/dynamic';
+
+// Dynamically import the 3D canvas with SSR disabled
+const GitVerseCanvas = dynamic(() => import('@/components/canvas-wrapper'), {
+  ssr: false,
+  loading: () => (
+    <div className="absolute inset-0 z-0 flex items-center justify-center bg-black">
+      <Loader2 className="size-8 animate-spin text-indigo-500" />
+    </div>
+  ),
+});
 
 export default function Home() {
   return (
     <div className="flex flex-1 flex-col">
       {/* Hero */}
-      <section className="relative flex flex-1 items-center justify-center overflow-hidden">
-        {/* Subtle gradient background */}
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-indigo-500/10 via-transparent to-transparent" />
+      <section className="relative flex flex-1 items-center justify-center overflow-hidden bg-black">
+        {/* 3D Universe Canvas Background */}
+        <GitVerseCanvas />
 
         <Container className="relative z-10 py-24 md:py-32">
           <div className="mx-auto flex max-w-3xl flex-col items-center text-center">
