@@ -2,14 +2,22 @@ import React, { useMemo, useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import { PlanetConfig } from './PlanetTypes';
+import { PlanetGeometryBuilder } from './Geometry';
+import { PlanetMaterialBuilder } from './Materials';
 
 export interface PlanetProps {
   config: PlanetConfig;
   position?: [number, number, number];
+  lodLevel?: 'high' | 'medium' | 'low';
 }
 
-export function Planet({ config, position = [0, 0, 0] }: PlanetProps) {
+export function Planet({
+  config,
+  position = [0, 0, 0],
+  lodLevel = 'high',
+}: PlanetProps) {
   const groupRef = useRef<THREE.Group>(null);
+  const meshRef = useRef<THREE.Mesh>(null);
 
   // Rotate planet slowly
   useFrame((_, delta) => {
@@ -18,24 +26,29 @@ export function Planet({ config, position = [0, 0, 0] }: PlanetProps) {
     }
   });
 
-  // Basic geometry for now. Will be replaced by procedural geometry.
   const geometry = useMemo(
-    () => new THREE.SphereGeometry(config.terrain.baseRadius, 64, 64),
-    [config.terrain.baseRadius]
+    () => PlanetGeometryBuilder.build(config.terrain, lodLevel),
+    [config.terrain, lodLevel]
   );
+  const material = useMemo(() => PlanetMaterialBuilder.build(config), [config]);
 
-  // Basic material for now. Will be replaced by procedural material.
-  const material = useMemo(() => {
-    return new THREE.MeshStandardMaterial({
-      color: config.material.colorPalette[0] || '#ffffff',
-      roughness: config.material.roughness,
-      metalness: config.material.metalness,
-    });
-  }, [config.material]);
+  // Clean up material on unmount or change
+  React.useEffect(() => {
+    return () => {
+      material.dispose();
+      geometry.dispose();
+    };
+  }, [material, geometry]);
 
   return (
     <group ref={groupRef} position={position}>
-      <mesh geometry={geometry} material={material} castShadow receiveShadow />
+      <mesh
+        ref={meshRef}
+        geometry={geometry}
+        material={material}
+        castShadow
+        receiveShadow
+      />
     </group>
   );
 }
