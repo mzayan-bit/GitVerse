@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { TerrainConfig } from '../PlanetTypes';
+import { PlanetCache } from '../Utilities/Cache';
 
 export class PlanetGeometryBuilder {
   /**
@@ -11,6 +12,10 @@ export class PlanetGeometryBuilder {
     config: TerrainConfig,
     lodLevel: 'high' | 'medium' | 'low' = 'high'
   ): THREE.BufferGeometry {
+    const cacheKey = `geo_${config.baseRadius}_${lodLevel}`;
+    const cached = PlanetCache.getGeometry(cacheKey);
+    if (cached) return cached;
+
     let segments = 256;
     if (lodLevel === 'medium') segments = 128;
     if (lodLevel === 'low') segments = 64;
@@ -23,6 +28,7 @@ export class PlanetGeometryBuilder {
 
     // Compute tangents for normal mapping / bump mapping
     geometry.computeTangents();
+    PlanetCache.setGeometry(cacheKey, geometry);
 
     return geometry;
   }

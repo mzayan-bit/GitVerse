@@ -1,4 +1,4 @@
-import React, { useMemo, useRef } from 'react';
+import { useMemo, useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import { PlanetConfig } from './PlanetTypes';
@@ -33,13 +33,8 @@ export function Planet({
   );
   const material = useMemo(() => PlanetMaterialBuilder.build(config), [config]);
 
-  // Clean up material on unmount or change
-  React.useEffect(() => {
-    return () => {
-      material.dispose();
-      geometry.dispose();
-    };
-  }, [material, geometry]);
+  // Materials and geometry are managed by a global cache now.
+  // We do not dispose them on unmount to allow reuse.
 
   return (
     <group ref={groupRef} position={position}>

@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import { useSceneStore } from '@/store/scene-store';
 import { PlanetFactory } from '@/planets/PlanetFactory';
 import { Planet } from '@/planets/Planet';

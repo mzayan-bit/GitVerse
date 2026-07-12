@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import { useMemo } from 'react';
 import { useSceneStore } from '@/store/scene-store';
 import { PlanetFactory } from '@/planets/PlanetFactory';
 
@@ -17,7 +17,7 @@ export function PlanetShowcaseUI() {
   const currentPlanetSeed = useSceneStore((s) => s.currentPlanetSeed);
   const setPlanetSeed = useSceneStore((s) => s.setPlanetSeed);
 
-  const planetConfig = React.useMemo(() => {
+  const planetConfig = useMemo(() => {
     return PlanetFactory.create(currentPlanetSeed);
   }, [currentPlanetSeed]);
 

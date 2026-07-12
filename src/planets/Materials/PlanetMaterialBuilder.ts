@@ -1,9 +1,17 @@
 import * as THREE from 'three';
 import { PlanetConfig } from '../PlanetTypes';
 import { GLSL_SIMPLEX_NOISE_3D } from '../Shaders/Noise';
+import { PlanetCache } from '../Utilities/Cache';
 
 export class PlanetMaterialBuilder {
   static build(config: PlanetConfig): THREE.MeshStandardMaterial {
+    // Generate a hash based on type and seed for caching
+    const cacheKey = `mat_${config.type}_${config.seed.value}`;
+    const cached = PlanetCache.getMaterial(
+      cacheKey
+    ) as THREE.MeshStandardMaterial;
+    if (cached) return cached;
+
     const material = new THREE.MeshStandardMaterial({
       color: new THREE.Color(config.material.colorPalette[0] || '#ffffff'),
       roughness: config.material.roughness,
@@ -108,6 +116,7 @@ export class PlanetMaterialBuilder {
       );
     };
 
+    PlanetCache.setMaterial(cacheKey, material);
     return material;
   }
 }

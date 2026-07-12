@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/immutability */
 
-import React, { useMemo, useRef } from 'react';
+import { useMemo, useRef } from 'react';
 import * as THREE from 'three';
 import { AtmosphereConfig, TerrainConfig } from '../PlanetTypes';
 

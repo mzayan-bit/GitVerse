@@ -1,4 +1,4 @@
-import { PlanetConfig, PlanetSeed, PlanetType } from './PlanetTypes';
+import { PlanetConfig, PlanetSeed } from './PlanetTypes';
 import { PlanetEngine } from './PlanetEngine';
 import {
   DEFAULT_ATMOSPHERE,
@@ -15,7 +15,7 @@ export interface IPlanetGenerator {
  * Specific planet type generators will override these values.
  */
 export class BasePlanetGenerator implements IPlanetGenerator {
-  public generate(engine: PlanetEngine, seed: PlanetSeed): PlanetConfig {
+  public generate(_engine: PlanetEngine, seed: PlanetSeed): PlanetConfig {
     return {
       seed,
       type: 'rocky',
