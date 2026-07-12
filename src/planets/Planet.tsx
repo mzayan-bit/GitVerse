@@ -4,6 +4,7 @@ import * as THREE from 'three';
 import { PlanetConfig } from './PlanetTypes';
 import { PlanetGeometryBuilder } from './Geometry';
 import { PlanetMaterialBuilder } from './Materials';
+import { AtmosphereLayer, CloudLayer } from './Atmosphere';
 
 export interface PlanetProps {
   config: PlanetConfig;
@@ -49,6 +50,17 @@ export function Planet({
         castShadow
         receiveShadow
       />
+
+      {config.atmosphere.enabled && (
+        <AtmosphereLayer
+          terrain={config.terrain}
+          atmosphere={config.atmosphere}
+        />
+      )}
+
+      {config.atmosphere.enabled && config.atmosphere.hasClouds && (
+        <CloudLayer terrain={config.terrain} atmosphere={config.atmosphere} />
+      )}
     </group>
   );
 }
