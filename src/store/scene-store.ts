@@ -20,6 +20,7 @@ interface SceneStore {
   // Performance
   performanceTier: PerformanceTier;
   performanceData: PerformanceData;
+  currentPlanetSeed: string;
 
   // Debug
   debugMode: boolean;
@@ -34,6 +35,7 @@ interface SceneStore {
   setPerformanceTier: (tier: PerformanceTier) => void;
   setPerformanceData: (data: Partial<PerformanceData>) => void;
   setDebugMode: (debug: boolean) => void;
+  setPlanetSeed: (seed: string) => void;
   reset: () => void;
 }
 
@@ -59,6 +61,7 @@ export const useSceneStore = create<SceneStore>((set) => ({
 
   performanceTier: 'medium',
   performanceData: { ...initialPerformanceData },
+  currentPlanetSeed: 'gitverse-genesis',
 
   debugMode: process.env.NODE_ENV === 'development',
 
@@ -78,6 +81,7 @@ export const useSceneStore = create<SceneStore>((set) => ({
       performanceData: { ...state.performanceData, ...data },
     })),
   setDebugMode: (debug) => set({ debugMode: debug }),
+  setPlanetSeed: (seed) => set({ currentPlanetSeed: seed }),
   reset: () =>
     set({
       isReady: false,

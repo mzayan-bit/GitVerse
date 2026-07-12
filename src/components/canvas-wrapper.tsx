@@ -18,6 +18,7 @@ import {
   Lighting,
   SceneFog,
 } from '@/effects';
+import { PlanetShowcase3D } from '@/components/PlanetShowcase3D';
 
 /**
  * The main 3D visualization canvas.
@@ -52,6 +53,9 @@ export default function GitVerseCanvas() {
               <StarManager />
               <NebulaManager />
               <DynamicEffectsManager />
+
+              {/* Planets */}
+              <PlanetShowcase3D />
 
               {/* Post-Processing Pipeline */}
               <PostProcessing />
