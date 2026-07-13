@@ -1,5 +1,8 @@
 import React, { useEffect } from 'react';
 import { useSolarSystemManager } from './SolarSystemManager';
+import { Star } from './Star';
+import { OrbitLine } from './OrbitLine';
+import { OrbitingPlanet } from './OrbitingPlanet';
 
 export function SolarSystem() {
   const { systemConfig, generateSystem } = useSolarSystemManager();
@@ -15,8 +18,16 @@ export function SolarSystem() {
 
   return (
     <group>
-      {/* Star implementation to come in Step 3 */}
-      {/* Planet / Orbit implementation to come in Step 4 */}
+      {/* Central Star */}
+      <Star config={systemConfig.star} />
+
+      {/* Planets and Orbits */}
+      {systemConfig.planets.map((node) => (
+        <group key={node.id}>
+          <OrbitLine config={node.orbit} />
+          <OrbitingPlanet node={node} />
+        </group>
+      ))}
     </group>
   );
 }
