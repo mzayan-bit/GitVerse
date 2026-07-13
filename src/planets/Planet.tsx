@@ -10,19 +10,21 @@ export interface PlanetProps {
   config: PlanetConfig;
   position?: [number, number, number];
   lodLevel?: 'high' | 'medium' | 'low';
+  autoRotate?: boolean;
 }
 
 export function Planet({
   config,
   position = [0, 0, 0],
   lodLevel = 'high',
+  autoRotate = true,
 }: PlanetProps) {
   const groupRef = useRef<THREE.Group>(null);
   const meshRef = useRef<THREE.Mesh>(null);
 
   // Rotate planet slowly
   useFrame((_, delta) => {
-    if (groupRef.current) {
+    if (autoRotate && groupRef.current) {
       groupRef.current.rotation.y += delta * 0.05;
     }
   });
