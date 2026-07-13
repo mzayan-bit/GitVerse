@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useSolarSystemManager } from './SolarSystemManager';
 import { Star } from './Star';
 import { OrbitLine } from './OrbitLine';

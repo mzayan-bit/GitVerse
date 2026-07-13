@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useSolarSystemManager } from '@/systems/SolarSystem/SolarSystemManager';
 import {
   Play,
@@ -10,7 +10,6 @@ import {
   Crosshair,
   Eye,
   EyeOff,
-  FastForward,
   Settings2,
 } from 'lucide-react';
 
