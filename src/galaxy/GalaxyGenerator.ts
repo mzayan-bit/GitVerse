@@ -125,12 +125,33 @@ export class GalaxyGenerator {
       // Determine color based on distance to core (density)
       const distToCore = Math.sqrt(x * x + y * y + z * z);
       const isCoreColor = distToCore < r_x * GALAXY_DEFAULTS.CORE_RADIUS_RATIO;
-      // Interpolate or just swap color
       const color = isCoreColor
         ? coreColor
         : engine.random() > 0.8
           ? coreColor
           : outerColor;
+
+      // Spatial partitioning to avoid overlaps (Minimum spacing = 20 units)
+      const MIN_SPACING = 20;
+      let overlap = false;
+
+      // Simple distance check against recently added systems to avoid N^2 complexity on huge scales
+      // We check the last 100 systems, which is a good heuristic for localized overlaps without destroying performance.
+      const checkCount = Math.min(systems.length, 100);
+      for (let j = systems.length - 1; j >= systems.length - checkCount; j--) {
+        const dx = systems[j].position[0] - x;
+        const dy = systems[j].position[1] - y;
+        const dz = systems[j].position[2] - z;
+        if (dx * dx + dy * dy + dz * dz < MIN_SPACING * MIN_SPACING) {
+          overlap = true;
+          break;
+        }
+      }
+
+      if (overlap) {
+        // If overlap, try again by skipping this iteration (this will result in slightly fewer systems, but guarantees spacing)
+        continue;
+      }
 
       systems.push({
         id: `sys-${i}`,
