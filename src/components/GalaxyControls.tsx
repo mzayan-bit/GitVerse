@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useGalaxyManager } from '@/galaxy/GalaxyManager';
 import { GalaxyShape } from '@/galaxy/GalaxyTypes';
-import { Settings2, Shuffle, ArrowLeft, Layers } from 'lucide-react';
+import { Settings2, Shuffle, ArrowLeft } from 'lucide-react';
 
 export function GalaxyControls() {
   const {
@@ -11,7 +11,6 @@ export function GalaxyControls() {
     generateGalaxy,
     cameraMode,
     setCameraMode,
-    focusedSystemId,
     setFocusedSystemId,
   } = useGalaxyManager();
 

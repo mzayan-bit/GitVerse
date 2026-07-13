@@ -6,7 +6,6 @@ import { GalaxyFactory } from './GalaxyFactory';
 
 export function Galaxy() {
   const { galaxyConfig, generateGalaxy } = useGalaxyManager();
-  const pointsRef = useRef<THREE.Points>(null);
 
   // Initialize on mount if missing
   useEffect(() => {
@@ -21,10 +20,51 @@ export function Galaxy() {
     return GalaxyFactory.createGalaxyGeometryData(galaxyConfig);
   }, [galaxyConfig]);
 
+  // Memory cleanup and InstancedMesh generation
+  const meshRef = useRef<THREE.InstancedMesh>(null);
+
+  useEffect(() => {
+    if (!meshRef.current || !geometryData) return;
+
+    const matrix = new THREE.Matrix4();
+    const color = new THREE.Color();
+
+    for (let i = 0; i < geometryData.systemCount; i++) {
+      matrix.setPosition(
+        geometryData.positions[i * 3],
+        geometryData.positions[i * 3 + 1],
+        geometryData.positions[i * 3 + 2]
+      );
+
+      // Add random rotation and scale for variety
+      matrix.scale(
+        new THREE.Vector3(
+          geometryData.sizes[i],
+          geometryData.sizes[i],
+          geometryData.sizes[i]
+        )
+      );
+
+      meshRef.current.setMatrixAt(i, matrix);
+
+      color.setRGB(
+        geometryData.colors[i * 3],
+        geometryData.colors[i * 3 + 1],
+        geometryData.colors[i * 3 + 2]
+      );
+      meshRef.current.setColorAt(i, color);
+    }
+
+    meshRef.current.instanceMatrix.needsUpdate = true;
+    if (meshRef.current.instanceColor) {
+      meshRef.current.instanceColor.needsUpdate = true;
+    }
+  }, [geometryData]);
+
   // Slow galactic rotation
   useFrame((_, delta) => {
-    if (pointsRef.current) {
-      pointsRef.current.rotation.y += delta * 0.005;
+    if (meshRef.current) {
+      meshRef.current.rotation.y += delta * 0.005;
     }
   });
 
@@ -32,17 +72,18 @@ export function Galaxy() {
 
   return (
     <group>
-      <points
-        ref={pointsRef}
+      <instancedMesh
+        ref={meshRef}
+        args={[undefined, undefined, geometryData.systemCount]}
         onClick={(e) => {
           e.stopPropagation();
-          if (e.index !== undefined && galaxyConfig) {
-            const system = galaxyConfig.systems[e.index];
+          if (e.instanceId !== undefined && galaxyConfig) {
+            const system = galaxyConfig.systems[e.instanceId];
             if (system) {
               const { setFocusedSystemId, setCameraMode } =
                 useGalaxyManager.getState();
               setFocusedSystemId(system.id);
-              setCameraMode('galaxy-follow'); // Will zoom in and eventually transition to solar system
+              setCameraMode('galaxy-follow'); // Will zoom in and transition
             }
           }
         }}
@@ -53,37 +94,14 @@ export function Galaxy() {
           document.body.style.cursor = 'auto';
         }}
       >
-        <bufferGeometry>
-          <bufferAttribute
-            attach="attributes-position"
-            count={geometryData.systemCount}
-            array={geometryData.positions}
-            itemSize={3}
-          />
-          <bufferAttribute
-            attach="attributes-color"
-            count={geometryData.systemCount}
-            array={geometryData.colors}
-            itemSize={3}
-          />
-          <bufferAttribute
-            attach="attributes-size"
-            count={geometryData.systemCount}
-            array={geometryData.sizes}
-            itemSize={1}
-          />
-        </bufferGeometry>
-        {/* We use a custom shader material later, but for Step 1 PointsMaterial is fine */}
-        <pointsMaterial
-          size={5}
-          sizeAttenuation={true}
-          vertexColors={true}
+        <icosahedronGeometry args={[5, 0]} />
+        <meshBasicMaterial
+          vertexColors={false} // We use instanceColor
+          toneMapped={false}
           transparent={true}
-          opacity={0.8}
-          blending={THREE.AdditiveBlending}
-          depthWrite={false}
+          opacity={0.9}
         />
-      </points>
+      </instancedMesh>
     </group>
   );
 }
