@@ -3,7 +3,7 @@
 import { Button } from '@/components/ui/button';
 import { Loader2 } from 'lucide-react';
 import dynamic from 'next/dynamic';
-import { PlanetShowcaseUI } from '@/components/PlanetShowcaseUI';
+import { SimulationControls } from '@/components/SimulationControls';
 
 // Dynamically import the 3D canvas with SSR disabled
 const GitVerseCanvas = dynamic(() => import('@/components/canvas-wrapper'), {
@@ -65,8 +65,10 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Planet Showcase UI overlay */}
-      <PlanetShowcaseUI />
+      {/* Simulation UI overlay */}
+      <div className="pointer-events-auto">
+        <SimulationControls />
+      </div>
     </main>
   );
 }
