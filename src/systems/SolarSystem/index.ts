@@ -6,3 +6,4 @@ export * from './SolarSystem';
 export * from './OrbitMechanics';
 export * from './OrbitLine';
 export * from './OrbitingPlanet';
+export * from './Star';
