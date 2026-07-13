@@ -20,6 +20,23 @@ import {
   SceneFog,
 } from '@/effects';
 import { SolarSystem } from '@/systems/SolarSystem';
+import { Galaxy } from '@/galaxy/Galaxy';
+import { useGalaxyManager } from '@/galaxy/GalaxyManager';
+
+function ActiveSolarSystemWrapper() {
+  const { focusedSystemId, galaxyConfig } = useGalaxyManager();
+
+  if (!focusedSystemId || !galaxyConfig) return null;
+
+  const sysNode = galaxyConfig.systems.find((s) => s.id === focusedSystemId);
+  if (!sysNode) return null;
+
+  return (
+    <group position={sysNode.position}>
+      <SolarSystem />
+    </group>
+  );
+}
 
 /**
  * The main 3D visualization canvas.
@@ -56,8 +73,11 @@ export default function GitVerseCanvas() {
               <NebulaManager />
               <DynamicEffectsManager />
 
-              {/* Solar System */}
-              <SolarSystem />
+              {/* Galaxy Engine */}
+              <Galaxy />
+
+              {/* Active Solar System Wrapper */}
+              <ActiveSolarSystemWrapper />
 
               {/* Post-Processing Pipeline */}
               <PostProcessing />

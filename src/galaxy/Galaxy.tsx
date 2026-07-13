@@ -32,7 +32,27 @@ export function Galaxy() {
 
   return (
     <group>
-      <points ref={pointsRef}>
+      <points
+        ref={pointsRef}
+        onClick={(e) => {
+          e.stopPropagation();
+          if (e.index !== undefined && galaxyConfig) {
+            const system = galaxyConfig.systems[e.index];
+            if (system) {
+              const { setFocusedSystemId, setCameraMode } =
+                useGalaxyManager.getState();
+              setFocusedSystemId(system.id);
+              setCameraMode('galaxy-follow'); // Will zoom in and eventually transition to solar system
+            }
+          }
+        }}
+        onPointerOver={() => {
+          document.body.style.cursor = 'pointer';
+        }}
+        onPointerOut={() => {
+          document.body.style.cursor = 'auto';
+        }}
+      >
         <bufferGeometry>
           <bufferAttribute
             attach="attributes-position"
