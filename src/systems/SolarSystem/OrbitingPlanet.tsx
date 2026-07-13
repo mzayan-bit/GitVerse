@@ -39,7 +39,19 @@ export function OrbitingPlanet({ node }: OrbitingPlanetProps) {
   });
 
   return (
-    <group ref={groupRef}>
+    <group
+      ref={groupRef}
+      onClick={(e) => {
+        e.stopPropagation();
+        useSolarSystemManager.getState().setFocusedPlanetId(node.id);
+      }}
+      onPointerOver={() => {
+        document.body.style.cursor = 'pointer';
+      }}
+      onPointerOut={() => {
+        document.body.style.cursor = 'auto';
+      }}
+    >
       {/* Apply tilt to the rotation group */}
       <group rotation={[0, 0, node.orbit.rotationTilt]}>
         <group ref={planetRotationRef}>

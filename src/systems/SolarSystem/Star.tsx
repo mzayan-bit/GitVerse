@@ -19,7 +19,24 @@ export function Star({ config }: StarProps) {
 
   return (
     <group>
-      <mesh ref={meshRef}>
+      <mesh
+        ref={meshRef}
+        onClick={(e) => {
+          e.stopPropagation();
+          // Reset focus and switch back to orbit mode at center
+          import('./SolarSystemManager').then(({ useSolarSystemManager }) => {
+            const state = useSolarSystemManager.getState();
+            state.setFocusedPlanetId(null);
+            state.setCameraMode('orbit');
+          });
+        }}
+        onPointerOver={() => {
+          document.body.style.cursor = 'pointer';
+        }}
+        onPointerOut={() => {
+          document.body.style.cursor = 'auto';
+        }}
+      >
         <sphereGeometry args={[config.radius, 64, 64]} />
         {/* We use MeshBasicMaterial because a star emits light and doesn't receive shadows/shading.
             We boost color values beyond 1.0 (if possible) or rely on the post-processing Bloom

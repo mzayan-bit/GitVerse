@@ -30,7 +30,7 @@ export function NebulaLayer({ config }: NebulaLayerProps) {
 
     const geo = new THREE.BufferGeometry();
     geo.setAttribute('position', new THREE.BufferAttribute(data.positions, 3));
-    geo.setAttribute('color', new THREE.BufferAttribute(data.colors, 3));
+    geo.setAttribute('aColor', new THREE.BufferAttribute(data.colors, 3));
     geo.setAttribute('size', new THREE.BufferAttribute(data.sizes, 1));
     geo.setAttribute('opacity', new THREE.BufferAttribute(data.opacities, 1));
     geo.setAttribute('rotation', new THREE.BufferAttribute(data.rotations, 1));
@@ -61,6 +61,7 @@ export function NebulaLayer({ config }: NebulaLayerProps) {
       <nebulaMaterial
         ref={materialRef}
         transparent
+        vertexColors={true}
         depthWrite={false}
         blending={THREE.AdditiveBlending}
         uniforms-uNoiseScale-value={config.noiseScale}

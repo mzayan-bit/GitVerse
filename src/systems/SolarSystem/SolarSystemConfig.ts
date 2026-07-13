@@ -7,8 +7,8 @@ export const SOLAR_SYSTEM_DEFAULTS = {
   ORBIT_SPACING: 30, // Minimum distance between orbits to prevent collisions
 
   // Orbit Mechanics
-  MIN_ORBIT_SPEED: 0.01,
-  MAX_ORBIT_SPEED: 0.1,
+  MIN_ORBIT_SPEED: 0.1,
+  MAX_ORBIT_SPEED: 0.5,
 
   // Star Settings
   MIN_STAR_RADIUS: 20,

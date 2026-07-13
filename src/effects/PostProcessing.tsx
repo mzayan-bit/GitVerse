@@ -65,8 +65,8 @@ function PostProcessing({ config }: PostProcessingProps) {
             )
           }
           blendFunction={BlendFunction.NORMAL}
-          radialModulation={false}
-          modulationOffset={0}
+          radialModulation={true}
+          modulationOffset={0.2}
         />
       ) : (
         <></>

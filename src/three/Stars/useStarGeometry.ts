@@ -18,7 +18,7 @@ export function useStarGeometry(
       'position',
       new THREE.BufferAttribute(data.positions, 3)
     );
-    geometry.setAttribute('color', new THREE.BufferAttribute(data.colors, 3));
+    geometry.setAttribute('aColor', new THREE.BufferAttribute(data.colors, 3));
     geometry.setAttribute('size', new THREE.BufferAttribute(data.sizes, 1));
     geometry.setAttribute(
       'twinklePhase',

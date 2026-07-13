@@ -9,6 +9,7 @@ export function NavigationCamera() {
   const focusedPlanetId = useSolarSystemManager((s) => s.focusedPlanetId);
   const systemConfig = useSolarSystemManager((s) => s.systemConfig);
   const simulationSpeed = useSolarSystemManager((s) => s.simulationSpeed);
+  const cameraMode = useSolarSystemManager((s) => s.cameraMode);
 
   // Target values for interpolation
   const targetPosition = useRef(new THREE.Vector3(0, 100, 300));
@@ -23,7 +24,9 @@ export function NavigationCamera() {
   useFrame((_, delta) => {
     timeRef.current += delta * simulationSpeed;
 
-    if (focusedPlanetId && systemConfig) {
+    if (cameraMode === 'orbit') return; // Let SceneOrbitControls handle it
+
+    if (cameraMode === 'follow' && focusedPlanetId && systemConfig) {
       const node = systemConfig.planets.find((p) => p.id === focusedPlanetId);
       if (node) {
         // Calculate where the planet is right now
@@ -47,7 +50,7 @@ export function NavigationCamera() {
     } else {
       // Free / Home mode
       targetLookAt.current.set(0, 0, 0);
-      targetPosition.current.set(0, 200, 600); // Home overview
+      targetPosition.current.set(0, 80, 250); // Cinematic close-up overview
     }
 
     // Smooth Interpolation

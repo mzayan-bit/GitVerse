@@ -63,6 +63,7 @@ export function StarField({
       <starMaterial
         ref={materialRef}
         transparent
+        vertexColors={true}
         depthWrite={false}
         blending={THREE.AdditiveBlending}
         uniforms-uTwinkleSpeed-value={config.twinkleSpeed}

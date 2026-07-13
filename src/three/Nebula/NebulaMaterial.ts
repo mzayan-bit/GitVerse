@@ -7,16 +7,17 @@ export const NebulaMaterial = shaderMaterial(
   },
   // Vertex Shader
   /* glsl */ `
+    attribute vec3 aColor;
     attribute float size;
     attribute float opacity;
     attribute float rotation;
     
-    varying vec3 vColor;
+    varying vec3 vParticleColor;
     varying float vOpacity;
     varying float vRotation;
 
     void main() {
-      vColor = color;
+      vParticleColor = aColor;
       vOpacity = opacity;
       vRotation = rotation;
       
@@ -31,7 +32,7 @@ export const NebulaMaterial = shaderMaterial(
     uniform float uTime;
     uniform float uNoiseScale;
 
-    varying vec3 vColor;
+    varying vec3 vParticleColor;
     varying float vOpacity;
     varying float vRotation;
 
@@ -73,7 +74,7 @@ export const NebulaMaterial = shaderMaterial(
       float n = noise((coord + uTime * uNoiseScale) * 10.0);
       alpha *= (0.6 + 0.4 * n);
 
-      gl_FragColor = vec4(vColor, alpha * vOpacity);
+      gl_FragColor = vec4(vParticleColor, alpha * vOpacity);
     }
   `
 );

@@ -9,14 +9,15 @@ export const StarMaterial = shaderMaterial(
   },
   // Vertex Shader
   /* glsl */ `
+    attribute vec3 aColor;
     attribute float size;
     attribute float twinklePhase;
     
-    varying vec3 vColor;
+    varying vec3 vParticleColor;
     varying float vTwinklePhase;
 
     void main() {
-      vColor = color;
+      vParticleColor = aColor;
       vTwinklePhase = twinklePhase;
       
       vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
@@ -33,7 +34,7 @@ export const StarMaterial = shaderMaterial(
     uniform float uTwinkleFactor;
     uniform float uOpacity;
 
-    varying vec3 vColor;
+    varying vec3 vParticleColor;
     varying float vTwinklePhase;
 
     void main() {
@@ -50,7 +51,7 @@ export const StarMaterial = shaderMaterial(
       // Mix between base alpha and twinkling alpha based on twinkle factor
       float finalAlpha = alpha * mix(1.0, twinkle, uTwinkleFactor) * uOpacity;
 
-      gl_FragColor = vec4(vColor, finalAlpha);
+      gl_FragColor = vec4(vParticleColor, finalAlpha);
     }
   `
 );

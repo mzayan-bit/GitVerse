@@ -21,7 +21,7 @@ function SceneOrbitControls({ config }: SceneOrbitControlsProps) {
     ...config,
   };
 
-  if (cameraMode === 'follow') return null;
+  if (cameraMode !== 'orbit') return null;
 
   return (
     <DreiOrbitControls
