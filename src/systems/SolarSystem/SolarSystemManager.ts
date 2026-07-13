@@ -3,17 +3,21 @@ import { devtools } from 'zustand/middleware';
 import { SolarSystemConfig } from './SolarSystemTypes';
 import { SolarSystemGenerator } from './SolarSystemGenerator';
 
+export type CameraMode = 'free' | 'orbit' | 'follow';
+
 export interface SolarSystemState {
   systemConfig: SolarSystemConfig | null;
   simulationSpeed: number;
   showOrbits: boolean;
   focusedPlanetId: string | null;
+  cameraMode: CameraMode;
 
   // Actions
   generateSystem: (seed: string, planetCount?: number) => void;
   setSimulationSpeed: (speed: number) => void;
   setShowOrbits: (show: boolean) => void;
   setFocusedPlanetId: (id: string | null) => void;
+  setCameraMode: (mode: CameraMode) => void;
 }
 
 export const useSolarSystemManager = create<SolarSystemState>()(
@@ -22,6 +26,7 @@ export const useSolarSystemManager = create<SolarSystemState>()(
     simulationSpeed: 1.0,
     showOrbits: true,
     focusedPlanetId: null,
+    cameraMode: 'free',
 
     generateSystem: (seed, planetCount) => {
       const config = SolarSystemGenerator.generate(seed, planetCount);
@@ -30,6 +35,8 @@ export const useSolarSystemManager = create<SolarSystemState>()(
 
     setSimulationSpeed: (speed) => set({ simulationSpeed: speed }),
     setShowOrbits: (show) => set({ showOrbits: show }),
-    setFocusedPlanetId: (id) => set({ focusedPlanetId: id }),
+    setFocusedPlanetId: (id) =>
+      set({ focusedPlanetId: id, cameraMode: id ? 'follow' : 'free' }),
+    setCameraMode: (mode) => set({ cameraMode: mode }),
   }))
 );

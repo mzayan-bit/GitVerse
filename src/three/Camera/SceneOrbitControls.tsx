@@ -3,6 +3,7 @@
 import { OrbitControls as DreiOrbitControls } from '@react-three/drei';
 import type { OrbitControlsConfig } from '@/types/rendering';
 import { DEFAULT_ORBIT_CONTROLS_CONFIG } from '@/constants/rendering';
+import { useSolarSystemManager } from '@/systems/SolarSystem/SolarSystemManager';
 
 interface SceneOrbitControlsProps {
   config?: Partial<OrbitControlsConfig>;
@@ -13,10 +14,14 @@ interface SceneOrbitControlsProps {
  * Must be a child of `<Canvas>`.
  */
 function SceneOrbitControls({ config }: SceneOrbitControlsProps) {
+  const cameraMode = useSolarSystemManager((s) => s.cameraMode);
+
   const merged: OrbitControlsConfig = {
     ...DEFAULT_ORBIT_CONTROLS_CONFIG,
     ...config,
   };
+
+  if (cameraMode === 'follow') return null;
 
   return (
     <DreiOrbitControls

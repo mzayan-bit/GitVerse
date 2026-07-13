@@ -11,6 +11,7 @@ import {
   NebulaManager,
   DynamicEffectsManager,
 } from '@/three';
+import { NavigationCamera } from '@/three/Camera/NavigationCamera';
 import { PerformanceManager } from '@/three';
 import {
   PostProcessing,
@@ -40,6 +41,7 @@ export default function GitVerseCanvas() {
               {/* Camera & Controls */}
               <CameraController />
               <SceneOrbitControls />
+              <NavigationCamera />
 
               {/* Performance */}
               <PerformanceManager />
