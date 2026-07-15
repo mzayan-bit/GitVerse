@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { GalaxyConfig, GalaxyShape } from './GalaxyTypes';
 import { GalaxyGenerator } from './GalaxyGenerator';
+import { RepositoryDomainModel } from '@/domain/RepositoryModels';
 
 export type GalaxyCameraMode =
   | 'galaxy-free'
@@ -19,7 +20,8 @@ interface GalaxyState {
   generateGalaxy: (
     seed: string,
     systemCount?: number,
-    shape?: GalaxyShape
+    shape?: GalaxyShape,
+    repositories?: RepositoryDomainModel[]
   ) => void;
   setFocusedSystemId: (id: string | null) => void;
   setCameraMode: (mode: GalaxyCameraMode) => void;
@@ -32,8 +34,13 @@ export const useGalaxyManager = create<GalaxyState>((set) => ({
   cameraMode: 'galaxy-free',
   showGalaxyUI: true,
 
-  generateGalaxy: (seed, systemCount = 2000, shape) => {
-    const config = GalaxyGenerator.generate(seed, systemCount, shape);
+  generateGalaxy: (seed, systemCount = 2000, shape, repositories) => {
+    const config = GalaxyGenerator.generate(
+      seed,
+      systemCount,
+      shape,
+      repositories
+    );
     set({
       galaxyConfig: config,
       focusedSystemId: null,

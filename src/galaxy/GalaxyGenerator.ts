@@ -2,14 +2,20 @@ import { GalaxyConfig, GalaxyShape, GalaxySystemNode } from './GalaxyTypes';
 import { GALAXY_DEFAULTS } from './GalaxyConfig';
 import { GalaxyEngine } from './GalaxyEngine';
 import { EntityFactory } from '@/entities/EntityFactory';
+import { MappingEngine } from '@/mapping/MappingEngine';
+import { RepositoryDomainModel } from '@/domain/RepositoryModels';
 
 export class GalaxyGenerator {
   public static generate(
     seedStr: string,
     systemCount: number = 2000,
-    forcedShape?: GalaxyShape
+    forcedShape?: GalaxyShape,
+    repositories?: RepositoryDomainModel[]
   ): GalaxyConfig {
     const engine = new GalaxyEngine(seedStr);
+
+    // If we have repositories, the system count is the number of repositories
+    const actualSystemCount = repositories ? repositories.length : systemCount;
 
     const shape = forcedShape || engine.randomElement(GALAXY_DEFAULTS.SHAPES);
     const coreColor = engine.randomElement(GALAXY_DEFAULTS.CORE_COLORS);
@@ -28,7 +34,7 @@ export class GalaxyGenerator {
     const systems: GalaxySystemNode[] = [];
 
     // Procedural distribution based on shape
-    for (let i = 0; i < systemCount; i++) {
+    for (let i = 0; i < actualSystemCount; i++) {
       let x = 0,
         y = 0,
         z = 0;
@@ -164,20 +170,42 @@ export class GalaxyGenerator {
         continue;
       }
 
-      const sysId = `sys-${i}`;
+      const sizeScale = 1;
+      x *= sizeScale;
+      y *= sizeScale;
+      z *= sizeScale;
+
+      const systemSeed = engine.randomElement(GALAXY_DEFAULTS.SYSTEM_SEEDS);
+      const systemId = repositories
+        ? repositories[i].id
+        : `system-${systemSeed}-${i}`;
+      const repoName = repositories
+        ? repositories[i].name
+        : `System ${systemId.slice(0, 4)}`;
+
+      // Register Solar System Entity
+      const metadata: Record<string, unknown> = { shape, isCoreColor };
+      if (repositories) {
+        metadata.repository = repositories[i];
+        const visualProps = MappingEngine.mapRepositoryToVisuals(
+          repositories[i]
+        );
+        metadata.visuals = visualProps;
+      }
+
       const sysPos: [number, number, number] = [x, y, z];
 
       EntityFactory.createEntity(
-        sysId,
-        'solar_system',
-        `System ${i}`,
-        `${seedStr}-${i}`,
+        systemId,
+        'solar-system',
+        repoName,
+        systemSeed,
         { position: sysPos },
-        { shape, isCoreColor }
+        metadata
       );
 
       systems.push({
-        id: sysId,
+        id: systemId,
         position: sysPos,
         size: engine.randomRange(0.5, 2.0),
         color,

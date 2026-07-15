@@ -9,8 +9,10 @@ import { SOLAR_SYSTEM_DEFAULTS } from './SolarSystemConfig';
 import { PlanetEngine } from '@/planets/PlanetEngine';
 import { PlanetFactory } from '@/planets/PlanetFactory';
 import { MockDataGenerator } from '@/mock/MockDataGenerator';
-import { MappingEngine } from '@/mapping/MappingEngine';
+import { MappingEngine, MappedVisualProperties } from '@/mapping/MappingEngine';
 import { EntityFactory } from '@/entities/EntityFactory';
+import { useEntityManager } from '@/entities/EntityManager';
+import { RepositoryDomainModel } from '@/domain/RepositoryModels';
 
 export class SolarSystemGenerator {
   static generate(
@@ -69,28 +71,37 @@ export class SolarSystemGenerator {
     let currentOrbitRadius =
       starRadius + SOLAR_SYSTEM_DEFAULTS.MIN_ORBIT_RADIUS;
 
-    // Use MockDataGenerator for the entities
+    // Use MockDataGenerator as a fallback for the entities if not registered
     const mockGen = new MockDataGenerator(systemSeed);
 
     for (let i = 0; i < count; i++) {
       const planetId = `${systemSeed}-planet-${i}`;
 
-      // 1. Generate Mock Repository Data
-      // Here we assume this solar system belongs to an organization/owner based on the seed
-      const repoData = mockGen.generateRepository(systemSeed, i);
+      // Check if entity exists in the global store first
+      let repoData;
+      let visualProps;
 
-      // 2. Map Repository Data to Visual Properties
-      const visualProps = MappingEngine.mapRepositoryToVisuals(repoData);
+      const existingEntity = useEntityManager.getState().entities[systemSeed];
+      if (existingEntity && existingEntity.metadata?.repository) {
+        // This is a live GitHub repository, we only have 1 planet for the repo
+        if (i > 0) break; // Only 1 planet per real repository
+        repoData = existingEntity.metadata.repository as RepositoryDomainModel;
+        visualProps = existingEntity.metadata.visuals as MappedVisualProperties;
+      } else {
+        // Fallback to mock generation for random universe exploration
+        repoData = mockGen.generateRepository(systemSeed, i);
+        visualProps = MappingEngine.mapRepositoryToVisuals(repoData);
 
-      // 3. Register as an Entity
-      EntityFactory.createEntity(
-        planetId,
-        'planet',
-        repoData.name,
-        visualProps.biomeSeed,
-        undefined, // transform will be set by render
-        { repository: repoData, visuals: visualProps }
-      );
+        // Register as an Entity
+        EntityFactory.createEntity(
+          planetId,
+          'planet',
+          repoData.name,
+          visualProps.biomeSeed,
+          undefined,
+          { repository: repoData, visuals: visualProps }
+        );
+      }
 
       // 4. Generate the Planet Config using the mapped seed and size
       const planetConfig = PlanetFactory.create(visualProps.biomeSeed);
