@@ -1,6 +1,7 @@
 import { GalaxyConfig, GalaxyShape, GalaxySystemNode } from './GalaxyTypes';
 import { GALAXY_DEFAULTS } from './GalaxyConfig';
 import { GalaxyEngine } from './GalaxyEngine';
+import { EntityFactory } from '@/entities/EntityFactory';
 
 export class GalaxyGenerator {
   public static generate(
@@ -13,6 +14,16 @@ export class GalaxyGenerator {
     const shape = forcedShape || engine.randomElement(GALAXY_DEFAULTS.SHAPES);
     const coreColor = engine.randomElement(GALAXY_DEFAULTS.CORE_COLORS);
     const outerColor = engine.randomElement(GALAXY_DEFAULTS.OUTER_COLORS);
+
+    // Register Galaxy Entity
+    EntityFactory.createEntity(
+      `galaxy-${seedStr}`,
+      'galaxy',
+      `Galaxy ${seedStr}`,
+      seedStr,
+      undefined,
+      { shape, systemCount }
+    );
 
     const systems: GalaxySystemNode[] = [];
 
@@ -153,9 +164,21 @@ export class GalaxyGenerator {
         continue;
       }
 
+      const sysId = `sys-${i}`;
+      const sysPos: [number, number, number] = [x, y, z];
+
+      EntityFactory.createEntity(
+        sysId,
+        'solar_system',
+        `System ${i}`,
+        `${seedStr}-${i}`,
+        { position: sysPos },
+        { shape, isCoreColor }
+      );
+
       systems.push({
-        id: `sys-${i}`,
-        position: [x, y, z],
+        id: sysId,
+        position: sysPos,
         size: engine.randomRange(0.5, 2.0),
         color,
       });

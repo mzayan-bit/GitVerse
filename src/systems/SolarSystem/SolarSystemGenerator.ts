@@ -8,6 +8,9 @@ import {
 import { SOLAR_SYSTEM_DEFAULTS } from './SolarSystemConfig';
 import { PlanetEngine } from '@/planets/PlanetEngine';
 import { PlanetFactory } from '@/planets/PlanetFactory';
+import { MockDataGenerator } from '@/mock/MockDataGenerator';
+import { MappingEngine } from '@/mapping/MappingEngine';
+import { EntityFactory } from '@/entities/EntityFactory';
 
 export class SolarSystemGenerator {
   static generate(
@@ -63,31 +66,55 @@ export class SolarSystemGenerator {
     starRadius: number
   ): PlanetNode[] {
     const nodes: PlanetNode[] = [];
-
     let currentOrbitRadius =
       starRadius + SOLAR_SYSTEM_DEFAULTS.MIN_ORBIT_RADIUS;
 
+    // Use MockDataGenerator for the entities
+    const mockGen = new MockDataGenerator(systemSeed);
+
     for (let i = 0; i < count; i++) {
-      // Planet ID and Seed based on system seed + index
       const planetId = `${systemSeed}-planet-${i}`;
 
-      // Generate Planet Config
-      const planetConfig = PlanetFactory.create(planetId);
+      // 1. Generate Mock Repository Data
+      // Here we assume this solar system belongs to an organization/owner based on the seed
+      const repoData = mockGen.generateRepository(systemSeed, i);
 
-      // Ensure orbit is pushed out far enough to avoid collision with previous planet
+      // 2. Map Repository Data to Visual Properties
+      const visualProps = MappingEngine.mapRepositoryToVisuals(repoData);
+
+      // 3. Register as an Entity
+      EntityFactory.createEntity(
+        planetId,
+        'planet',
+        repoData.name,
+        visualProps.biomeSeed,
+        undefined, // transform will be set by render
+        { repository: repoData, visuals: visualProps }
+      );
+
+      // 4. Generate the Planet Config using the mapped seed and size
+      const planetConfig = PlanetFactory.create(visualProps.biomeSeed);
+
+      // Apply mapped properties
+      planetConfig.terrain.baseRadius = visualProps.size * 10; // Scale it up for visibility
+      planetConfig.atmosphere.color = visualProps.baseColor;
+      planetConfig.terrain.displacementStrength +=
+        visualProps.craterDensity * 2.0;
+
+      // In a full implementation, we'd add moons based on visualProps.moonCount
+      // and city lights based on visualProps.populationDensity.
+
       const planetRadius = planetConfig.terrain.baseRadius;
       currentOrbitRadius +=
         planetRadius * 2 +
         engine.randomRange(10, SOLAR_SYSTEM_DEFAULTS.ORBIT_SPACING);
 
-      // Eccentricity (0 to 0.2 mostly, rarely up to 0.4)
       const eccentricity =
         engine.random() > 0.8
           ? engine.randomRange(0.2, 0.4)
           : engine.randomRange(0, 0.1);
-
       const radiusX = currentOrbitRadius;
-      const radiusZ = currentOrbitRadius * (1 - eccentricity * 0.5); // Elliptical distortion
+      const radiusZ = currentOrbitRadius * (1 - eccentricity * 0.5);
 
       const orbit: OrbitConfig = {
         radiusX,
@@ -98,22 +125,16 @@ export class SolarSystemGenerator {
             SOLAR_SYSTEM_DEFAULTS.MAX_ORBIT_SPEED
           ) *
             (engine.random() > 0.9 ? 2 : 1)) /
-          (Math.sqrt(currentOrbitRadius) * 0.1), // Kepler approximation
-        direction: engine.random() > 0.1 ? 1 : -1, // Most orbit same direction
-        inclination: engine.randomRange(-0.1, 0.1), // Slight tilt
+          (Math.sqrt(currentOrbitRadius) * 0.1),
+        direction: engine.random() > 0.1 ? 1 : -1,
+        inclination: engine.randomRange(-0.1, 0.1),
         eccentricity,
         rotationSpeed: engine.randomRange(0.01, 0.1),
         rotationTilt: engine.randomRange(-0.5, 0.5),
         initialAngle: engine.randomRange(0, Math.PI * 2),
       };
 
-      nodes.push({
-        id: planetId,
-        planet: planetConfig,
-        orbit,
-      });
-
-      // Push radius for next iteration
+      nodes.push({ id: planetId, planet: planetConfig, orbit });
       currentOrbitRadius += planetRadius * 2;
     }
 
