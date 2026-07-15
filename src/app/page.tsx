@@ -6,6 +6,7 @@ import { Loader2 } from 'lucide-react';
 import dynamic from 'next/dynamic';
 import { SimulationControls } from '@/components/SimulationControls';
 import { GalaxyControls } from '@/components/GalaxyControls';
+import { EntityInspector } from '@/components/EntityInspector';
 import { useSolarSystemManager } from '@/systems/SolarSystem/SolarSystemManager';
 
 // Dynamically import the 3D canvas with SSR disabled
@@ -84,6 +85,7 @@ export default function Home() {
         <div className="pointer-events-auto animate-in fade-in duration-1000">
           <GalaxyControls />
           <SimulationControls />
+          <EntityInspector />
         </div>
       )}
     </main>
