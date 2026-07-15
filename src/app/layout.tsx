@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Geist, Geist_Mono } from 'next/font/google';
 
 import { ThemeProvider } from '@/providers/theme-provider';
+import { AuthProvider } from '@/providers/auth-provider';
 import { Navbar } from '@/components/layout/navbar';
 import { Footer } from '@/components/layout/footer';
 
@@ -65,11 +66,13 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body className="flex min-h-screen flex-col bg-background font-sans text-foreground antialiased">
-        <ThemeProvider>
-          <Navbar />
-          <main className="flex flex-1 flex-col">{children}</main>
-          <Footer />
-        </ThemeProvider>
+        <AuthProvider>
+          <ThemeProvider>
+            <Navbar />
+            <main className="flex flex-1 flex-col">{children}</main>
+            <Footer />
+          </ThemeProvider>
+        </AuthProvider>
       </body>
     </html>
   );
