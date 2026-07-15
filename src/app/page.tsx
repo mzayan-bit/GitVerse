@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Loader2 } from 'lucide-react';
 import dynamic from 'next/dynamic';
@@ -38,9 +38,12 @@ export default function Home() {
   const startImport = async () => {
     setIsImporting(true);
     try {
-      if (session && (session as Record<string, unknown>).accessToken) {
+      if (
+        session &&
+        (session as unknown as Record<string, unknown>).accessToken
+      ) {
         const github = new GithubService(
-          (session as Record<string, unknown>).accessToken as string
+          (session as unknown as Record<string, unknown>).accessToken as string
         );
         const repos = await github.fetchUserRepositories();
         setRepositories(repos);

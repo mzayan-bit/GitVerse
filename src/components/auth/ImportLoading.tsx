@@ -1,13 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import {
-  Loader2,
-  CheckCircle2,
-  Server,
-  Database,
-  Sparkles,
-} from 'lucide-react';
+import { CheckCircle2, Server, Database, Sparkles } from 'lucide-react';
 import { RepositoryDomainModel } from '@/domain/RepositoryModels';
 
 interface ImportLoadingProps {

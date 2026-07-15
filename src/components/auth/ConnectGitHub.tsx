@@ -2,14 +2,7 @@
 
 import { useState } from 'react';
 import { signIn } from 'next-auth/react';
-import {
-  Github,
-  Globe,
-  GitBranch,
-  Star,
-  Loader2,
-  AlertCircle,
-} from 'lucide-react';
+import { GitBranch, Globe, Star, Loader2, AlertCircle } from 'lucide-react';
 
 export function ConnectGitHub() {
   const [isConnecting, setIsConnecting] = useState(false);
@@ -21,7 +14,7 @@ export function ConnectGitHub() {
     try {
       // Initiates the OAuth flow
       await signIn('github', { callbackUrl: '/' });
-    } catch (err) {
+    } catch {
       setError('Failed to connect to GitHub. Please try again.');
       setIsConnecting(false);
     }
@@ -33,7 +26,7 @@ export function ConnectGitHub() {
         {/* Header */}
         <div className="flex flex-col items-center justify-center px-8 pb-6 pt-10 text-center">
           <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-2xl bg-white/5 ring-1 ring-white/10">
-            <Github size={32} className="text-white" />
+            <GitBranch size={32} className="text-white" />
           </div>
           <h2 className="mb-2 text-2xl font-medium tracking-tight text-white">
             Connect GitHub
@@ -82,7 +75,7 @@ export function ConnectGitHub() {
             {isConnecting ? (
               <Loader2 size={16} className="animate-spin" />
             ) : (
-              <Github size={16} />
+              <GitBranch size={16} />
             )}
             {isConnecting ? 'Connecting...' : 'Continue with GitHub'}
           </button>

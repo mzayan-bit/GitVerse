@@ -175,7 +175,7 @@ export class GalaxyGenerator {
       y *= sizeScale;
       z *= sizeScale;
 
-      const systemSeed = engine.randomElement(GALAXY_DEFAULTS.SYSTEM_SEEDS);
+      const systemSeed = `${seedStr}-${i}`;
       const systemId = repositories
         ? repositories[i].id
         : `system-${systemSeed}-${i}`;
@@ -197,7 +197,7 @@ export class GalaxyGenerator {
 
       EntityFactory.createEntity(
         systemId,
-        'solar-system',
+        'solar_system',
         repoName,
         systemSeed,
         { position: sysPos },
