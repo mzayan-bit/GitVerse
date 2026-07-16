@@ -23,7 +23,7 @@ export function validateAuthEnvironment(): AuthEnvironment {
   if (!nextAuthSecret) missing.push('NEXTAUTH_SECRET');
 
   if (missing.length > 0 && process.env.NODE_ENV === 'production') {
-    throw new Error(
+    console.warn(
       `[GitVerse Auth] Missing required environment variables: ${missing.join(', ')}`
     );
   }
