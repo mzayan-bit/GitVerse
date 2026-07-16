@@ -47,9 +47,9 @@ export function RepositoryInspector() {
                 Repository Inspector
               </h2>
               <span
-                className={`px-2 py-0.5 rounded-full text-[10px] uppercase tracking-wider ${repoData.isPrivate ? 'bg-red-500/20 text-red-300' : 'bg-emerald-500/20 text-emerald-300'}`}
+                className={`px-2 py-0.5 rounded-full text-[10px] uppercase tracking-wider ${repoData.visibility === 'private' ? 'bg-red-500/20 text-red-300' : 'bg-emerald-500/20 text-emerald-300'}`}
               >
-                {repoData.isPrivate ? 'Private' : 'Public'}
+                {repoData.visibility === 'private' ? 'Private' : 'Public'}
               </span>
             </div>
             <h3
