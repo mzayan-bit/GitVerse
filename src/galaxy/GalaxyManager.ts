@@ -2,6 +2,10 @@ import { create } from 'zustand';
 import { GalaxyConfig, GalaxyShape } from './GalaxyTypes';
 import { GalaxyGenerator } from './GalaxyGenerator';
 import { RepositoryDomainModel } from '@/domain/RepositoryModels';
+import { useEntityManager } from '@/entities/EntityManager';
+import { useGraphManager } from '@/intelligence/KnowledgeGraph/GraphManager';
+import { GraphBuilder } from '@/intelligence/KnowledgeGraph/GraphBuilder';
+import { RelationshipEngine } from '@/intelligence/RelationshipEngine';
 
 export type GalaxyCameraMode =
   | 'galaxy-free'
@@ -34,13 +38,27 @@ export const useGalaxyManager = create<GalaxyState>((set) => ({
   cameraMode: 'galaxy-free',
   showGalaxyUI: true,
 
-  generateGalaxy: (seed, systemCount = 2000, shape, repositories) => {
-    const config = GalaxyGenerator.generate(
-      seed,
-      systemCount,
-      shape,
-      repositories
-    );
+  generateGalaxy: (seed, count = 2000, shape, repositories) => {
+    // 2. Clear old state
+    set({
+      galaxyConfig: null,
+      focusedSystemId: null,
+      cameraMode: 'galaxy-free',
+    });
+    useEntityManager.getState().clearEntities();
+    useGraphManager.getState().clearGraph();
+
+    // 3. Generate new universe (synchronously creates basic shapes)
+    const config = GalaxyGenerator.generate(seed, count, shape, repositories);
+
+    // 4. Build Knowledge Graph if repositories exist
+    if (repositories && repositories.length > 0) {
+      const graph = GraphBuilder.buildGraph(repositories);
+      RelationshipEngine.computeRelationships(graph, repositories);
+      useGraphManager.getState().setGraph(graph);
+    }
+
+    // 5. Update state
     set({
       galaxyConfig: config,
       focusedSystemId: null,

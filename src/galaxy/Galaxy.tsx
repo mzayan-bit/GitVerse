@@ -3,6 +3,7 @@ import * as THREE from 'three';
 import { useFrame } from '@react-three/fiber';
 import { useGalaxyManager } from './GalaxyManager';
 import { GalaxyFactory } from './GalaxyFactory';
+import { GraphEdges } from '@/components/canvas/GraphEdges';
 
 export function Galaxy() {
   const { galaxyConfig, generateGalaxy } = useGalaxyManager();
@@ -102,6 +103,7 @@ export function Galaxy() {
           opacity={0.9}
         />
       </instancedMesh>
+      <GraphEdges />
     </group>
   );
 }
