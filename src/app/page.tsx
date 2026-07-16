@@ -4,15 +4,14 @@ import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Loader2 } from 'lucide-react';
 import dynamic from 'next/dynamic';
-import { useSession } from 'next-auth/react';
+import { useAuth } from '@/auth/hooks';
 import { SimulationControls } from '@/components/SimulationControls';
 import { GalaxyControls } from '@/components/GalaxyControls';
-import { RepositoryInspector } from '@/components/RepositoryInspector';
-import { useSolarSystemManager } from '@/systems/SolarSystem/SolarSystemManager';
-import { useGalaxyManager } from '@/galaxy/GalaxyManager';
 import { ConnectGitHub } from '@/components/auth/ConnectGitHub';
-import { ImportLoading } from '@/components/auth/ImportLoading';
-import { GithubService } from '@/lib/github/GithubService';
+import { OrganizationExplorer } from '@/components/auth/OrganizationExplorer';
+import { DeveloperDashboard } from '@/components/dashboard';
+import { ImportEngine } from '@/github';
+import type { ClientMetrics, GitHubRateLimitResponse } from '@/github';
 import { RepositoryDomainModel } from '@/domain/RepositoryModels';
 
 // Dynamically import the 3D canvas with SSR disabled
@@ -26,125 +25,141 @@ const GitVerseCanvas = dynamic(() => import('@/components/canvas-wrapper'), {
 });
 
 export default function Home() {
-  const { data: session, status } = useSession();
-  const [hasEntered, setHasEntered] = useState(false);
+  const { isAuthenticated, isLoading, accessToken } = useAuth();
+
+  // UI States
   const [showAuth, setShowAuth] = useState(false);
+  const [showOrgExplorer, setShowOrgExplorer] = useState(false);
+  const [showDashboard, setShowDashboard] = useState(false);
   const [isImporting, setIsImporting] = useState(false);
+
+  // Data States
   const [repositories, setRepositories] = useState<RepositoryDomainModel[]>([]);
-
-  const setCameraMode = useSolarSystemManager((s) => s.setCameraMode);
-  const generateGalaxy = useGalaxyManager((s) => s.generateGalaxy);
-
-  const startImport = async () => {
-    setIsImporting(true);
-    try {
-      if (
-        session &&
-        (session as unknown as Record<string, unknown>).accessToken
-      ) {
-        const github = new GithubService(
-          (session as unknown as Record<string, unknown>).accessToken as string
-        );
-        const repos = await github.fetchUserRepositories();
-        setRepositories(repos);
-
-        // Generate the galaxy using real data
-        generateGalaxy('github-universe', undefined, 'spiral', repos);
-      }
-    } catch (err) {
-      console.error('Failed to import repositories:', err);
-      setIsImporting(false);
-    }
-  };
+  const [clientMetrics, setClientMetrics] = useState<ClientMetrics>();
+  const [rateLimit, setRateLimit] = useState<GitHubRateLimitResponse>();
 
   const handleEnter = () => {
-    if (status === 'authenticated') {
-      startImport();
+    if (isAuthenticated) {
+      setShowOrgExplorer(true);
     } else {
       setShowAuth(true);
     }
   };
 
-  const handleImportComplete = () => {
-    setIsImporting(false);
-    setHasEntered(true);
-    setCameraMode('orbit');
+  const startImport = async (mode: 'personal' | 'org', orgLogin?: string) => {
+    if (!accessToken) return;
+
+    setShowOrgExplorer(false);
+    setIsImporting(true);
+
+    const engine = new ImportEngine(accessToken);
+
+    try {
+      let result;
+      if (mode === 'personal') {
+        result = await engine.importUserRepositories();
+      } else if (orgLogin) {
+        result = await engine.importOrgRepositories(orgLogin);
+      }
+
+      if (result) {
+        setRepositories(result.repositories);
+      }
+
+      const metrics = engine.getClient().getMetrics();
+      const limits = await engine.getClient().getRateLimit();
+
+      setClientMetrics(metrics);
+      setRateLimit(limits);
+    } catch (err) {
+      console.error('Import failed:', err);
+    } finally {
+      setIsImporting(false);
+      setShowDashboard(true);
+    }
   };
 
   return (
     <main className="relative h-screen w-full overflow-hidden bg-black selection:bg-white/20">
-      {/* 3D Scene Background */}
-      <div className="absolute inset-0 z-0 pointer-events-auto">
-        {hasEntered && <GitVerseCanvas />}
+      {/* 3D Scene Background - Running independently as requested */}
+      <div className="absolute inset-0 z-0 pointer-events-auto opacity-50">
+        <GitVerseCanvas />
       </div>
 
-      {/* UI Overlay - Space OS */}
-      {!hasEntered && !isImporting && (
-        <div className="absolute inset-0 z-10 pointer-events-none flex flex-col items-center justify-between p-8 font-sans transition-opacity duration-1000">
-          {/* Top Status Bar */}
+      {/* Landing UI */}
+      {!showOrgExplorer && !isImporting && !showDashboard && (
+        <div className="absolute inset-0 z-10 pointer-events-none flex flex-col items-center justify-between p-8 font-sans">
           <header className="w-full max-w-7xl flex items-center justify-between text-[11px] font-mono tracking-widest text-white/50 uppercase">
             <div className="flex items-center gap-3">
               <div className="w-2 h-2 rounded-full bg-emerald-500/80 animate-pulse" />
               <span>System Online</span>
             </div>
             <div>
-              <span>GitVerse v0.1.0</span>
+              <span>GitVerse v0.2.0</span>
             </div>
           </header>
 
-          {/* Center Content - Floating gracefully */}
           <div className="flex flex-col items-center justify-center translate-y-[-10%] animate-in fade-in slide-in-from-bottom-8 duration-1000">
             <h1 className="text-5xl md:text-7xl font-light tracking-[-0.04em] text-white/90 select-none mb-4 drop-shadow-2xl">
               GitVerse
             </h1>
             <p className="text-sm md:text-base font-light tracking-[0.05em] text-white/50 max-w-md text-center leading-relaxed">
-              A cinematic operating system for your repositories.
+              Integration Platform Dashboard
             </p>
           </div>
 
-          {/* Bottom Dock */}
-          <div className="pointer-events-auto flex items-center justify-center mb-8 animate-in fade-in slide-in-from-bottom-12 duration-1000 delay-300 fill-mode-both">
-            <div className="flex items-center gap-4 px-6 py-4 rounded-3xl bg-white/[0.03] backdrop-blur-xl border border-white/10 shadow-[0_8px_32px_rgba(0,0,0,0.4)] transition-all hover:bg-white/[0.05]">
-              <Button
-                variant="outline"
-                onClick={handleEnter}
-                className="rounded-2xl border-white/10 bg-white/5 hover:bg-white/10 text-white font-light tracking-wide px-8 py-6 h-auto transition-all"
-              >
-                {status === 'loading' ? (
-                  <Loader2 className="animate-spin mr-2 size-4" />
-                ) : null}
-                Enter Universe
-              </Button>
-            </div>
+          <div className="pointer-events-auto flex items-center justify-center mb-8 animate-in fade-in slide-in-from-bottom-12 duration-1000 delay-300">
+            <Button
+              variant="outline"
+              onClick={handleEnter}
+              className="rounded-2xl border-white/10 bg-white/5 hover:bg-white/10 text-white font-light tracking-wide px-8 py-6 h-auto transition-all backdrop-blur-xl"
+            >
+              {isLoading ? (
+                <Loader2 className="animate-spin mr-2 size-4" />
+              ) : null}
+              {isAuthenticated ? 'Open Dashboard' : 'Connect GitHub'}
+            </Button>
           </div>
         </div>
       )}
 
-      {/* Auth Modal Overlay */}
-      {showAuth && !isImporting && (
-        <div className="absolute inset-0 z-50 pointer-events-auto">
-          <ConnectGitHub />
-        </div>
+      {/* Modals & Overlays */}
+      {showAuth && !isAuthenticated && <ConnectGitHub />}
+
+      {showOrgExplorer && accessToken && (
+        <OrganizationExplorer
+          accessToken={accessToken}
+          onSelectPersonal={() => startImport('personal')}
+          onSelectOrg={(org) => startImport('org', org)}
+        />
       )}
 
-      {/* Import Loading Screen */}
       {isImporting && (
-        <div className="absolute inset-0 z-50 pointer-events-auto bg-black">
-          <ImportLoading
-            repositories={repositories}
-            onComplete={handleImportComplete}
-          />
+        <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-md">
+          <div className="flex flex-col items-center gap-4 text-white">
+            <Loader2 className="size-8 animate-spin text-emerald-400" />
+            <p className="text-sm tracking-widest uppercase text-white/50">
+              Importing Repositories...
+            </p>
+          </div>
         </div>
       )}
 
-      {/* Simulation UI overlay */}
-      {hasEntered && (
-        <div className="pointer-events-auto animate-in fade-in duration-1000 z-10 relative">
-          <GalaxyControls />
-          <SimulationControls />
-          <RepositoryInspector />
-        </div>
-      )}
+      {/* Developer Dashboard - The Operational View */}
+      <DeveloperDashboard
+        isOpen={showDashboard}
+        onClose={() => setShowDashboard(false)}
+        clientMetrics={clientMetrics}
+        rateLimit={rateLimit?.resources.core}
+        importedRepoCount={repositories.length}
+        orgCount={1}
+      />
+
+      {/* Background Controls (optional, disabled for dashboard focus) */}
+      <div className="hidden">
+        <GalaxyControls />
+        <SimulationControls />
+      </div>
     </main>
   );
 }
