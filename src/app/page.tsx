@@ -7,7 +7,7 @@ import dynamic from 'next/dynamic';
 import { useSession } from 'next-auth/react';
 import { SimulationControls } from '@/components/SimulationControls';
 import { GalaxyControls } from '@/components/GalaxyControls';
-import { EntityInspector } from '@/components/EntityInspector';
+import { RepositoryInspector } from '@/components/RepositoryInspector';
 import { useSolarSystemManager } from '@/systems/SolarSystem/SolarSystemManager';
 import { useGalaxyManager } from '@/galaxy/GalaxyManager';
 import { ConnectGitHub } from '@/components/auth/ConnectGitHub';
@@ -142,7 +142,7 @@ export default function Home() {
         <div className="pointer-events-auto animate-in fade-in duration-1000 z-10 relative">
           <GalaxyControls />
           <SimulationControls />
-          <EntityInspector />
+          <RepositoryInspector />
         </div>
       )}
     </main>
