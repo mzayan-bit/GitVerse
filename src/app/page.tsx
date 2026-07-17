@@ -13,6 +13,7 @@ import { DeveloperDashboard } from '@/components/dashboard';
 import { ImportEngine } from '@/github';
 import type { ClientMetrics, GitHubRateLimitResponse } from '@/github';
 import { RepositoryDomainModel } from '@/domain/RepositoryModels';
+import { UniverseSearch, UniverseHUD } from '@/universe';
 
 // Dynamically import the 3D canvas with SSR disabled
 const GitVerseCanvas = dynamic(() => import('@/components/canvas-wrapper'), {
@@ -164,6 +165,10 @@ export default function Home() {
         importedRepoCount={repositories.length}
         orgCount={1}
       />
+
+      {/* Live Universe UI Overlays */}
+      <UniverseSearch />
+      <UniverseHUD />
 
       {/* Background Controls (optional, disabled for dashboard focus) */}
       <div className="hidden">
