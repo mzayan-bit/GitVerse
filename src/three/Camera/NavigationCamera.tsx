@@ -4,6 +4,9 @@ import * as THREE from 'three';
 import { useSolarSystemManager } from '@/systems/SolarSystem/SolarSystemManager';
 import { OrbitMechanics } from '@/systems/SolarSystem/OrbitMechanics';
 import { useGalaxyManager } from '@/galaxy/GalaxyManager';
+import { useUniverseManager } from '@/universe';
+import { useEntityManager } from '@/entities/EntityManager';
+import { MappedVisualProperties } from '@/mapping/MappingEngine';
 
 export function NavigationCamera() {
   const { camera } = useThree();
@@ -18,6 +21,9 @@ export function NavigationCamera() {
   const targetPosition = useRef(new THREE.Vector3(0, 4000, 8000));
   const targetLookAt = useRef(new THREE.Vector3(0, 0, 0));
 
+  const { isBuilt, cameraState: universeCameraState } = useUniverseManager();
+  const { entities } = useEntityManager();
+
   // Current values to smoothly interpolate from
   const currentLookAt = useRef(new THREE.Vector3(0, 0, 0));
 
@@ -26,6 +32,49 @@ export function NavigationCamera() {
   useFrame((_, delta) => {
     timeRef.current += delta * simulationSpeed;
 
+    // --- LIVE UNIVERSE NAVIGATION ---
+    if (isBuilt) {
+      if (universeCameraState.mode === 'free') {
+        targetLookAt.current.set(0, 0, 0);
+        targetPosition.current.set(0, 4000, 8000); // Macro view
+      } else if (
+        universeCameraState.mode === 'focus' &&
+        universeCameraState.targetId
+      ) {
+        const entity = entities[universeCameraState.targetId];
+        if (entity && entity.transform?.position) {
+          const [ex, ey, ez] = entity.transform.position;
+          const entityPos = new THREE.Vector3(ex, ey, ez);
+
+          targetLookAt.current.copy(entityPos);
+
+          // Determine offset based on entity type
+          let offsetDist = 50;
+          if (entity.type === 'planet') {
+            const r = entity.metadata?.visuals
+              ? (entity.metadata.visuals as MappedVisualProperties).size * 10
+              : 20;
+            offsetDist = r * 3;
+          } else if (entity.type === 'solar_system') {
+            offsetDist = 300;
+          } else if (entity.type === 'galaxy') {
+            offsetDist = 2000;
+          }
+
+          targetPosition.current
+            .copy(entityPos)
+            .add(new THREE.Vector3(offsetDist, offsetDist * 0.8, offsetDist));
+        }
+      }
+
+      // Smooth Interpolation
+      camera.position.lerp(targetPosition.current, delta * 2.5);
+      currentLookAt.current.lerp(targetLookAt.current, delta * 3.5);
+      camera.lookAt(currentLookAt.current);
+      return;
+    }
+
+    // --- PROCEDURAL DEMO NAVIGATION ---
     const basePosition = new THREE.Vector3(0, 0, 0);
     let isFollowingPlanet = false;
 

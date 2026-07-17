@@ -91,7 +91,23 @@ function PlanetRenderer({ planetId }: { planetId: string }) {
   if (!entity || !config) return null;
 
   return (
-    <group position={entity.transform?.position}>
+    <group
+      position={entity.transform?.position}
+      onClick={(e) => {
+        e.stopPropagation();
+        useUniverseManager.getState().focusEntity(planetId);
+      }}
+      onPointerOver={(e) => {
+        e.stopPropagation();
+        document.body.style.cursor = 'pointer';
+        useUniverseManager.getState().setHoveredEntity(planetId);
+      }}
+      onPointerOut={(e) => {
+        e.stopPropagation();
+        document.body.style.cursor = 'auto';
+        useUniverseManager.getState().setHoveredEntity(null);
+      }}
+    >
       <Planet config={config} autoRotate={true} />
     </group>
   );
