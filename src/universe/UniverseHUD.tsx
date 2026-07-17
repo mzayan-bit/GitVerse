@@ -53,7 +53,7 @@ export function UniverseHUD() {
         <div className="flex items-center gap-2 mb-6">
           <Globe2 size={16} className="text-white/60" />
           <h2 className="text-xs font-semibold tracking-widest text-white/80 uppercase">
-            Universe State
+            Live Universe State
           </h2>
         </div>
 
