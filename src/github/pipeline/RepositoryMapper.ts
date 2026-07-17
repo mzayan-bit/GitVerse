@@ -41,6 +41,7 @@ export class RepositoryMapper {
       owner: repo.owner.login,
       name: repo.name,
       description: repo.description || '',
+      size: repo.size,
       stars: repo.stargazers_count,
       forks: repo.forks_count,
       issues: repo.open_issues_count,

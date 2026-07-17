@@ -17,24 +17,34 @@ export const LanguageColors: Record<string, string> = {
 };
 
 export const MappingConfig = {
-  // Size mapping (Stars)
-  MIN_PLANET_SIZE: 0.5,
-  MAX_PLANET_SIZE: 5.0,
-  MAX_STARS_FOR_SCALE: 100000, // e.g. 100k stars = MAX_PLANET_SIZE
+  // Size (Repository Size in KB)
+  MIN_PLANET_SIZE: 1.0,
+  MAX_PLANET_SIZE: 10.0,
+  MAX_REPO_SIZE_KB_FOR_SCALE: 1000000, // 1GB
+
+  // Mass (Stars)
+  MIN_PLANET_MASS: 1.0,
+  MAX_PLANET_MASS: 100.0,
+  MAX_STARS_FOR_SCALE: 50000,
 
   // Moons (Forks)
-  MAX_MOONS: 5,
-  FORKS_PER_MOON: 100, // Every 100 forks = 1 moon (up to MAX_MOONS)
+  MAX_MOONS: 10,
+  FORKS_PER_MOON: 50,
 
-  // Surface Damage / Craters (Issues)
-  MAX_CRATER_DENSITY: 0.8,
-  ISSUES_FOR_MAX_CRATERS: 1000,
+  // Satellites (Contributors)
+  MAX_SATELLITES: 20,
+  CONTRIBUTORS_PER_SATELLITE: 5,
 
-  // Population / Density (Commits)
-  MAX_POPULATION_DENSITY: 1.0,
-  COMMITS_FOR_MAX_POPULATION: 10000,
+  // Surface Damage / Cracks (Issues)
+  MAX_CRATER_DENSITY: 1.0,
+  ISSUES_FOR_MAX_CRATERS: 500,
 
-  // Atmosphere / Energy (Releases)
+  // Atmosphere / Energy Pulses (Releases)
   MAX_ENERGY_INTENSITY: 1.0,
-  RELEASES_FOR_MAX_ENERGY: 50,
+  RELEASES_FOR_MAX_ENERGY: 30,
+
+  // Rotation Speed (Activity / Commits / Updates)
+  MIN_ROTATION_SPEED: 0.001,
+  MAX_ROTATION_SPEED: 0.02,
+  MAX_ACTIVITY_SCORE: 100, // Normalized score based on recent activity
 };

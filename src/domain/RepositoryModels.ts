@@ -22,6 +22,7 @@ export interface RepositoryDomainModel {
   owner: string;
   name: string;
   description: string;
+  size: number; // Size in KB
 
   // Stats
   stars: number;
