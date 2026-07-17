@@ -22,6 +22,7 @@ import {
 import { SolarSystem } from '@/systems/SolarSystem';
 import { Galaxy } from '@/galaxy/Galaxy';
 import { useGalaxyManager } from '@/galaxy/GalaxyManager';
+import { UniverseRenderer, useUniverseManager } from '@/universe';
 
 function ActiveSolarSystemWrapper() {
   const { focusedSystemId, galaxyConfig } = useGalaxyManager();
@@ -34,6 +35,19 @@ function ActiveSolarSystemWrapper() {
   return (
     <group position={sysNode.position}>
       <SolarSystem />
+    </group>
+  );
+}
+
+function ProceduralBackground() {
+  const { isBuilt } = useUniverseManager();
+
+  if (isBuilt) return null;
+
+  return (
+    <group>
+      <Galaxy />
+      <ActiveSolarSystemWrapper />
     </group>
   );
 }
@@ -73,16 +87,14 @@ export default function GitVerseCanvas() {
               <NebulaManager />
               <DynamicEffectsManager />
 
-              {/* Galaxy Engine */}
-              <Galaxy />
+              {/* Galaxy Engine (Procedural Demo) */}
+              <ProceduralBackground />
 
-              {/* Active Solar System Wrapper */}
-              <ActiveSolarSystemWrapper />
+              {/* Live GitHub Universe Engine */}
+              <UniverseRenderer />
 
               {/* Post-Processing Pipeline */}
               <PostProcessing />
-
-              {/* Empty space for future Universe/Planets */}
             </RootScene>
           </Suspense>
         </SceneCanvas>

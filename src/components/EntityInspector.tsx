@@ -124,8 +124,12 @@ export function EntityInspector() {
                 <span>{(visualProps.craterDensity * 100).toFixed(0)}%</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-white/50">Population (Commits)</span>
-                <span>{(visualProps.populationDensity * 100).toFixed(0)}%</span>
+                <span className="text-white/50">Satellites (Contributors)</span>
+                <span>{visualProps.satelliteCount}</span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-white/50">Rotation Speed (Activity)</span>
+                <span>{(visualProps.rotationSpeed * 100).toFixed(1)}</span>
               </div>
               <div className="flex justify-between">
                 <span className="text-white/50">Biome Seed</span>

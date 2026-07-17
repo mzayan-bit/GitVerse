@@ -150,6 +150,7 @@ export class GithubService {
       owner: (repo.owner as Record<string, string>).login,
       name: repo.name as string,
       description: (repo.description as string) || '',
+      size: (repo.size as number) || 0,
       stars: (repo.stargazers_count as number) || 0,
       forks: (repo.forks_count as number) || 0,
       issues: (repo.open_issues_count as number) || 0,

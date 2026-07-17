@@ -64,6 +64,16 @@ export default function Home() {
 
       if (result) {
         setRepositories(result.repositories);
+        // Build the Live Universe
+        const { UniverseBuilder } = await import('@/universe/UniverseBuilder');
+        const { useGalaxyManager } = await import('@/galaxy/GalaxyManager');
+
+        // Hide the procedural background galaxy
+        useGalaxyManager.getState().setShowGalaxyUI(false);
+        // Wait for state to settle then build universe
+        setTimeout(() => {
+          UniverseBuilder.build(result.repositories);
+        }, 100);
       }
 
       const metrics = engine.getClient().getMetrics();

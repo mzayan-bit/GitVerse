@@ -156,6 +156,7 @@ export class MockDataGenerator {
       owner,
       name,
       description: `A highly scalable, performant ${name} built for the modern web.`,
+      size: this.randomRange(100, 1000000),
       stars,
       forks,
       issues,
