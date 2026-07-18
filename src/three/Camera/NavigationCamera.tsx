@@ -7,6 +7,7 @@ import { useGalaxyManager } from '@/galaxy/GalaxyManager';
 import { useUniverseManager } from '@/universe';
 import { useEntityManager } from '@/entities/EntityManager';
 import { MappedVisualProperties } from '@/mapping/MappingEngine';
+import { useRepositoryScene } from '@/repository-scene';
 
 export function NavigationCamera() {
   const { camera } = useThree();
@@ -24,12 +25,18 @@ export function NavigationCamera() {
   const { isBuilt, cameraState: universeCameraState } = useUniverseManager();
   const { entities } = useEntityManager();
 
+  // Repository scene awareness
+  const repoSceneMode = useRepositoryScene((s) => s.mode);
+
   // Current values to smoothly interpolate from
   const currentLookAt = useRef(new THREE.Vector3(0, 0, 0));
 
   const timeRef = useRef(0);
 
   useFrame((_, delta) => {
+    // Yield control when repository scene is active (entering, exploring, or leaving)
+    if (repoSceneMode !== 'idle') return;
+
     timeRef.current += delta * simulationSpeed;
 
     // --- LIVE UNIVERSE NAVIGATION ---
