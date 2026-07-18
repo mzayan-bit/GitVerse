@@ -31,7 +31,7 @@ export function BuildingMesh({ config }: BuildingMeshProps) {
 
   const { style } = config;
 
-  // Window texture
+  // Window texture (memoized globally per archetype to save memory on 5000+ files)
   const windowTexture = useMemo(() => {
     const size = 128;
     const canvas = document.createElement('canvas');
@@ -53,8 +53,9 @@ export function BuildingMesh({ config }: BuildingMeshProps) {
       for (let c = 0; c < wCols; c++) {
         const wx = wWidth + c * wWidth * 2;
         const wy = wHeight + r * wHeight * 2;
-        // Some windows are lit, some dark
-        const lit = ((r * wCols + c) * 7 + config.id.charCodeAt(0)) % 3 !== 0;
+        // Deterministic lit windows based on archetype
+        const lit =
+          ((r * wCols + c) * 7 + style.archetype.charCodeAt(0)) % 3 !== 0;
         ctx.fillStyle = lit ? style.emissiveColor : 'rgba(0,0,0,0.3)';
         ctx.fillRect(wx, wy, wWidth * 0.8, wHeight * 0.8);
       }
@@ -63,7 +64,13 @@ export function BuildingMesh({ config }: BuildingMeshProps) {
     const tex = new THREE.CanvasTexture(canvas);
     tex.minFilter = THREE.LinearFilter;
     return tex;
-  }, [style, config.id]);
+  }, [
+    style.archetype,
+    style.baseColor,
+    style.windowCols,
+    style.windowRows,
+    style.emissiveColor,
+  ]);
 
   return (
     <group
@@ -91,8 +98,13 @@ export function BuildingMesh({ config }: BuildingMeshProps) {
       }}
     >
       {/* Main building body */}
-      <mesh ref={meshRef} castShadow receiveShadow>
-        <boxGeometry args={[config.width, config.height, config.depth]} />
+      <mesh
+        ref={meshRef}
+        castShadow
+        receiveShadow
+        scale={[config.width, config.height, config.depth]}
+      >
+        <boxGeometry args={[1, 1, 1]} />
         <meshStandardMaterial
           map={windowTexture}
           color={isHovered ? style.accentColor : style.baseColor}
@@ -107,8 +119,12 @@ export function BuildingMesh({ config }: BuildingMeshProps) {
 
       {/* Roof detail */}
       {style.hasRoofDetail && (
-        <mesh position={[0, config.height / 2 + 0.5, 0]} castShadow>
-          <boxGeometry args={[config.width * 0.6, 1, config.depth * 0.6]} />
+        <mesh
+          position={[0, config.height / 2 + 0.5, 0]}
+          castShadow
+          scale={[config.width * 0.6, 1, config.depth * 0.6]}
+        >
+          <boxGeometry args={[1, 1, 1]} />
           <meshStandardMaterial
             color={style.accentColor}
             emissive={style.emissiveColor}
@@ -136,14 +152,13 @@ export function BuildingMesh({ config }: BuildingMeshProps) {
         <mesh
           rotation={[-Math.PI / 2, 0, 0]}
           position={[0, -config.height / 2 + 0.1, 0]}
+          scale={[
+            Math.max(config.width, config.depth) * 0.6,
+            Math.max(config.width, config.depth) * 0.6,
+            1,
+          ]}
         >
-          <ringGeometry
-            args={[
-              Math.max(config.width, config.depth) * 0.6,
-              Math.max(config.width, config.depth) * 0.8,
-              16,
-            ]}
-          />
+          <ringGeometry args={[1, 1.2, 16]} />
           <meshBasicMaterial
             color={style.accentColor}
             transparent
