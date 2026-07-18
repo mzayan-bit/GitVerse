@@ -23,6 +23,7 @@ import { SolarSystem } from '@/systems/SolarSystem';
 import { Galaxy } from '@/galaxy/Galaxy';
 import { useGalaxyManager } from '@/galaxy/GalaxyManager';
 import { UniverseRenderer, useUniverseManager } from '@/universe';
+import { RepositorySceneRenderer } from '@/repository-scene/RepositorySceneRenderer';
 
 function ActiveSolarSystemWrapper() {
   const { focusedSystemId, galaxyConfig } = useGalaxyManager();
@@ -92,6 +93,9 @@ export default function GitVerseCanvas() {
 
               {/* Live GitHub Universe Engine */}
               <UniverseRenderer />
+
+              {/* Repository Surface Engine */}
+              <RepositorySceneRenderer />
 
               {/* Post-Processing Pipeline */}
               <PostProcessing />

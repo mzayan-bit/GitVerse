@@ -7,6 +7,8 @@ import { MappedVisualProperties } from '@/mapping/MappingEngine';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 import { BakeShadows } from '@react-three/drei';
+import { useRepositoryScene } from '@/repository-scene';
+import { RepositoryDomainModel } from '@/domain/RepositoryModels';
 
 export function UniverseRenderer() {
   const { isBuilt, hierarchy } = useUniverseManager();
@@ -117,6 +119,15 @@ function PlanetRenderer({ planetId }: { planetId: string }) {
       onClick={(e) => {
         e.stopPropagation();
         useUniverseManager.getState().focusEntity(planetId);
+      }}
+      onDoubleClick={(e) => {
+        e.stopPropagation();
+        // Enter the repository planet
+        const repo = entity?.metadata?.repository as
+          RepositoryDomainModel | undefined;
+        if (repo) {
+          useRepositoryScene.getState().enterRepository(repo, planetId);
+        }
       }}
       onPointerOver={(e) => {
         e.stopPropagation();
