@@ -11,7 +11,7 @@ export const UniverseConfig = {
   // Camera settings
   CAMERA_DEFAULT_FOV: 45,
   CAMERA_MIN_DISTANCE: 5,
-  CAMERA_MAX_DISTANCE: 5000,
+  CAMERA_MAX_DISTANCE: 50000,
 
   // Transition timings
   TRANSITION_SPEED: 2.0, // Seconds for camera transitions

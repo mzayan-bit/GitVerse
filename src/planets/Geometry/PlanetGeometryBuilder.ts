@@ -16,9 +16,9 @@ export class PlanetGeometryBuilder {
     const cached = PlanetCache.getGeometry(cacheKey);
     if (cached) return cached;
 
-    let segments = 256;
-    if (lodLevel === 'medium') segments = 128;
-    if (lodLevel === 'low') segments = 64;
+    let segments = 128;
+    if (lodLevel === 'medium') segments = 64;
+    if (lodLevel === 'low') segments = 32;
 
     const geometry = new THREE.SphereGeometry(
       config.baseRadius,

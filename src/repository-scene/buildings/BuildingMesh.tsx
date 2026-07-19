@@ -11,6 +11,16 @@ interface BuildingMeshProps {
 }
 
 /**
+ * Global cache for building geometries and textures.
+ * Crucial for preventing massive memory leaks and FPS drops with 5000+ files.
+ */
+const GLOBAL_BOX_GEO = new THREE.BoxGeometry(1, 1, 1);
+const GLOBAL_CYLINDER_GEO = new THREE.CylinderGeometry(0.05, 0.05, 4, 4);
+const GLOBAL_RING_GEO = new THREE.RingGeometry(1, 1.2, 16);
+
+const textureCache = new Map<string, THREE.CanvasTexture>();
+
+/**
  * Renders a single procedural building with windows, emissive accents, and hover effects.
  */
 export function BuildingMesh({ config }: BuildingMeshProps) {
@@ -33,6 +43,11 @@ export function BuildingMesh({ config }: BuildingMeshProps) {
 
   // Window texture (memoized globally per archetype to save memory on 5000+ files)
   const windowTexture = useMemo(() => {
+    const cacheKey = `${style.archetype}_${style.baseColor}_${style.windowCols}_${style.windowRows}_${style.emissiveColor}`;
+    if (textureCache.has(cacheKey)) {
+      return textureCache.get(cacheKey)!;
+    }
+
     const size = 128;
     const canvas = document.createElement('canvas');
     canvas.width = size;
@@ -63,6 +78,7 @@ export function BuildingMesh({ config }: BuildingMeshProps) {
 
     const tex = new THREE.CanvasTexture(canvas);
     tex.minFilter = THREE.LinearFilter;
+    textureCache.set(cacheKey, tex);
     return tex;
   }, [
     style.archetype,
@@ -104,7 +120,7 @@ export function BuildingMesh({ config }: BuildingMeshProps) {
         receiveShadow
         scale={[config.width, config.height, config.depth]}
       >
-        <boxGeometry args={[1, 1, 1]} />
+        <primitive object={GLOBAL_BOX_GEO} attach="geometry" />
         <meshStandardMaterial
           map={windowTexture}
           color={isHovered ? style.accentColor : style.baseColor}
@@ -124,7 +140,7 @@ export function BuildingMesh({ config }: BuildingMeshProps) {
           castShadow
           scale={[config.width * 0.6, 1, config.depth * 0.6]}
         >
-          <boxGeometry args={[1, 1, 1]} />
+          <primitive object={GLOBAL_BOX_GEO} attach="geometry" />
           <meshStandardMaterial
             color={style.accentColor}
             emissive={style.emissiveColor}
@@ -138,7 +154,7 @@ export function BuildingMesh({ config }: BuildingMeshProps) {
       {/* Antenna */}
       {style.hasAntenna && (
         <mesh position={[0, config.height / 2 + 2, 0]}>
-          <cylinderGeometry args={[0.05, 0.05, 4, 4]} />
+          <primitive object={GLOBAL_CYLINDER_GEO} attach="geometry" />
           <meshStandardMaterial
             color="#ffffff"
             emissive={style.emissiveColor}
@@ -158,7 +174,7 @@ export function BuildingMesh({ config }: BuildingMeshProps) {
             1,
           ]}
         >
-          <ringGeometry args={[1, 1.2, 16]} />
+          <primitive object={GLOBAL_RING_GEO} attach="geometry" />
           <meshBasicMaterial
             color={style.accentColor}
             transparent

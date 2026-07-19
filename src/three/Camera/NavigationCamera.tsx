@@ -59,8 +59,8 @@ export function NavigationCamera() {
           let offsetDist = 50;
           if (entity.type === 'planet') {
             const r = entity.metadata?.visuals
-              ? (entity.metadata.visuals as MappedVisualProperties).size * 10
-              : 20;
+              ? (entity.metadata.visuals as MappedVisualProperties).size
+              : 2;
             offsetDist = r * 3;
           } else if (entity.type === 'solar_system') {
             offsetDist = 300;

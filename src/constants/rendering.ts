@@ -31,7 +31,7 @@ export const DEFAULT_RENDERER_CONFIG: RendererConfig = {
 export const DEFAULT_CAMERA_CONFIG: CameraConfig = {
   fov: 50,
   near: 0.1,
-  far: 2000,
+  far: 100000,
   position: [0, 0, 20],
   target: [0, 0, 0],
 };
@@ -46,7 +46,7 @@ export const DEFAULT_ORBIT_CONTROLS_CONFIG: OrbitControlsConfig = {
   enablePan: true,
   panSpeed: 0.5,
   minDistance: 2,
-  maxDistance: 500,
+  maxDistance: 50000,
   minPolarAngle: 0,
   maxPolarAngle: Math.PI,
   autoRotate: false,

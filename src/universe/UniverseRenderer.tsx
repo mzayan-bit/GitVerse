@@ -1,12 +1,12 @@
 import { useUniverseManager } from './UniverseManager';
 import { useEntityManager } from '@/entities/EntityManager';
-import { useMemo, useRef } from 'react';
+import React, { useMemo, useRef } from 'react';
 import { Planet } from '@/planets/Planet';
 import { PlanetFactory } from '@/planets/PlanetFactory';
 import { MappedVisualProperties } from '@/mapping/MappingEngine';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
-import { BakeShadows } from '@react-three/drei';
+
 import { useRepositoryScene } from '@/repository-scene';
 import { RepositoryDomainModel } from '@/domain/RepositoryModels';
 
@@ -20,7 +20,6 @@ export function UniverseRenderer() {
 
   return (
     <group>
-      <BakeShadows />
       {/* Render Galaxies (Orgs) */}
       {hierarchy.galaxies.map((galaxy) => {
         const entity = entities[galaxy.id];
@@ -56,19 +55,20 @@ function SolarSystemRenderer({ systemId }: { systemId: string }) {
   if (!systemNode) return null;
 
   return (
-    <group position={entity.transform?.position}>
-      {/* System central star (Language marker) */}
-      <mesh>
-        <sphereGeometry args={[10, 32, 32]} />
-        <meshBasicMaterial color="#ffcc00" transparent opacity={0.8} />
-      </mesh>
-      <pointLight color="#ffcc00" intensity={2} distance={500} />
+    <React.Fragment>
+      <group position={entity.transform?.position}>
+        {/* System central star (Language marker) */}
+        <mesh>
+          <sphereGeometry args={[10, 32, 32]} />
+          <meshBasicMaterial color="#ffcc00" transparent opacity={0.8} />
+        </mesh>
+      </group>
 
-      {/* Render Planets in this system */}
+      {/* Render Planets in this system globally */}
       {systemNode.planetIds.map((planetId) => (
         <PlanetRenderer key={planetId} planetId={planetId} />
       ))}
-    </group>
+    </React.Fragment>
   );
 }
 
@@ -85,7 +85,7 @@ function PlanetRenderer({ planetId }: { planetId: string }) {
     // For simplicity, we calculate directly
     const dist = camera.position.distanceTo(groupRef.current.position);
     // Mutate visibility based on distance directly on the ref to avoid react renders
-    if (dist > 3000) {
+    if (dist > 50000) {
       groupRef.current.visible = false;
     } else {
       groupRef.current.visible = true;
