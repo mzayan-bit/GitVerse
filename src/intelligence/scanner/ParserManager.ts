@@ -1,6 +1,17 @@
+import { AnalysisResult } from '../analysis/parsers/AnalysisTypes';
+import { RegexParser } from '../analysis/parsers/RegexParser';
+
 export class ParserManager {
-  // To be implemented in Step 2: Language Analysis
-  public static route(fileExtension: string, content: string): void {
-    // Basic routing logic
+  public static route(
+    path: string,
+    language: string,
+    content: string
+  ): AnalysisResult | null {
+    if (language === 'Unknown' || !content) {
+      return null;
+    }
+
+    // We use a robust regex parser that works across all requested languages
+    return RegexParser.parse(path, language, content);
   }
 }
