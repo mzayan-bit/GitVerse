@@ -1,4 +1,4 @@
-import { ScannerConfig, ScannerResult, FileMetadata } from './ScannerTypes';
+import { ScannerConfig, ScannerResult } from './ScannerTypes';
 import { ScannerWorker } from './ScannerWorker';
 import { ScannerCache } from './ScannerCache';
 
