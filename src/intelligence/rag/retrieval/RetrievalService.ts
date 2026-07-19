@@ -49,6 +49,8 @@ export class RetrievalService {
    */
   private rerank(results: RetrievalResult[], query: string): RetrievalResult[] {
     // Current implementation: No-op
+    // Ensure query is used to avoid TypeScript error
+    void query;
     return results;
   }
 }

@@ -12,6 +12,7 @@ export class MemoryStorage implements VectorStorage {
     records: VectorRecord[],
     namespace?: string
   ): Promise<void> {
+    void namespace;
     // Basic upsert by ID
     for (const record of records) {
       const idx = this.records.findIndex((r) => r.id === record.id);
@@ -30,6 +31,7 @@ export class MemoryStorage implements VectorStorage {
     filter?: QueryFilter,
     namespace?: string
   ): Promise<VectorRecord[]> {
+    void namespace;
     // Filter records
     let filtered = this.records;
     if (filter) {
@@ -65,6 +67,7 @@ export class MemoryStorage implements VectorStorage {
   }
 
   public async delete(filter: QueryFilter, namespace?: string): Promise<void> {
+    void namespace;
     this.records = this.records.filter((r) => {
       let matches = true;
       if (filter.repositoryId && r.payload.repositoryId !== filter.repositoryId)
