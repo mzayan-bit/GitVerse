@@ -1,4 +1,4 @@
-import { StateGraph } from '@langchain/langgraph';
+import { StateGraph, START, END } from '@langchain/langgraph';
 import { AgentManager } from '../framework/AgentManager';
 import { AgentContext } from '../framework/AgentContext';
 import { Finding } from '../findings/FindingsModel';
@@ -65,9 +65,12 @@ export class NightlyScanWorkflow {
     });
 
     // Edge wiring
-    graph.addEdge('__start__', 'coreScan');
+    // @ts-expect-error LangGraph node typings
+    graph.addEdge(START, 'coreScan');
+    // @ts-expect-error LangGraph node typings
     graph.addEdge('coreScan', 'debtScan');
-    graph.addEdge('debtScan', '__end__');
+    // @ts-expect-error LangGraph node typings
+    graph.addEdge('debtScan', END);
 
     return graph.compile();
   }

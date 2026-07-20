@@ -20,7 +20,9 @@ export class WorkflowEngine {
       completedAgents: [],
     };
 
-    const finalState = await app.invoke(initialState);
+    const finalState = (await app.invoke(initialState)) as unknown as {
+      findings: Finding[];
+    };
     return finalState.findings;
   }
 }
