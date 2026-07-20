@@ -1,4 +1,4 @@
-import { EngineeringContext, SemanticCitation } from './ContextTypes';
+import { EngineeringContext } from './ContextTypes';
 
 export class ContextCompressor {
   /**

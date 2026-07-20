@@ -55,6 +55,7 @@ export class MockOpenAIProvider implements AIProvider {
     onChunk: (chunk: string) => void,
     options?: GenerationOptions
   ): Promise<GenerationResult> {
+    void messages;
     void options;
     const response = 'This is a streamed mocked response from OpenAI.';
     const words = response.split(' ');
