@@ -17,7 +17,7 @@ interface ImpactState {
   clearSimulation: () => void;
 }
 
-export const useImpactManager = create<ImpactState>((set, get) => ({
+export const useImpactManager = create<ImpactState>((set) => ({
   isActive: false,
   isSimulating: false,
   context: null,

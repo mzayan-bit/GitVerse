@@ -17,17 +17,19 @@ export class RiskScoringEngine {
    */
   public evaluateGraphRisks(graph: ImpactGraph): void {
     graph.riskNodes.forEach((riskNode) => {
-      if (riskNode.graphNode.type === 'REPOSITORY') {
-        const repoData = riskNode.graphNode.metadata?.repository as
-          RepositoryDomainModel | undefined;
-        if (repoData) {
-          const scores = this.calculateRepositoryRisk(
-            graph,
-            riskNode.graphNode.id,
-            repoData
-          );
-          graph.updateRiskNode(riskNode.graphNode.id, { riskScores: scores });
-        }
+      const repo = riskNode.graphNode.repository;
+      if (repo) {
+        const isCore = repo.topics?.includes('core');
+        const isCritical = repo.topics?.includes('critical');
+        const isInfra = repo.topics?.includes('infrastructure');
+
+        const scores = this.calculateRepositoryRisk(
+          graph,
+          riskNode.graphNode.id,
+          repo,
+          { isCore, isCritical, isInfra }
+        );
+        graph.updateRiskNode(riskNode.graphNode.id, { riskScores: scores });
       }
     });
   }
@@ -35,7 +37,8 @@ export class RiskScoringEngine {
   private calculateRepositoryRisk(
     graph: ImpactGraph,
     nodeId: string,
-    repoData: RepositoryDomainModel
+    repoData: RepositoryDomainModel,
+    _meta: { isCore?: boolean; isCritical?: boolean; isInfra?: boolean }
   ): RiskScores {
     const explanations: Record<string, string[]> = {
       repositoryRisk: [],

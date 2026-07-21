@@ -31,9 +31,9 @@ export class ImpactAnalyzer {
       if (targetRiskNode) {
         targetRiskNode.isDirectlyImpacted = true;
         affectedRepoSet.add(targetRiskNode.graphNode.id);
-        if (targetRiskNode.graphNode.type === 'CONTRIBUTOR') {
-          affectedContributorSet.add(targetRiskNode.graphNode.label);
-        }
+        affectedContributorSet.add(
+          targetRiskNode.graphNode.repository.owner || 'unknown'
+        );
       }
 
       // Propagate indirect impact and collect sets
@@ -56,11 +56,7 @@ export class ImpactAnalyzer {
               currentPropagatedImpact
             );
 
-            if (riskNode.graphNode.type === 'REPOSITORY') {
-              affectedRepoSet.add(nodeId);
-            } else if (riskNode.graphNode.type === 'CONTRIBUTOR') {
-              affectedContributorSet.add(riskNode.graphNode.label);
-            }
+            affectedRepoSet.add(nodeId);
           }
         }
       }

@@ -1,6 +1,6 @@
 import { useImpactManager } from '@/intelligence/impact/ImpactManager';
 import { useEntityManager } from '@/entities/EntityManager';
-import { ShieldAlert, Users, GitBranch } from 'lucide-react';
+import { ShieldAlert } from 'lucide-react';
 
 export function RiskPanel() {
   const { report } = useImpactManager();
@@ -60,7 +60,8 @@ export function RiskPanel() {
             ) : (
               report.affectedRepositories.map((id) => {
                 const entity = entities[id];
-                const name = entity?.metadata?.repository?.name || id;
+                const repo = entity?.metadata?.repository as { name?: string };
+                const name = repo?.name || id;
                 return (
                   <div
                     key={id}

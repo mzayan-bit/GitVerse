@@ -236,7 +236,6 @@ export class SnapshotBuilder {
         }
       }
 
-      // Add file to its parent directory
       if (parts.length > 1) {
         const parentPath = parts.slice(0, -1).join('/');
         const parent = dirs.get(parentPath);
@@ -249,7 +248,7 @@ export class SnapshotBuilder {
     }
 
     // Build child relationships
-    for (const [path, dir] of dirs) {
+    for (const [path, _dir] of dirs) {
       const parentParts = path.split('/');
       if (parentParts.length > 1) {
         const parentPath = parentParts.slice(0, -1).join('/');

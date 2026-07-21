@@ -11,6 +11,10 @@ export class TraversalEngine {
   private resolver = new RelationshipResolver();
   private maxDepth = 10; // Prevent infinite loops in deeply nested/circular graphs
 
+  // Memoization cache for downstream/upstream queries to ensure O(V+E) performance across repeated hits
+  private downstreamCache = new Map<string, ImpactPath[]>();
+  private upstreamCache = new Map<string, ImpactPath[]>();
+
   /**
    * Traverse the graph from a specific node to find all downstream impacted paths.
    */
@@ -18,6 +22,10 @@ export class TraversalEngine {
     graph: ImpactGraph,
     startNodeId: string
   ): ImpactPath[] {
+    if (this.downstreamCache.has(startNodeId)) {
+      return this.downstreamCache.get(startNodeId)!;
+    }
+
     const paths: ImpactPath[] = [];
     const visited = new Set<string>();
 
@@ -33,6 +41,7 @@ export class TraversalEngine {
       'DOWNSTREAM'
     );
 
+    this.downstreamCache.set(startNodeId, paths);
     return paths;
   }
 
@@ -43,6 +52,10 @@ export class TraversalEngine {
     graph: ImpactGraph,
     startNodeId: string
   ): ImpactPath[] {
+    if (this.upstreamCache.has(startNodeId)) {
+      return this.upstreamCache.get(startNodeId)!;
+    }
+
     const paths: ImpactPath[] = [];
     const visited = new Set<string>();
 
@@ -58,6 +71,7 @@ export class TraversalEngine {
       'UPSTREAM'
     );
 
+    this.upstreamCache.set(startNodeId, paths);
     return paths;
   }
 

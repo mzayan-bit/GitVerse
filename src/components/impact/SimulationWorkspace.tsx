@@ -3,7 +3,7 @@ import { useEntityManager } from '@/entities/EntityManager';
 import { useImpactManager } from '@/intelligence/impact/ImpactManager';
 import { SimulationScenarioType } from '@/intelligence/impact';
 import { v4 as uuidv4 } from 'uuid';
-import { Activity, Play, Settings2 } from 'lucide-react';
+import { Activity, Play } from 'lucide-react';
 
 export function SimulationWorkspace() {
   const { entities } = useEntityManager();
@@ -14,7 +14,7 @@ export function SimulationWorkspace() {
   const [targetId, setTargetId] = useState<string>('');
 
   const repositories = Object.values(entities).filter(
-    (e) => e.type === 'REPOSITORY'
+    (e) => (e.type as string).toUpperCase() === 'REPOSITORY'
   );
 
   const handleRun = () => {
@@ -80,7 +80,8 @@ export function SimulationWorkspace() {
               </option>
               {repositories.map((repo) => (
                 <option key={repo.id} value={repo.id}>
-                  {repo.metadata?.repository?.name || repo.id}
+                  {(repo.metadata?.repository as { name?: string })?.name ||
+                    repo.id}
                 </option>
               ))}
             </select>

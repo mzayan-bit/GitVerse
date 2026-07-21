@@ -25,8 +25,8 @@ export function DependencyExplorer() {
           <div key={index} className="flex items-center gap-0 min-w-max">
             {path.nodes.map((nodeId, i) => {
               const entity = entities[nodeId];
-              const name = entity?.metadata?.repository?.name || nodeId;
-              const isSource = i === 0;
+              const repo = entity?.metadata?.repository as { name?: string };
+              const name = repo?.name || nodeId;
               const isTarget = i === path.nodes.length - 1;
 
               return (

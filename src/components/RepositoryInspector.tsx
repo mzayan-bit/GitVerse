@@ -253,7 +253,7 @@ export function RepositoryInspector() {
 
       {showEvolutionMode && (
         <EvolutionMode
-          repoFullName={repoData.fullName}
+          repoFullName={`${repoData.owner || 'unknown'}/${repoData.name}`}
           onClose={() => setShowEvolutionMode(false)}
         />
       )}

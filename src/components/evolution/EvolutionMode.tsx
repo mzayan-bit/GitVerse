@@ -33,9 +33,18 @@ export function EvolutionMode({ repoFullName, onClose }: EvolutionModeProps) {
         setError(null);
 
         const importer = new HistoryImporter(accessToken);
+        const [owner, repoName] = repoFullName.split('/');
 
-        // Fetch last 5 commits (as per requirements for this milestone)
-        const history = await importer.importRepositoryHistory(repoFullName, 5);
+        const history = await importer.importHistory(
+          owner,
+          repoName,
+          'main', // Assuming 'main' as default for now
+          (progress) => {
+            console.log(
+              Math.round((progress.loaded / Math.max(progress.total, 1)) * 100)
+            );
+          }
+        );
 
         if (!isMounted) return;
 
