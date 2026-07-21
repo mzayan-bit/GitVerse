@@ -20,7 +20,13 @@ export function UniverseRenderer() {
   if (!isBuilt) return null;
 
   return (
-    <group>
+    <group
+      onPointerMissed={() => {
+        useUniverseManager
+          .getState()
+          .setCameraState({ mode: 'free', targetId: null });
+      }}
+    >
       <ImpactVisualizer />
       {/* Render Galaxies (Orgs) */}
       {hierarchy.galaxies.map((galaxy) => {
@@ -60,7 +66,7 @@ function SolarSystemRenderer({ systemId }: { systemId: string }) {
       <group position={entity.transform?.position}>
         {/* System central star (Language marker) */}
         <mesh>
-          <sphereGeometry args={[10, 32, 32]} />
+          <sphereGeometry args={[30, 32, 32]} />
           <meshBasicMaterial color="#ffcc00" transparent opacity={0.8} />
         </mesh>
       </group>
@@ -89,7 +95,7 @@ function PlanetRenderer({ planetId }: { planetId: string }) {
     const c = PlanetFactory.create(visuals.biomeSeed || planetId);
 
     // Apply mapped visuals
-    c.terrain.baseRadius = visuals.size || 2.0;
+    c.terrain.baseRadius = (visuals.size || 2.0) * 8; // Scaled up for visibility
     c.atmosphere.color = visuals.baseColor || '#ffffff';
     c.terrain.displacementStrength += (visuals.craterDensity || 0) * 2;
     if (visuals.isFrozen) {

@@ -4,6 +4,7 @@ import { OrbitControls as DreiOrbitControls } from '@react-three/drei';
 import type { OrbitControlsConfig } from '@/types/rendering';
 import { DEFAULT_ORBIT_CONTROLS_CONFIG } from '@/constants/rendering';
 import { useSolarSystemManager } from '@/systems/SolarSystem/SolarSystemManager';
+import { useUniverseManager } from '@/universe/UniverseManager';
 
 interface SceneOrbitControlsProps {
   config?: Partial<OrbitControlsConfig>;
@@ -15,13 +16,17 @@ interface SceneOrbitControlsProps {
  */
 function SceneOrbitControls({ config }: SceneOrbitControlsProps) {
   const cameraMode = useSolarSystemManager((s) => s.cameraMode);
+  const { isBuilt, cameraState: universeCameraState } = useUniverseManager();
 
   const merged: OrbitControlsConfig = {
     ...DEFAULT_ORBIT_CONTROLS_CONFIG,
     ...config,
   };
 
-  if (cameraMode !== 'orbit') return null;
+  const isSolarOrbit = cameraMode === 'orbit';
+  const isUniverseFree = isBuilt && universeCameraState.mode === 'free';
+
+  if (!isSolarOrbit && !isUniverseFree) return null;
 
   return (
     <DreiOrbitControls

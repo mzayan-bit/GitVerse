@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef, useEffect } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
 import { useSolarSystemManager } from '@/systems/SolarSystem/SolarSystemManager';
@@ -33,6 +33,20 @@ export function NavigationCamera() {
 
   const timeRef = useRef(0);
 
+  // Warp camera when universe is built
+  const hasWarped = useRef(false);
+
+  useEffect(() => {
+    if (isBuilt && !hasWarped.current) {
+      camera.position.set(0, 400, 800);
+      camera.lookAt(0, 0, 0);
+      targetPosition.current.set(0, 400, 800);
+      targetLookAt.current.set(0, 0, 0);
+      currentLookAt.current.set(0, 0, 0);
+      hasWarped.current = true;
+    }
+  }, [isBuilt, camera]);
+
   useFrame((_, delta) => {
     // Yield control when repository scene is active (entering, exploring, or leaving)
     if (repoSceneMode !== 'idle') return;
@@ -42,8 +56,8 @@ export function NavigationCamera() {
     // --- LIVE UNIVERSE NAVIGATION ---
     if (isBuilt) {
       if (universeCameraState.mode === 'free') {
-        targetLookAt.current.set(0, 0, 0);
-        targetPosition.current.set(0, 400, 800); // Macro view closer
+        // Yield to OrbitControls
+        return;
       } else if (
         universeCameraState.mode === 'focus' &&
         universeCameraState.targetId
@@ -60,8 +74,9 @@ export function NavigationCamera() {
           if (entity.type === 'planet') {
             const r = entity.metadata?.visuals
               ? (entity.metadata.visuals as MappedVisualProperties).size
-              : 2;
-            offsetDist = r * 3;
+              : 2.0;
+            const actualRadius = r * 8; // Match UniverseRenderer scaling
+            offsetDist = actualRadius * 3;
           } else if (entity.type === 'solar_system') {
             offsetDist = 300;
           } else if (entity.type === 'galaxy') {
@@ -74,7 +89,7 @@ export function NavigationCamera() {
         }
       }
 
-      // Smooth Interpolation
+      // Smooth Interpolation for focus mode
       camera.position.lerp(targetPosition.current, delta * 2.5);
       currentLookAt.current.lerp(targetLookAt.current, delta * 3.5);
       camera.lookAt(currentLookAt.current);
