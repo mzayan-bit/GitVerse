@@ -43,7 +43,7 @@ export function NavigationCamera() {
     if (isBuilt) {
       if (universeCameraState.mode === 'free') {
         targetLookAt.current.set(0, 0, 0);
-        targetPosition.current.set(0, 4000, 8000); // Macro view
+        targetPosition.current.set(0, 400, 800); // Macro view closer
       } else if (
         universeCameraState.mode === 'focus' &&
         universeCameraState.targetId
