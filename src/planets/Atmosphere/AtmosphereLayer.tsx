@@ -29,8 +29,9 @@ varying vec3 vNormal;
 varying vec3 vPositionNormal;
 
 void main() {
-  // Simple fresnel approximation
-  float intensity = pow(uScattering - dot(vNormal, vPositionNormal), uGlowIntensity);
+  // Simple fresnel approximation, MUST clamp to prevent NaN with pow()
+  float fresnel = max(0.0, uScattering - dot(vNormal, vPositionNormal));
+  float intensity = pow(fresnel, uGlowIntensity);
   gl_FragColor = vec4(uColor, 1.0) * intensity;
 }
 `;
