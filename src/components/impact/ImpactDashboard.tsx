@@ -5,7 +5,8 @@ import { DependencyExplorer } from './DependencyExplorer';
 import { X } from 'lucide-react';
 
 export function ImpactDashboard() {
-  const { isActive, closeImpactMode } = useImpactManager();
+  const isActive = useImpactManager((s) => s.isActive);
+  const closeImpactMode = useImpactManager((s) => s.closeImpactMode);
 
   if (!isActive) return null;
 

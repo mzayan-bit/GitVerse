@@ -12,8 +12,9 @@ import { RepositoryDomainModel } from '@/domain/RepositoryModels';
 import { ImpactVisualizer } from '@/intelligence/impact/visualization/ImpactVisualizer';
 
 export function UniverseRenderer() {
-  const { isBuilt, hierarchy } = useUniverseManager();
-  const { entities } = useEntityManager();
+  const isBuilt = useUniverseManager((s) => s.isBuilt);
+  const hierarchy = useUniverseManager((s) => s.hierarchy);
+  const entities = useEntityManager((s) => s.entities);
 
   // If universe isn't built yet, don't render it.
   // We can leave the default background rendering from before if we want.
@@ -47,13 +48,12 @@ export function UniverseRenderer() {
 }
 
 function SolarSystemRenderer({ systemId }: { systemId: string }) {
-  const { entities } = useEntityManager();
-  const { hierarchy } = useUniverseManager();
-  const entity = entities[systemId];
+  const entity = useEntityManager((s) => s.entities[systemId]);
+  const solarSystems = useUniverseManager((s) => s.hierarchy.solarSystems);
 
   if (!entity) return null;
 
-  const systemNode = hierarchy.solarSystems.find((s) => s.id === systemId);
+  const systemNode = solarSystems.find((s) => s.id === systemId);
   if (!systemNode) return null;
 
   return (
@@ -75,19 +75,18 @@ function SolarSystemRenderer({ systemId }: { systemId: string }) {
 }
 
 function PlanetRenderer({ planetId }: { planetId: string }) {
-  const { entities } = useEntityManager();
-  const entity = entities[planetId];
+  const entity = useEntityManager((s) => s.entities[planetId]);
 
   const groupRef = useRef<THREE.Group>(null);
 
   // Throttled distance calculation for LOD/Culling
   useFrame(({ camera }) => {
     if (!groupRef.current) return;
-    // Only calculate distance every few frames or based on camera movement to save CPU
-    // For simplicity, we calculate directly
-    const dist = camera.position.distanceTo(groupRef.current.position);
-    // Mutate visibility based on distance directly on the ref to avoid react renders
-    if (dist > 50000) {
+
+    // Instead of distanceTo (square root), use distanceToSquared for performance
+    const distSq = camera.position.distanceToSquared(groupRef.current.position);
+    // 50000 distance -> 2,500,000,000 squared
+    if (distSq > 2500000000) {
       groupRef.current.visible = false;
     } else {
       groupRef.current.visible = true;

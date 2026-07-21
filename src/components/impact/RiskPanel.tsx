@@ -3,8 +3,8 @@ import { useEntityManager } from '@/entities/EntityManager';
 import { ShieldAlert } from 'lucide-react';
 
 export function RiskPanel() {
-  const { report } = useImpactManager();
-  const { entities } = useEntityManager();
+  const report = useImpactManager((s) => s.report);
+  const entities = useEntityManager((s) => s.entities);
 
   if (!report) {
     return (

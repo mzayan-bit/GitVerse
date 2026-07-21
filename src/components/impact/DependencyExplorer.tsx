@@ -2,8 +2,8 @@ import { useImpactManager } from '@/intelligence/impact/ImpactManager';
 import { useEntityManager } from '@/entities/EntityManager';
 
 export function DependencyExplorer() {
-  const { report } = useImpactManager();
-  const { entities } = useEntityManager();
+  const report = useImpactManager((s) => s.report);
+  const entities = useEntityManager((s) => s.entities);
 
   if (!report || report.criticalPaths.length === 0) return null;
 

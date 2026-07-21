@@ -6,8 +6,9 @@ import { v4 as uuidv4 } from 'uuid';
 import { Activity, Play } from 'lucide-react';
 
 export function SimulationWorkspace() {
-  const { entities } = useEntityManager();
-  const { runSimulation, isSimulating } = useImpactManager();
+  const entities = useEntityManager((s) => s.entities);
+  const runSimulation = useImpactManager((s) => s.runSimulation);
+  const isSimulating = useImpactManager((s) => s.isSimulating);
 
   const [type, setType] =
     useState<SimulationScenarioType>('REPOSITORY_DELETED');
