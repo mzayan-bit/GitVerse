@@ -9,6 +9,7 @@ import * as THREE from 'three';
 
 import { useRepositoryScene } from '@/repository-scene';
 import { RepositoryDomainModel } from '@/domain/RepositoryModels';
+import { ImpactVisualizer } from '@/intelligence/impact/visualization/ImpactVisualizer';
 
 export function UniverseRenderer() {
   const { isBuilt, hierarchy } = useUniverseManager();
@@ -20,6 +21,7 @@ export function UniverseRenderer() {
 
   return (
     <group>
+      <ImpactVisualizer />
       {/* Render Galaxies (Orgs) */}
       {hierarchy.galaxies.map((galaxy) => {
         const entity = entities[galaxy.id];

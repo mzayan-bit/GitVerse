@@ -74,13 +74,28 @@ export function RepositoryInspector() {
         </div>
 
         {/* Action Buttons */}
-        <div className="mb-4">
+        <div className="mb-4 flex flex-col gap-2">
           <button
             onClick={() => setShowEvolutionMode(true)}
             className="w-full flex items-center justify-center gap-2 rounded-lg bg-indigo-500 hover:bg-indigo-600 text-white py-2.5 text-sm font-medium transition-colors shadow-lg shadow-indigo-500/20"
           >
             <Activity size={16} />
             View Repository Evolution
+          </button>
+
+          <button
+            onClick={() => {
+              import('@/intelligence/impact/ImpactManager').then(
+                ({ useImpactManager }) => {
+                  useImpactManager.getState().openImpactMode();
+                  setFocusedEntity(null); // Close inspector to focus on dashboard
+                }
+              );
+            }}
+            className="w-full flex items-center justify-center gap-2 rounded-lg bg-red-500/20 hover:bg-red-500/30 text-red-300 border border-red-500/50 py-2.5 text-sm font-medium transition-colors"
+          >
+            <ShieldAlert size={16} />
+            Simulate Impact
           </button>
         </div>
 
