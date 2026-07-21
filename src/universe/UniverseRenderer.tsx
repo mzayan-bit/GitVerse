@@ -4,7 +4,6 @@ import React, { useMemo, useRef } from 'react';
 import { Planet } from '@/planets/Planet';
 import { PlanetFactory } from '@/planets/PlanetFactory';
 import { MappedVisualProperties } from '@/mapping/MappingEngine';
-import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 
 import { useRepositoryScene } from '@/repository-scene';
@@ -79,19 +78,8 @@ function PlanetRenderer({ planetId }: { planetId: string }) {
 
   const groupRef = useRef<THREE.Group>(null);
 
-  // Throttled distance calculation for LOD/Culling
-  useFrame(({ camera }) => {
-    if (!groupRef.current) return;
-
-    // Instead of distanceTo (square root), use distanceToSquared for performance
-    const distSq = camera.position.distanceToSquared(groupRef.current.position);
-    // 50000 distance -> 2,500,000,000 squared
-    if (distSq > 2500000000) {
-      groupRef.current.visible = false;
-    } else {
-      groupRef.current.visible = true;
-    }
-  });
+  // Removed manual distance culling because R3F handles frustum culling natively,
+  // and local coordinates vs world coordinates caused blinking bugs.
 
   const config = useMemo(() => {
     if (!entity?.metadata?.visuals) return null;

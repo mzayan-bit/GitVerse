@@ -16,8 +16,8 @@ const TYPE_COLORS: Record<RelationshipType, THREE.Color> = {
 };
 
 export function GraphEdges() {
-  const { graph } = useGraphManager();
-  const { entities } = useEntityManager();
+  const graph = useGraphManager((s) => s.graph);
+  const entities = useEntityManager((s) => s.entities);
   const linesRef = useRef<THREE.LineSegments>(null);
 
   const { positions, colors } = useMemo(() => {
@@ -68,15 +68,14 @@ export function GraphEdges() {
 
   return (
     <lineSegments ref={linesRef}>
-      <bufferGeometry>
+      <bufferGeometry key={positions.length}>
         <bufferAttribute attach="attributes-position" args={[positions, 3]} />
         <bufferAttribute attach="attributes-color" args={[colors, 3]} />
       </bufferGeometry>
       <lineBasicMaterial
         vertexColors
         transparent
-        opacity={0.15}
-        blending={THREE.AdditiveBlending}
+        opacity={0.3}
         depthWrite={false}
       />
     </lineSegments>

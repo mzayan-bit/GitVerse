@@ -30,7 +30,7 @@ export const DEFAULT_RENDERER_CONFIG: RendererConfig = {
 
 export const DEFAULT_CAMERA_CONFIG: CameraConfig = {
   fov: 50,
-  near: 0.1,
+  near: 10,
   far: 100000,
   position: [0, 0, 20],
   target: [0, 0, 0],
