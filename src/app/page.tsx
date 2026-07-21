@@ -93,7 +93,7 @@ export default function Home() {
   return (
     <main className="relative h-screen w-full overflow-hidden bg-black selection:bg-white/20">
       {/* 3D Scene Background - Running independently as requested */}
-      <div className="absolute inset-0 z-0 pointer-events-auto opacity-50">
+      <div className="absolute inset-0 z-0 pointer-events-auto">
         <GitVerseCanvas />
       </div>
 

@@ -14,7 +14,7 @@ import type {
 // ---------------------------------------------------------------------------
 
 export const DEFAULT_RENDERER_CONFIG: RendererConfig = {
-  dpr: [1, 2],
+  dpr: [1, 1.5],
   antialias: true,
   toneMapping: ACESFilmicToneMapping,
   toneMappingExposure: 1.0,
@@ -61,7 +61,7 @@ export const DEFAULT_PERFORMANCE_CONFIG: PerformanceConfig = {
   targetFps: 60,
   adaptiveDpr: true,
   minDpr: 1,
-  maxDpr: 2,
+  maxDpr: 1.5,
   fpsLimit: false,
   fpsLimitValue: 60,
   debug: process.env.NODE_ENV === 'development',
@@ -86,11 +86,11 @@ export const DEFAULT_POST_PROCESSING_CONFIG: PostProcessingConfig = {
     darkness: 0.5,
   },
   noise: {
-    enabled: true,
+    enabled: false,
     opacity: 0.05,
   },
   chromaticAberration: {
-    enabled: true,
+    enabled: false,
     offset: [0.002, 0.002],
   },
 };
