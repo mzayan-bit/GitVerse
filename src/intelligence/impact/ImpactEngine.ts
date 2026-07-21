@@ -2,6 +2,7 @@ import { RepositoryGraph } from '../KnowledgeGraph/RepositoryGraph';
 import { ImpactAnalyzer } from './ImpactAnalyzer';
 import { ImpactGraph } from './ImpactGraph';
 import { ImpactReport, SimulationContext } from './ImpactTypes';
+import { RiskScoringEngine } from './scoring/RiskScoringEngine';
 
 // ============================================================================
 // Impact Engine Facade
@@ -33,6 +34,9 @@ export class ImpactEngine {
    * Pre-processes an Impact Graph with static risk scoring, caching it for multiple simulations.
    */
   public initializeImpactGraph(baseGraph: RepositoryGraph): ImpactGraph {
-    return new ImpactGraph(baseGraph);
+    const impactGraph = new ImpactGraph(baseGraph);
+    const riskEngine = new RiskScoringEngine();
+    riskEngine.evaluateGraphRisks(impactGraph);
+    return impactGraph;
   }
 }
