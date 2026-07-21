@@ -16,10 +16,13 @@ import {
 } from 'lucide-react';
 import { RepositoryDomainModel } from '@/domain/RepositoryModels';
 import { RepositoryMetrics } from '@/intelligence/MetricsEngine';
+import { EvolutionMode } from './evolution';
+import { useState } from 'react';
 
 export function RepositoryInspector() {
   const { entities, focusedEntityId, setFocusedEntity } = useEntityManager();
   const { graph } = useGraphManager();
+  const [showEvolutionMode, setShowEvolutionMode] = useState(false);
 
   if (!focusedEntityId) return null;
 
@@ -67,6 +70,17 @@ export function RepositoryInspector() {
             className="flex h-8 w-8 items-center justify-center rounded-full bg-white/5 transition-colors hover:bg-white/20"
           >
             <X size={14} />
+          </button>
+        </div>
+
+        {/* Action Buttons */}
+        <div className="mb-4">
+          <button
+            onClick={() => setShowEvolutionMode(true)}
+            className="w-full flex items-center justify-center gap-2 rounded-lg bg-indigo-500 hover:bg-indigo-600 text-white py-2.5 text-sm font-medium transition-colors shadow-lg shadow-indigo-500/20"
+          >
+            <Activity size={16} />
+            View Repository Evolution
           </button>
         </div>
 
@@ -221,6 +235,13 @@ export function RepositoryInspector() {
           )}
         </div>
       </div>
+
+      {showEvolutionMode && (
+        <EvolutionMode
+          repoFullName={repoData.fullName}
+          onClose={() => setShowEvolutionMode(false)}
+        />
+      )}
     </div>
   );
 }
