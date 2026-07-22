@@ -17,14 +17,15 @@ export class DigitalTwinBuilder {
     const deployments: DeploymentModel[] = [];
     const pipelines: PipelineModel[] = [];
 
-    // Create a cluster for the galaxy
-    const clusterId = 'cluster-1';
-    clusters.push({
-      id: clusterId,
-      providerId: 'aws-1',
-      name: 'production-cluster',
-      status: 'active',
-    });
+    // Create 50 clusters for performance validation
+    for (let i = 0; i < 50; i++) {
+      clusters.push({
+        id: 'cluster-' + i,
+        providerId: 'aws-' + i,
+        name: 'production-cluster-' + i,
+        status: 'active',
+      });
+    }
 
     // Create services based on solar systems (languages)
     for (const sys of hierarchy.solarSystems) {
