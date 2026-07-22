@@ -15,6 +15,7 @@ import type { ClientMetrics, GitHubRateLimitResponse } from '@/github';
 import { RepositoryDomainModel } from '@/domain/RepositoryModels';
 import { UniverseSearch, UniverseHUD } from '@/universe';
 import { ImpactDashboard } from '@/components/impact';
+import { CommandCenter } from '@/components/infrastructure/CommandCenter';
 
 // Dynamically import the 3D canvas with SSR disabled
 const GitVerseCanvas = dynamic(() => import('@/components/canvas-wrapper'), {
@@ -170,6 +171,9 @@ export default function Home() {
       {/* Live Universe UI Overlays */}
       <UniverseSearch />
       <UniverseHUD />
+
+      {/* Infrastructure Command Center */}
+      {showDashboard && <CommandCenter />}
 
       {/* Impact Analysis Overlay */}
       <ImpactDashboard />
