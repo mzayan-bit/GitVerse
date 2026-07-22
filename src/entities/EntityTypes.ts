@@ -5,7 +5,13 @@ export type EntityType =
   | 'moon'
   | 'satellite'
   | 'repository'
-  | 'contributor';
+  | 'contributor'
+  | 'cluster'
+  | 'service'
+  | 'database'
+  | 'pipeline'
+  | 'deployment'
+  | 'container';
 
 export interface EntityTransform {
   position: [number, number, number];

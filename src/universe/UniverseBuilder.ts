@@ -4,6 +4,7 @@ import { UniverseFactory } from './UniverseFactory';
 import { useUniverseManager } from './UniverseManager';
 import { UniverseConfig } from './UniverseConfig';
 import { useEntityManager } from '@/entities/EntityManager';
+import { DigitalTwinBuilder } from './DigitalTwin/DigitalTwinBuilder';
 
 export class UniverseBuilder {
   /**
@@ -76,11 +77,15 @@ export class UniverseBuilder {
       totalForks,
     };
 
+    // 0. Augment with Infrastructure Digital Twin
+    DigitalTwinBuilder.augmentHierarchy(hierarchy);
+
     // 1. Register with Factory
     UniverseFactory.registerUniverse(hierarchy);
 
     // 2. Perform Layout (Update positions in EntityManager)
     this.computeLayout(hierarchy);
+    DigitalTwinBuilder.computeDigitalTwinLayout(hierarchy);
 
     // 3. Commit state
     useUniverseManager

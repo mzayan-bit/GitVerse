@@ -9,15 +9,13 @@ import * as THREE from 'three';
 import { useRepositoryScene } from '@/repository-scene';
 import { RepositoryDomainModel } from '@/domain/RepositoryModels';
 import { ImpactVisualizer } from '@/intelligence/impact/visualization/ImpactVisualizer';
+import { InfrastructureRenderer } from './DigitalTwin/InfrastructureRenderer';
 
 export function UniverseRenderer() {
-  const isBuilt = useUniverseManager((s) => s.isBuilt);
-  const hierarchy = useUniverseManager((s) => s.hierarchy);
-  const entities = useEntityManager((s) => s.entities);
+  const { isBuilt, hierarchy } = useUniverseManager();
+  const { entities } = useEntityManager();
 
-  // If universe isn't built yet, don't render it.
-  // We can leave the default background rendering from before if we want.
-  if (!isBuilt) return null;
+  if (!isBuilt || !hierarchy) return null;
 
   return (
     <group
@@ -27,6 +25,7 @@ export function UniverseRenderer() {
           .setCameraState({ mode: 'free', targetId: null });
       }}
     >
+      <InfrastructureRenderer />
       <ImpactVisualizer />
       {/* Render Galaxies (Orgs) */}
       {hierarchy.galaxies.map((galaxy) => {

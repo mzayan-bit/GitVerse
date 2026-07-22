@@ -1,3 +1,11 @@
+import {
+  ClusterModel,
+  ServiceModel,
+  DatabaseModel,
+  DeploymentModel,
+  PipelineModel,
+  ContainerModel,
+} from '@/domain/Infrastructure';
 import { RepositoryDomainModel } from '@/domain/RepositoryModels';
 
 export type CameraTargetMode = 'free' | 'focus' | 'orbit';
@@ -28,6 +36,12 @@ export interface UniverseHierarchy {
     solarSystemId: string;
     repository: RepositoryDomainModel;
   }[];
+  clusters?: ClusterModel[];
+  services?: ServiceModel[];
+  databases?: DatabaseModel[];
+  deployments?: DeploymentModel[];
+  pipelines?: PipelineModel[];
+  containers?: ContainerModel[];
 }
 
 export interface UniverseStatistics {
