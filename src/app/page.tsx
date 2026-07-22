@@ -34,12 +34,15 @@ export default function Home() {
   const [showAuth, setShowAuth] = useState(false);
   const [showOrgExplorer, setShowOrgExplorer] = useState(false);
   const [showDashboard, setShowDashboard] = useState(false);
+  const [showCommandCenter, setShowCommandCenter] = useState(false);
   const [isImporting, setIsImporting] = useState(false);
 
   // Data States
   const [repositories, setRepositories] = useState<RepositoryDomainModel[]>([]);
   const [clientMetrics, setClientMetrics] = useState<ClientMetrics>();
   const [rateLimit, setRateLimit] = useState<GitHubRateLimitResponse>();
+
+  const hasImported = repositories.length > 0;
 
   const handleEnter = () => {
     if (isAuthenticated) {
@@ -89,6 +92,7 @@ export default function Home() {
     } finally {
       setIsImporting(false);
       setShowDashboard(true);
+      setShowCommandCenter(true);
     }
   };
 
@@ -100,7 +104,7 @@ export default function Home() {
       </div>
 
       {/* Landing UI */}
-      {!showOrgExplorer && !isImporting && !showDashboard && (
+      {!showOrgExplorer && !isImporting && !hasImported && (
         <div className="absolute inset-0 z-10 pointer-events-none flex flex-col items-center justify-between p-8 font-sans">
           <header className="w-full max-w-7xl flex items-center justify-between text-[11px] font-mono tracking-widest text-white/50 uppercase">
             <div className="flex items-center gap-3">
@@ -168,12 +172,41 @@ export default function Home() {
         orgCount={1}
       />
 
+      {/* HUD Panel Toggles */}
+      {hasImported && (
+        <div className="absolute top-6 left-6 z-50 flex items-center gap-2 pointer-events-auto">
+          <button
+            onClick={() => setShowDashboard(!showDashboard)}
+            className={`px-4 py-2 text-xs font-semibold tracking-wider uppercase rounded-xl transition-all border backdrop-blur-xl shadow-lg ${
+              showDashboard
+                ? 'bg-white/20 text-white border-white/20 shadow-white/5'
+                : 'bg-black/50 text-white/50 border-white/10 hover:bg-white/10 hover:text-white/80'
+            }`}
+          >
+            Integration
+          </button>
+          <button
+            onClick={() => setShowCommandCenter(!showCommandCenter)}
+            className={`px-4 py-2 text-xs font-semibold tracking-wider uppercase rounded-xl transition-all border backdrop-blur-xl shadow-lg ${
+              showCommandCenter
+                ? 'bg-white/20 text-white border-white/20 shadow-white/5'
+                : 'bg-black/50 text-white/50 border-white/10 hover:bg-white/10 hover:text-white/80'
+            }`}
+          >
+            Command Center
+          </button>
+        </div>
+      )}
+
       {/* Live Universe UI Overlays */}
       <UniverseSearch />
       <UniverseHUD />
 
       {/* Infrastructure Command Center */}
-      {showDashboard && <CommandCenter />}
+      <CommandCenter
+        isOpen={showCommandCenter}
+        onClose={() => setShowCommandCenter(false)}
+      />
 
       {/* Impact Analysis Overlay */}
       <ImpactDashboard />

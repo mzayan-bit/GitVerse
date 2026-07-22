@@ -54,8 +54,8 @@ export function DeveloperDashboard({
   const isOnline = typeof navigator !== 'undefined' ? navigator.onLine : true;
 
   return (
-    <div className="absolute left-6 top-24 z-50 w-96 animate-in fade-in slide-in-from-left-8 font-sans">
-      <div className="rounded-2xl border border-white/10 bg-black/50 shadow-2xl backdrop-blur-2xl overflow-hidden">
+    <div className="absolute left-6 top-20 z-50 w-[340px] animate-in fade-in slide-in-from-left-8 font-sans">
+      <div className="rounded-2xl border border-white/10 bg-black/60 shadow-2xl backdrop-blur-2xl overflow-hidden flex flex-col max-h-[85vh]">
         {/* Header */}
         <div className="flex items-center justify-between px-5 py-4 border-b border-white/5">
           <div className="flex items-center gap-2">
@@ -72,7 +72,7 @@ export function DeveloperDashboard({
           </button>
         </div>
 
-        <div className="px-5 py-4 space-y-4 max-h-[70vh] overflow-y-auto text-sm text-white/90">
+        <div className="px-5 py-4 space-y-4 overflow-y-auto text-sm text-white/90 custom-scrollbar">
           {/* User Info */}
           <div className="rounded-xl bg-white/[0.03] border border-white/5 p-3">
             <div className="flex items-center gap-3">
@@ -88,11 +88,11 @@ export function DeveloperDashboard({
                   <User size={18} className="text-white/50" />
                 )}
               </div>
-              <div className="flex-1">
-                <div className="text-sm font-medium text-white">
+              <div className="flex-1 min-w-0">
+                <div className="text-sm font-medium text-white truncate">
                   {user?.name || 'Not connected'}
                 </div>
-                <div className="text-xs text-white/40">
+                <div className="text-xs text-white/40 truncate">
                   {user?.email || 'No email'}
                 </div>
               </div>
@@ -117,10 +117,12 @@ export function DeveloperDashboard({
                 {isOnline ? 'Online' : 'Offline'}
               </div>
               <div className="flex items-center gap-2 text-xs text-white/40">
-                <Clock size={10} />
-                {clientMetrics?.lastRequestAt
-                  ? new Date(clientMetrics.lastRequestAt).toLocaleTimeString()
-                  : 'No requests yet'}
+                <Clock size={10} className="shrink-0" />
+                <span className="truncate">
+                  {clientMetrics?.lastRequestAt
+                    ? new Date(clientMetrics.lastRequestAt).toLocaleTimeString()
+                    : 'No requests yet'}
+                </span>
               </div>
             </div>
           </div>
