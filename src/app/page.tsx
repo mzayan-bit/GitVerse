@@ -16,6 +16,10 @@ import { RepositoryDomainModel } from '@/domain/RepositoryModels';
 import { UniverseSearch, UniverseHUD } from '@/universe';
 import { ImpactDashboard } from '@/components/impact';
 import { CommandCenter } from '@/components/infrastructure/CommandCenter';
+import { useRepositoryScene } from '@/repository-scene/SceneManager';
+import { RepositoryExplorerHUD } from '@/repository-scene/ui/RepositoryExplorerHUD';
+import { BuildingTooltip } from '@/repository-scene/ui/BuildingTooltip';
+import { Minimap } from '@/repository-scene/ui/Minimap';
 
 // Dynamically import the 3D canvas with SSR disabled
 const GitVerseCanvas = dynamic(() => import('@/components/canvas-wrapper'), {
@@ -43,6 +47,11 @@ export default function Home() {
   const [rateLimit, setRateLimit] = useState<GitHubRateLimitResponse>();
 
   const hasImported = repositories.length > 0;
+
+  // Repository Scene State for decoupled UI rendering
+  const repoSceneMode = useRepositoryScene((s) => s.mode);
+  const repoSceneLayout = useRepositoryScene((s) => s.layout);
+  const isRepoSceneActive = repoSceneMode !== 'idle';
 
   const handleEnter = () => {
     if (isAuthenticated) {
@@ -163,17 +172,19 @@ export default function Home() {
       )}
 
       {/* Developer Dashboard - The Operational View */}
-      <DeveloperDashboard
-        isOpen={showDashboard}
-        onClose={() => setShowDashboard(false)}
-        clientMetrics={clientMetrics}
-        rateLimit={rateLimit?.resources.core}
-        importedRepoCount={repositories.length}
-        orgCount={1}
-      />
+      {!isRepoSceneActive && (
+        <DeveloperDashboard
+          isOpen={showDashboard}
+          onClose={() => setShowDashboard(false)}
+          clientMetrics={clientMetrics}
+          rateLimit={rateLimit?.resources.core}
+          importedRepoCount={repositories.length}
+          orgCount={1}
+        />
+      )}
 
       {/* HUD Panel Toggles */}
-      {hasImported && (
+      {hasImported && !isRepoSceneActive && (
         <div className="absolute top-6 left-6 z-50 flex items-center gap-2 pointer-events-auto">
           <button
             onClick={() => setShowDashboard(!showDashboard)}
@@ -199,17 +210,34 @@ export default function Home() {
       )}
 
       {/* Live Universe UI Overlays */}
-      <UniverseSearch />
-      <UniverseHUD />
+      {!isRepoSceneActive && (
+        <>
+          <UniverseSearch />
+          <UniverseHUD />
 
-      {/* Infrastructure Command Center */}
-      <CommandCenter
-        isOpen={showCommandCenter}
-        onClose={() => setShowCommandCenter(false)}
-      />
+          {/* Infrastructure Command Center */}
+          <CommandCenter
+            isOpen={showCommandCenter}
+            onClose={() => setShowCommandCenter(false)}
+          />
 
-      {/* Impact Analysis Overlay */}
-      <ImpactDashboard />
+          {/* Impact Analysis Overlay */}
+          <ImpactDashboard />
+        </>
+      )}
+
+      {/* Decoupled Repository Scene UI Overlays */}
+      {repoSceneMode === 'exploring' && (
+        <div className="absolute inset-0 z-50 pointer-events-none">
+          <RepositoryExplorerHUD />
+          {repoSceneLayout && (
+            <>
+              <BuildingTooltip layout={repoSceneLayout} />
+              <Minimap layout={repoSceneLayout} />
+            </>
+          )}
+        </div>
+      )}
 
       {/* Background Controls (optional, disabled for dashboard focus) */}
       <div className="hidden">

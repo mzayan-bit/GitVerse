@@ -8,10 +8,6 @@ import { GroundPlane } from './terrain/GroundPlane';
 import { BuildingRenderer } from './buildings/BuildingRenderer';
 import { RepositoryCamera } from './RepositoryCamera';
 import { SceneTransition } from './SceneTransition';
-import { Html } from '@react-three/drei';
-import { RepositoryExplorerHUD } from './ui/RepositoryExplorerHUD';
-import { BuildingTooltip } from './ui/BuildingTooltip';
-import { Minimap } from './ui/Minimap';
 
 /**
  * The main 3D renderer for the repository exploration scene.
@@ -21,15 +17,23 @@ import { Minimap } from './ui/Minimap';
  * This component lives INSIDE the R3F Canvas.
  */
 export function RepositorySceneRenderer() {
-  const { mode, activeRepository, currentPath } = useRepositoryScene();
+  const { mode, activeRepository, currentPath, setLayout } =
+    useRepositoryScene();
 
   // Generate the file tree and city layout once for the active repository
   const cityLayout = useMemo(() => {
     if (!activeRepository) return null;
 
     const fileTree = SceneLoader.generateFileTree(activeRepository);
-    return TerrainGenerator.generate(fileTree, activeRepository.id);
-  }, [activeRepository]);
+    const layout = TerrainGenerator.generate(fileTree, activeRepository.id);
+
+    // Defer the state update to avoid React state-during-render warnings
+    setTimeout(() => {
+      setLayout(layout);
+    }, 0);
+
+    return layout;
+  }, [activeRepository, setLayout]);
 
   return (
     <group>
@@ -66,14 +70,7 @@ export function RepositorySceneRenderer() {
             distance={300}
           />
 
-          {/* UI Overlays */}
-          {mode === 'exploring' && (
-            <Html fullscreen style={{ pointerEvents: 'none' }}>
-              <RepositoryExplorerHUD />
-              <BuildingTooltip layout={cityLayout} />
-              <Minimap layout={cityLayout} />
-            </Html>
-          )}
+          {/* UI Overlays decoupled from 3D scene (rendered in page.tsx) */}
         </group>
       )}
     </group>

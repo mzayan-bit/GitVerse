@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef } from 'react';
+import { useRef, useEffect } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
 import { useRepositoryScene } from './SceneManager';
@@ -24,6 +24,24 @@ export function RepositoryCamera({ layout }: RepositoryCameraProps) {
   const targetLookAt = useRef(new THREE.Vector3(0, 0, 0));
   const currentLookAt = useRef(new THREE.Vector3(0, 0, 0));
   const orbitAngle = useRef(0);
+
+  // Keyboard state for first-person walking
+  const keys = useRef<{ [key: string]: boolean }>({});
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) =>
+      (keys.current[e.key.toLowerCase()] = true);
+    const handleKeyUp = (e: KeyboardEvent) =>
+      (keys.current[e.key.toLowerCase()] = false);
+
+    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('keyup', handleKeyUp);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('keyup', handleKeyUp);
+    };
+  }, []);
 
   useFrame((_, delta) => {
     if (mode !== 'exploring') return;
@@ -51,18 +69,40 @@ export function RepositoryCamera({ layout }: RepositoryCameraProps) {
       }
 
       case 'first-person': {
-        // Low camera, looking forward
-        const fpRadius = layout.groundRadius * 0.3;
-        targetPosition.current.set(
-          Math.cos(orbitAngle.current) * fpRadius,
-          8,
-          Math.sin(orbitAngle.current) * fpRadius
-        );
-        const lookAhead = orbitAngle.current + 0.5;
+        // Simple WASD controller
+        const speed = 40.0 * delta;
+        const currentPos = targetPosition.current;
+
+        // Direction vectors
+        const forward = new THREE.Vector3();
+        camera.getWorldDirection(forward);
+        forward.y = 0;
+        forward.normalize();
+
+        const right = new THREE.Vector3()
+          .crossVectors(forward, new THREE.Vector3(0, 1, 0))
+          .normalize();
+
+        if (keys.current['w'])
+          currentPos.add(forward.clone().multiplyScalar(speed));
+        if (keys.current['s'])
+          currentPos.add(forward.clone().multiplyScalar(-speed));
+        if (keys.current['d'])
+          currentPos.add(right.clone().multiplyScalar(speed));
+        if (keys.current['a'])
+          currentPos.add(right.clone().multiplyScalar(-speed));
+        if (keys.current['q']) orbitAngle.current -= delta * 1.5;
+        if (keys.current['e']) orbitAngle.current += delta * 1.5;
+
+        // Force height to be slightly above ground
+        currentPos.y = 5;
+
+        // Calculate look target based on current position and rotation angle
+        const lookAheadDist = 20;
         targetLookAt.current.set(
-          Math.cos(lookAhead) * fpRadius * 0.5,
+          currentPos.x + Math.sin(orbitAngle.current) * lookAheadDist,
           5,
-          Math.sin(lookAhead) * fpRadius * 0.5
+          currentPos.z + Math.cos(orbitAngle.current) * lookAheadDist
         );
         break;
       }

@@ -7,6 +7,7 @@ import {
   RepositorySceneConfig,
   DEFAULT_SCENE_CONFIG,
 } from './SceneState';
+import { CityLayout } from './terrain/TerrainTypes';
 import { RepositoryDomainModel } from '@/domain/RepositoryModels';
 
 // ============================================================================
@@ -22,6 +23,7 @@ interface RepositorySceneStore {
   currentPath: ExplorationPath;
   selectedBuilding: SelectedBuilding | null;
   hoveredBuildingId: string | null;
+  layout: CityLayout | null;
   navigationHistory: string[];
   config: RepositorySceneConfig;
 
@@ -37,6 +39,7 @@ interface RepositorySceneStore {
   navigateUp: () => void;
   selectBuilding: (building: SelectedBuilding | null) => void;
   setHoveredBuilding: (id: string | null) => void;
+  setLayout: (layout: CityLayout | null) => void;
   setTransitionProgress: (progress: number) => void;
 }
 
@@ -48,6 +51,7 @@ export const useRepositoryScene = create<RepositorySceneStore>((set, get) => ({
   currentPath: { segments: [], fullPath: '' },
   selectedBuilding: null,
   hoveredBuildingId: null,
+  layout: null,
   navigationHistory: [],
   config: DEFAULT_SCENE_CONFIG,
   transitionProgress: 0,
@@ -60,6 +64,7 @@ export const useRepositoryScene = create<RepositorySceneStore>((set, get) => ({
       currentPath: { segments: [], fullPath: '' },
       selectedBuilding: null,
       hoveredBuildingId: null,
+      layout: null,
       navigationHistory: [],
       transitionProgress: 0,
       cameraMode: 'orbit',
@@ -109,5 +114,6 @@ export const useRepositoryScene = create<RepositorySceneStore>((set, get) => ({
     }),
 
   setHoveredBuilding: (id) => set({ hoveredBuildingId: id }),
+  setLayout: (layout) => set({ layout }),
   setTransitionProgress: (progress) => set({ transitionProgress: progress }),
 }));
