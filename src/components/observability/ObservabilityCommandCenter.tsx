@@ -1,11 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import {
   Activity,
-  AlertTriangle,
   Play,
   Pause,
-  FastForward,
-  Filter,
   Search,
   Terminal,
   Zap,
@@ -13,7 +10,6 @@ import {
   CheckCircle2,
   X,
 } from 'lucide-react';
-import { useLiveState } from '@/universe/Live/LiveStateStore';
 import { EventStore } from '@/observability/core/EventStore';
 import { ReplayEngine } from '@/observability/core/ReplayEngine';
 import { LiveEvent } from '@/observability/types';
@@ -21,8 +17,8 @@ import { LiveEvent } from '@/observability/types';
 export function ObservabilityCommandCenter() {
   const [isOpen, setIsOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<
-    'metrics' | 'logs' | 'traces' | 'incidents'
-  >('metrics');
+    'metric' | 'log' | 'trace' | 'incident'
+  >('metric');
   const [events, setEvents] = useState<LiveEvent[]>([]);
   const [isReplaying, setIsReplaying] = useState(false);
   const replayEngine = new ReplayEngine();
@@ -83,7 +79,7 @@ export function ObservabilityCommandCenter() {
       {/* Toolbar */}
       <div className="flex items-center justify-between px-6 py-3 border-b border-white/10 bg-black/40">
         <div className="flex gap-2">
-          {(['metrics', 'logs', 'traces', 'incidents'] as const).map((tab) => (
+          {(['metric', 'log', 'trace', 'incident'] as const).map((tab) => (
             <button
               key={tab}
               onClick={() => setActiveTab(tab)}
@@ -135,9 +131,7 @@ export function ObservabilityCommandCenter() {
         <div className="flex-1 p-6 overflow-y-auto custom-scrollbar">
           <div className="space-y-2">
             {events
-              .filter((e) =>
-                activeTab === 'metrics' ? true : e.type === activeTab
-              )
+              .filter((e) => e.type === activeTab)
               .map((event) => (
                 <EventRow key={event.id} event={event} />
               ))}

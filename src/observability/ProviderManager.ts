@@ -1,4 +1,7 @@
-import { IObservabilityProvider, ProviderConfig } from './ProviderInterface';
+import {
+  IObservabilityProvider,
+  ProviderConfig,
+} from './providers/ProviderInterface';
 
 export class ProviderManager {
   private static instance: ProviderManager;
