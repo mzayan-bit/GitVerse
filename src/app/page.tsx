@@ -20,6 +20,7 @@ import { useRepositoryScene } from '@/repository-scene/SceneManager';
 import { RepositoryExplorerHUD } from '@/repository-scene/ui/RepositoryExplorerHUD';
 import { BuildingTooltip } from '@/repository-scene/ui/BuildingTooltip';
 import { Minimap } from '@/repository-scene/ui/Minimap';
+import { ObservabilityCommandCenter } from '@/components/observability/ObservabilityCommandCenter';
 
 // Dynamically import the 3D canvas with SSR disabled
 const GitVerseCanvas = dynamic(() => import('@/components/canvas-wrapper'), {
@@ -223,6 +224,9 @@ export default function Home() {
 
           {/* Impact Analysis Overlay */}
           <ImpactDashboard />
+
+          {/* Live Observability */}
+          <ObservabilityCommandCenter />
         </>
       )}
 
