@@ -10,6 +10,7 @@ import { useRepositoryScene } from '@/repository-scene';
 import { RepositoryDomainModel } from '@/domain/RepositoryModels';
 import { ImpactVisualizer } from '@/intelligence/impact/visualization/ImpactVisualizer';
 import { InfrastructureRenderer } from './DigitalTwin/InfrastructureRenderer';
+import { LiveUniverseConnector } from './Live/LiveUniverseConnector';
 
 export function UniverseRenderer() {
   const { isBuilt, hierarchy } = useUniverseManager();
@@ -25,6 +26,7 @@ export function UniverseRenderer() {
           .setCameraState({ mode: 'free', targetId: null });
       }}
     >
+      <LiveUniverseConnector />
       <InfrastructureRenderer />
       <ImpactVisualizer />
       {/* Render Galaxies (Orgs) */}
@@ -134,7 +136,7 @@ function PlanetRenderer({ planetId }: { planetId: string }) {
         useUniverseManager.getState().setHoveredEntity(null);
       }}
     >
-      <Planet config={config} autoRotate={true} />
+      <Planet config={config} autoRotate={true} planetId={planetId} />
     </group>
   );
 }
