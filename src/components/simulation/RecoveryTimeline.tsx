@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import { useMemo } from 'react';
 import { PredictionReport as IPredictionReport } from '@/simulation/types';
 import { RecoveryEngine } from '@/simulation/core/RecoveryEngine';
 import { Circle } from 'lucide-react';

@@ -5,7 +5,7 @@ export class BlastRadiusCalculator {
    * Calculates direct and indirect blast radius using breadth-first search on the Knowledge Graph.
    */
   public calculate(
-    graph: RepositoryGraph,
+    _graph: RepositoryGraph,
     targetNodeId: string
   ): { direct: string[]; indirect: string[] } {
     const direct: string[] = [];

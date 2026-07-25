@@ -1,4 +1,3 @@
-import React from 'react';
 import { PredictionReport as IPredictionReport } from '@/simulation/types';
 import {
   AlertOctagon,

@@ -1,4 +1,3 @@
-import React from 'react';
 import { ChaosScenario, ChaosFailureDefinition } from '@/simulation/types';
 import { Plus, Trash2, Target } from 'lucide-react';
 

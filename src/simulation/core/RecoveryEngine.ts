@@ -1,4 +1,4 @@
-import { SimulationState, PredictionReport } from '../types';
+import { PredictionReport } from '../types';
 
 export class RecoveryEngine {
   /**

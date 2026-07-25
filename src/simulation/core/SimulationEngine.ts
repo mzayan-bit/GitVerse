@@ -2,7 +2,6 @@ import { SimulationState, ChaosScenario, PredictionReport } from '../types';
 import { SnapshotManager } from './SnapshotManager';
 import { ScenarioRunner } from './ScenarioRunner';
 import { PredictionEngine } from '../intelligence/PredictionEngine';
-import { GraphManager } from '@/intelligence/KnowledgeGraph/GraphManager';
 
 export class SimulationEngine {
   private static instance: SimulationEngine;
