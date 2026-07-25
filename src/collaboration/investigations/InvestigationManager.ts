@@ -3,7 +3,6 @@ import {
   InvestigationStatus,
   Evidence,
   ActionItem,
-  InvestigationTimeline,
 } from './types';
 
 /**

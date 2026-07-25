@@ -2,8 +2,6 @@ import { useState } from 'react';
 import {
   Users,
   Eye,
-  MessageCircle,
-  Search as SearchIcon,
   UserPlus,
   Radio,
   X,
@@ -29,7 +27,6 @@ export function TeamWorkspace() {
   const session = server.getActiveSession();
   const activityLog = server.getActivityLog();
   const participants = session?.participants ?? [];
-  const presenceEntries = Object.values(remotePresence);
 
   if (!isOpen) {
     return (

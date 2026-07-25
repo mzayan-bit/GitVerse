@@ -1,5 +1,5 @@
 import { CollaborationServer } from '../core/CollaborationServer';
-import { SyncMessage, PresenceState } from '../types';
+import { SyncMessage } from '../types';
 import { useSharedState } from './SharedStateStore';
 
 /**
