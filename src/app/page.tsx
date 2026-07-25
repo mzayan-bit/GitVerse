@@ -21,6 +21,7 @@ import { RepositoryExplorerHUD } from '@/repository-scene/ui/RepositoryExplorerH
 import { BuildingTooltip } from '@/repository-scene/ui/BuildingTooltip';
 import { Minimap } from '@/repository-scene/ui/Minimap';
 import { ObservabilityCommandCenter } from '@/components/observability/ObservabilityCommandCenter';
+import { SimulationWorkspace } from '@/components/simulation/SimulationWorkspace';
 
 // Dynamically import the 3D canvas with SSR disabled
 const GitVerseCanvas = dynamic(() => import('@/components/canvas-wrapper'), {
@@ -227,6 +228,9 @@ export default function Home() {
 
           {/* Live Observability */}
           <ObservabilityCommandCenter />
+
+          {/* Engineering Simulation */}
+          <SimulationWorkspace />
         </>
       )}
 
