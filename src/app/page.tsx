@@ -23,6 +23,7 @@ import { Minimap } from '@/repository-scene/ui/Minimap';
 import { ObservabilityCommandCenter } from '@/components/observability/ObservabilityCommandCenter';
 import { SimulationWorkspace } from '@/components/simulation/SimulationWorkspace';
 import { TeamWorkspace } from '@/components/collaboration/TeamWorkspace';
+import { NavigationHUD } from '@/components/navigation/NavigationHUD';
 
 // Dynamically import the 3D canvas with SSR disabled
 const GitVerseCanvas = dynamic(() => import('@/components/canvas-wrapper'), {
@@ -235,6 +236,9 @@ export default function Home() {
 
           {/* Team Collaboration */}
           <TeamWorkspace />
+
+          {/* Navigation HUD */}
+          <NavigationHUD />
         </>
       )}
 

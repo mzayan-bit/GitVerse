@@ -24,6 +24,9 @@ import { Galaxy } from '@/galaxy/Galaxy';
 import { useGalaxyManager } from '@/galaxy/GalaxyManager';
 import { UniverseRenderer, useUniverseManager } from '@/universe';
 import { RepositorySceneRenderer } from '@/repository-scene/RepositorySceneRenderer';
+import { PremiumCameraController } from '@/navigation/camera/PremiumCameraController';
+import { KeyboardNavigationHandler } from '@/navigation/input/KeyboardNavigationHandler';
+import { InteractionEffects } from '@/navigation/interaction/InteractionEffects';
 
 function ActiveSolarSystemWrapper() {
   const { focusedSystemId, galaxyConfig } = useGalaxyManager();
@@ -74,6 +77,8 @@ export default function GitVerseCanvas() {
               <CameraController />
               <SceneOrbitControls />
               <NavigationCamera />
+              <PremiumCameraController />
+              <KeyboardNavigationHandler />
 
               {/* Performance */}
               <PerformanceManager />
@@ -96,6 +101,9 @@ export default function GitVerseCanvas() {
 
               {/* Repository Surface Engine */}
               <RepositorySceneRenderer />
+
+              {/* Interaction Effects */}
+              <InteractionEffects />
 
               {/* Post-Processing Pipeline */}
               <PostProcessing />
