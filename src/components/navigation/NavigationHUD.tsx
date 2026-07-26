@@ -1,9 +1,5 @@
 import { useState } from 'react';
 import {
-  Compass,
-  Eye,
-  Crosshair,
-  Move3D,
   Bookmark,
   History,
   Settings2,
@@ -11,8 +7,6 @@ import {
   ChevronRight,
   RotateCcw,
   X,
-  Maximize2,
-  Minimize2,
 } from 'lucide-react';
 import { useCameraRig, CameraMode } from '@/navigation/camera/CameraRig';
 import { useInteractionStore } from '@/navigation/interaction/InteractionStore';

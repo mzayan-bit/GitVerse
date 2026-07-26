@@ -1,8 +1,6 @@
 import { useCallback } from 'react';
 import * as THREE from 'three';
-import { useThree } from '@react-three/fiber';
 import { useCameraRig } from '../camera/CameraRig';
-import { useUniverseManager } from '@/universe/UniverseManager';
 import { useEntityManager } from '@/entities/EntityManager';
 import { MappedVisualProperties } from '@/mapping/MappingEngine';
 

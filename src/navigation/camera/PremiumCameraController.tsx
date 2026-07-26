@@ -1,4 +1,4 @@
-import { useRef, useCallback } from 'react';
+import { useRef } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
 import { useCameraRig } from './CameraRig';
@@ -21,7 +21,6 @@ export function PremiumCameraController() {
   // Refs for per-frame mutable state (avoids Zustand subscription overhead)
   const currentPos = useRef(new THREE.Vector3(0, 400, 800));
   const currentTarget = useRef(new THREE.Vector3(0, 0, 0));
-  const smoothVelocity = useRef(new THREE.Vector3());
 
   useFrame((_, rawDelta) => {
     // Yield when repository scene is active
