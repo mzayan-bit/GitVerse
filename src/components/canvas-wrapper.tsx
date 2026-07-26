@@ -13,12 +13,8 @@ import {
 } from '@/three';
 import { NavigationCamera } from '@/three/Camera/NavigationCamera';
 import { PerformanceManager } from '@/three';
-import {
-  PostProcessing,
-  EnvironmentSetup,
-  Lighting,
-  SceneFog,
-} from '@/effects';
+import { EnvironmentSetup, Lighting, SceneFog } from '@/effects';
+import { CinematicPostProcessing } from '@/rendering/effects/CinematicPostProcessing';
 import { SolarSystem } from '@/systems/SolarSystem';
 import { Galaxy } from '@/galaxy/Galaxy';
 import { useGalaxyManager } from '@/galaxy/GalaxyManager';
@@ -106,7 +102,7 @@ export default function GitVerseCanvas() {
               <InteractionEffects />
 
               {/* Post-Processing Pipeline */}
-              <PostProcessing />
+              <CinematicPostProcessing />
             </RootScene>
           </Suspense>
         </SceneCanvas>
