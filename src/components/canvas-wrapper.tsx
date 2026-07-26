@@ -15,6 +15,7 @@ import { NavigationCamera } from '@/three/Camera/NavigationCamera';
 import { PerformanceManager } from '@/three';
 import { EnvironmentSetup, Lighting, SceneFog } from '@/effects';
 import { CinematicPostProcessing } from '@/rendering/effects/CinematicPostProcessing';
+import { ThemeController } from '@/rendering/themes/ThemeController';
 import { SolarSystem } from '@/systems/SolarSystem';
 import { Galaxy } from '@/galaxy/Galaxy';
 import { useGalaxyManager } from '@/galaxy/GalaxyManager';
@@ -78,6 +79,9 @@ export default function GitVerseCanvas() {
 
               {/* Performance */}
               <PerformanceManager />
+
+              {/* Theme Engine */}
+              <ThemeController />
 
               {/* Environment & Lighting */}
               <EnvironmentSetup />

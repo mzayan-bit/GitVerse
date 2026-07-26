@@ -1,39 +1,42 @@
-/* eslint-disable react-hooks/immutability */
+/* eslint-disable react-hooks/immutability, react-hooks/exhaustive-deps */
 'use client';
 
-import { Fog as ThreeFog } from 'three';
-import { useThree } from '@react-three/fiber';
+import { FogExp2 } from 'three';
+import { useThree, useFrame } from '@react-three/fiber';
 import { useEffect } from 'react';
-import type { FogConfig } from '@/types/rendering';
-import { DEFAULT_FOG_CONFIG } from '@/constants/rendering';
-
-interface SceneFogProps {
-  config?: Partial<FogConfig>;
-}
+import { useThemeManager } from '@/rendering/themes/ThemeManager';
 
 /**
- * Applies linear fog to the scene.
+ * Applies cinematic exponential fog to the scene, driven by ThemeManager.
  * Must be a child of `<Canvas>`.
  */
-function SceneFog({ config }: SceneFogProps) {
+function SceneFog() {
   const scene = useThree((s) => s.scene);
-
-  const merged: FogConfig = { ...DEFAULT_FOG_CONFIG, ...config };
+  const theme = useThemeManager((s) => s.activeTheme);
 
   useEffect(() => {
-    if (merged.enabled) {
-      scene.fog = new ThreeFog(merged.color, merged.near, merged.far);
-    } else {
-      scene.fog = null;
-    }
-
+    // We use FogExp2 because it looks more cinematic than linear Fog
+    scene.fog = new FogExp2(
+      theme.environment.fogColor,
+      theme.environment.fogDensity
+    );
     return () => {
       scene.fog = null;
     };
-  }, [scene, merged.enabled, merged.color, merged.near, merged.far]);
+  }, [scene]);
+
+  // Update fog properties smoothly every frame
+  useFrame(() => {
+    if (scene.fog instanceof FogExp2) {
+      scene.fog.color.set(
+        useThemeManager.getState().activeTheme.environment.fogColor
+      );
+      scene.fog.density =
+        useThemeManager.getState().activeTheme.environment.fogDensity;
+    }
+  });
 
   return null;
 }
 
 export { SceneFog };
-export type { SceneFogProps };

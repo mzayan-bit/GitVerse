@@ -1,51 +1,43 @@
 'use client';
 
-import { DEFAULT_LIGHTING_CONFIG, LightingConfig } from '@/constants/lighting';
-
-interface LightingProps {
-  config?: Partial<LightingConfig>;
-}
+import { useThemeManager } from '@/rendering/themes/ThemeManager';
 
 /**
- * Scene lighting configuration for cinematic universe.
+ * Scene lighting configuration for cinematic universe, driven by ThemeManager.
  */
-function Lighting({ config }: LightingProps) {
-  const merged = {
-    ...DEFAULT_LIGHTING_CONFIG,
-    ...config,
-  };
+function Lighting() {
+  const theme = useThemeManager((s) => s.activeTheme);
+  const { ambient, directional, rim, core, intensityMultiplier } =
+    theme.lighting;
 
   return (
     <group name="CinematicLighting">
       {/* Ambient Fill */}
-      <ambientLight
-        intensity={merged.ambient.intensity}
-        color={merged.ambient.color}
-      />
+      <ambientLight intensity={0.4 * intensityMultiplier} color={ambient} />
 
       {/* Main Directional Light (Sun/Star) */}
       <directionalLight
-        position={merged.directional.position}
-        intensity={merged.directional.intensity}
-        color={merged.directional.color}
+        position={[100, 200, 50]}
+        intensity={1.0 * intensityMultiplier}
+        color={directional}
       />
 
       {/* Cinematic Rim Light (Cool tone from behind) */}
       <spotLight
-        position={merged.rim.position}
-        intensity={merged.rim.intensity}
-        color={merged.rim.color}
+        position={[-100, 50, -200]}
+        intensity={2.5 * intensityMultiplier}
+        color={rim}
         angle={Math.PI / 4}
         penumbra={1}
-        distance={100}
+        distance={800}
       />
 
       {/* Galactic Core Warmth (From below) */}
       <pointLight
-        position={merged.core.position}
-        intensity={merged.core.intensity}
-        color={merged.core.color}
-        distance={200}
+        position={[0, -100, 0]}
+        intensity={1.5 * intensityMultiplier}
+        color={core}
+        distance={1000}
         decay={2}
       />
     </group>
@@ -53,4 +45,3 @@ function Lighting({ config }: LightingProps) {
 }
 
 export { Lighting };
-export type { LightingProps };
