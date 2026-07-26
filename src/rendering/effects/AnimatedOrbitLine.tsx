@@ -1,7 +1,7 @@
 import { useRef, useMemo } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
-import { useThemeManager } from '../../themes/ThemeManager';
+import { useThemeManager } from '../themes/ThemeManager';
 
 interface AnimatedOrbitLineProps {
   points: THREE.Vector3[];
@@ -19,7 +19,7 @@ export function AnimatedOrbitLine({
   color,
   opacity = 0.5,
 }: AnimatedOrbitLineProps) {
-  const lineRef = useRef<THREE.Line>(null);
+  const lineRef = useRef<unknown>(null);
   const materialRef = useRef<THREE.LineBasicMaterial>(null);
   const theme = useThemeManager((s) => s.activeTheme);
 
@@ -42,7 +42,9 @@ export function AnimatedOrbitLine({
   });
 
   return (
-    <line ref={lineRef} geometry={geometry}>
+    // @ts-expect-error - R3F line vs SVG line type conflict
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    <line ref={lineRef as any} geometry={geometry}>
       <lineBasicMaterial
         ref={materialRef}
         color={orbitColor}

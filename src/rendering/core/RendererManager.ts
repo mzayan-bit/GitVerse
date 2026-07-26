@@ -55,7 +55,8 @@ export const QUALITY_PRESETS: Record<QualityPreset, QualityProfile> = {
     gammaCorrection: true,
     environmentMap: true,
     physicallyBased: true,
-    pixelRatio: Math.min(window?.devicePixelRatio ?? 1, 2),
+    pixelRatio:
+      typeof window !== 'undefined' ? Math.min(window.devicePixelRatio, 2) : 1,
   },
   ultra: {
     renderScale: 1.25,
@@ -68,7 +69,8 @@ export const QUALITY_PRESETS: Record<QualityPreset, QualityProfile> = {
     gammaCorrection: true,
     environmentMap: true,
     physicallyBased: true,
-    pixelRatio: Math.min(window?.devicePixelRatio ?? 1, 2),
+    pixelRatio:
+      typeof window !== 'undefined' ? Math.min(window.devicePixelRatio, 2) : 1,
   },
 };
 

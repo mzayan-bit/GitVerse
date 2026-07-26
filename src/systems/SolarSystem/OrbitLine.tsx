@@ -42,6 +42,7 @@ export function OrbitLine({ config }: OrbitLineProps) {
 
   return (
     <group rotation={[config.inclination, 0, 0]}>
+      {/* @ts-expect-error - R3F line vs SVG line type conflict */}
       <line geometry={geometry}>
         <lineBasicMaterial
           ref={materialRef}

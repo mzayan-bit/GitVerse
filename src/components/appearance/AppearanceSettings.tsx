@@ -2,8 +2,6 @@ import { useState } from 'react';
 import { useThemeManager, THEMES } from '../../rendering/themes/ThemeManager';
 import {
   useRendererManager,
-  QUALITY_PRESETS,
-  POST_FX_PRESETS,
   QualityPreset,
 } from '../../rendering/core/RendererManager';
 import {

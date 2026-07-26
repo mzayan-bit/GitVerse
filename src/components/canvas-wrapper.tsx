@@ -24,6 +24,7 @@ import { RepositorySceneRenderer } from '@/repository-scene/RepositorySceneRende
 import { PremiumCameraController } from '@/navigation/camera/PremiumCameraController';
 import { KeyboardNavigationHandler } from '@/navigation/input/KeyboardNavigationHandler';
 import { InteractionEffects } from '@/navigation/interaction/InteractionEffects';
+import { AdaptivePerformanceManager } from '@/rendering/optimization/AdaptivePerformanceManager';
 
 function ActiveSolarSystemWrapper() {
   const { focusedSystemId, galaxyConfig } = useGalaxyManager();
@@ -79,6 +80,7 @@ export default function GitVerseCanvas() {
 
               {/* Performance */}
               <PerformanceManager />
+              <AdaptivePerformanceManager />
 
               {/* Theme Engine */}
               <ThemeController />
