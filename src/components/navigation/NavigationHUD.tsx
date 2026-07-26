@@ -10,6 +10,7 @@ import {
 } from 'lucide-react';
 import { useCameraRig, CameraMode } from '@/navigation/camera/CameraRig';
 import { useInteractionStore } from '@/navigation/interaction/InteractionStore';
+import { AppearanceSettings } from '../appearance/AppearanceSettings';
 
 const MODE_CONFIG: Record<
   CameraMode,
@@ -222,6 +223,11 @@ export function NavigationHUD() {
             </span>
           ))}
         </div>
+      )}
+
+      {/* ── Settings Overlay ───────────────────────────────────────── */}
+      {showSettings && (
+        <AppearanceSettings onClose={() => setShowSettings(false)} />
       )}
     </>
   );
