@@ -14,9 +14,9 @@ import { useCameraRig, CameraMode } from '@/navigation/camera/CameraRig';
 import { useInteractionStore } from '@/navigation/interaction/InteractionStore';
 import { AppearanceSettings } from '../appearance/AppearanceSettings';
 import { InteractiveMinimap } from './InteractiveMinimap';
-import { WorldSearchOverlay } from './WorldSearchOverlay';
 import { MovementTutorialModal } from './MovementTutorialModal';
 import { MotionPanel } from '../motion/MotionPanel';
+import { CommandPalette } from '@/workspace/command/CommandPalette';
 
 const MODE_CONFIG: Record<
   CameraMode,
@@ -267,8 +267,8 @@ export function NavigationHUD() {
       {/* ── Interactive Minimap Widget ───────────────────────────── */}
       <InteractiveMinimap />
 
-      {/* ── Search Overlay ────────────────────────────────────────── */}
-      <WorldSearchOverlay
+      {/* ── Search / Universal Command Palette Overlay ───────────── */}
+      <CommandPalette
         isOpen={showSearch}
         onClose={() => setShowSearch(false)}
       />
