@@ -6,12 +6,10 @@ import { SceneCanvas } from '@/three';
 import { RootScene } from '@/scene';
 import {
   CameraController,
-  SceneOrbitControls,
   StarManager,
   NebulaManager,
   DynamicEffectsManager,
 } from '@/three';
-import { NavigationCamera } from '@/three/Camera/NavigationCamera';
 import { PerformanceManager } from '@/three';
 import { EnvironmentSetup, Lighting, SceneFog } from '@/effects';
 import { CinematicPostProcessing } from '@/rendering/effects/CinematicPostProcessing';
@@ -22,8 +20,7 @@ import { Galaxy } from '@/galaxy/Galaxy';
 import { useGalaxyManager } from '@/galaxy/GalaxyManager';
 import { UniverseRenderer, useUniverseManager } from '@/universe';
 import { RepositorySceneRenderer } from '@/repository-scene/RepositorySceneRenderer';
-import { PremiumCameraController } from '@/navigation/camera/PremiumCameraController';
-import { KeyboardNavigationHandler } from '@/navigation/input/KeyboardNavigationHandler';
+import { UnifiedCameraSystem } from '@/navigation/camera/UnifiedCameraSystem';
 import { InteractionEffects } from '@/navigation/interaction/InteractionEffects';
 import { AdaptivePerformanceManager } from '@/rendering/optimization/AdaptivePerformanceManager';
 
@@ -72,12 +69,9 @@ export default function GitVerseCanvas() {
         <SceneCanvas>
           <Suspense fallback={null}>
             <RootScene>
-              {/* Camera & Controls */}
+              {/* Camera — Single unified controller (replaces 3 competing systems) */}
               <CameraController />
-              <SceneOrbitControls />
-              <NavigationCamera />
-              <PremiumCameraController />
-              <KeyboardNavigationHandler />
+              <UnifiedCameraSystem />
 
               {/* Performance */}
               <PerformanceManager />
