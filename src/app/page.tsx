@@ -27,6 +27,9 @@ import { NavigationHUD } from '@/components/navigation/NavigationHUD';
 import { ContextMenu } from '@/engine/interaction/ContextMenu';
 import { MotionProvider } from '@/components/motion/MotionProvider';
 import { WorkspaceLayout } from '@/workspace/WorkspaceLayout';
+import { CommandPalette } from '@/workspace/command/CommandPalette';
+import { MovementTutorialModal } from '@/components/navigation/MovementTutorialModal';
+import { MotionPanel } from '@/components/motion/MotionPanel';
 
 // Dynamically import the 3D canvas with SSR disabled
 const GitVerseCanvas = dynamic(() => import('@/components/canvas-wrapper'), {
@@ -47,6 +50,9 @@ export default function Home() {
   const [showDashboard, setShowDashboard] = useState(false);
   const [showCommandCenter, setShowCommandCenter] = useState(false);
   const [isImporting, setIsImporting] = useState(false);
+  const [showSearch, setShowSearch] = useState(false);
+  const [showTutorial, setShowTutorial] = useState(false);
+  const [showMotion, setShowMotion] = useState(false);
 
   // Data States
   const [repositories, setRepositories] = useState<RepositoryDomainModel[]>([]);
@@ -115,7 +121,13 @@ export default function Home() {
   return (
     <main className="relative h-screen w-full overflow-hidden bg-black selection:bg-white/20">
       <MotionProvider>
-        <WorkspaceLayout>
+        <WorkspaceLayout
+          onOpenSearch={() => setShowSearch(true)}
+          onOpenControls={() => setShowTutorial(true)}
+          onOpenMotion={() => setShowMotion(true)}
+          onToggleIntegration={() => setShowDashboard(!showDashboard)}
+          onToggleCommandCenter={() => setShowCommandCenter(!showCommandCenter)}
+        >
           {/* 3D Scene Background - Running independently as requested */}
           <div className="absolute inset-0 z-0 pointer-events-auto">
             <GitVerseCanvas />
@@ -192,31 +204,21 @@ export default function Home() {
             />
           )}
 
-          {/* HUD Panel Toggles */}
-          {hasImported && !isRepoSceneActive && (
-            <div className="absolute top-6 left-6 z-50 flex items-center gap-2 pointer-events-auto">
-              <button
-                onClick={() => setShowDashboard(!showDashboard)}
-                className={`px-4 py-2 text-xs font-semibold tracking-wider uppercase rounded-xl transition-all border backdrop-blur-xl shadow-lg ${
-                  showDashboard
-                    ? 'bg-white/20 text-white border-white/20 shadow-white/5'
-                    : 'bg-black/50 text-white/50 border-white/10 hover:bg-white/10 hover:text-white/80'
-                }`}
-              >
-                Integration
-              </button>
-              <button
-                onClick={() => setShowCommandCenter(!showCommandCenter)}
-                className={`px-4 py-2 text-xs font-semibold tracking-wider uppercase rounded-xl transition-all border backdrop-blur-xl shadow-lg ${
-                  showCommandCenter
-                    ? 'bg-white/20 text-white border-white/20 shadow-white/5'
-                    : 'bg-black/50 text-white/50 border-white/10 hover:bg-white/10 hover:text-white/80'
-                }`}
-              >
-                Command Center
-              </button>
-            </div>
-          )}
+          {/* Workspace Modals & Overlays */}
+          <CommandPalette
+            isOpen={showSearch}
+            onClose={() => setShowSearch(false)}
+          />
+
+          <MovementTutorialModal
+            isOpen={showTutorial}
+            onClose={() => setShowTutorial(false)}
+          />
+
+          <MotionPanel
+            isOpen={showMotion}
+            onClose={() => setShowMotion(false)}
+          />
 
           {/* Live Universe UI Overlays */}
           {!isRepoSceneActive && (

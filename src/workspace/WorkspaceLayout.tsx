@@ -1,8 +1,32 @@
 import { usePanelStore } from './PanelController';
 import { PANEL_REGISTRY, PanelType } from './PanelRegistry';
-import { LayoutGrid, RotateCcw } from 'lucide-react';
+import {
+  LayoutGrid,
+  RotateCcw,
+  Search,
+  Gamepad2,
+  Activity,
+  SlidersHorizontal,
+  Terminal,
+} from 'lucide-react';
 
-export function WorkspaceLayout({ children }: { children: React.ReactNode }) {
+interface WorkspaceLayoutProps {
+  children: React.ReactNode;
+  onOpenSearch?: () => void;
+  onOpenControls?: () => void;
+  onOpenMotion?: () => void;
+  onToggleIntegration?: () => void;
+  onToggleCommandCenter?: () => void;
+}
+
+export function WorkspaceLayout({
+  children,
+  onOpenSearch,
+  onOpenControls,
+  onOpenMotion,
+  onToggleIntegration,
+  onToggleCommandCenter,
+}: WorkspaceLayoutProps) {
   const panels = usePanelStore((s) => s.panels);
   const activeDockTab = usePanelStore((s) => s.activeDockTab);
   const openPanel = usePanelStore((s) => s.openPanel);
@@ -15,7 +39,7 @@ export function WorkspaceLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="relative w-full h-full overflow-hidden select-none">
       {/* Top Workspace Toolbar */}
-      <header className="absolute top-0 left-0 right-0 h-10 z-40 bg-black/80 backdrop-blur-2xl border-b border-white/10 flex items-center justify-between px-4 text-white">
+      <header className="absolute top-0 left-0 right-0 h-10 z-40 bg-black/85 backdrop-blur-2xl border-b border-white/10 flex items-center justify-between px-4 text-white">
         <div className="flex items-center gap-3">
           <div className="flex items-center gap-1.5 font-bold text-xs tracking-wider uppercase text-indigo-400">
             <LayoutGrid className="w-4 h-4" />
@@ -45,12 +69,72 @@ export function WorkspaceLayout({ children }: { children: React.ReactNode }) {
               </button>
             ))}
           </div>
+
+          <div className="h-4 w-px bg-white/10 mx-1" />
+
+          {/* Quick Tool Triggers */}
+          <div className="flex items-center gap-1">
+            {onToggleIntegration && (
+              <button
+                onClick={onToggleIntegration}
+                className="flex items-center gap-1 px-2 py-1 text-[11px] text-gray-300 hover:text-white hover:bg-white/10 rounded-md transition-colors"
+              >
+                <SlidersHorizontal className="w-3 h-3 text-indigo-400" />
+                <span>Integration</span>
+              </button>
+            )}
+            {onToggleCommandCenter && (
+              <button
+                onClick={onToggleCommandCenter}
+                className="flex items-center gap-1 px-2 py-1 text-[11px] text-gray-300 hover:text-white hover:bg-white/10 rounded-md transition-colors"
+              >
+                <Terminal className="w-3 h-3 text-emerald-400" />
+                <span>Command Center</span>
+              </button>
+            )}
+          </div>
         </div>
 
+        {/* Right Section Tools */}
         <div className="flex items-center gap-2">
+          {onOpenSearch && (
+            <button
+              onClick={onOpenSearch}
+              className="flex items-center gap-1.5 px-2.5 py-1 text-[11px] bg-white/5 border border-white/10 hover:border-indigo-500/50 rounded-md text-gray-300 hover:text-white transition-all"
+            >
+              <Search className="w-3 h-3 text-indigo-400" />
+              <span>Search</span>
+              <kbd className="px-1 py-0.2 text-[9px] bg-white/10 rounded font-mono text-gray-400">
+                ⌘K
+              </kbd>
+            </button>
+          )}
+
+          {onOpenControls && (
+            <button
+              onClick={onOpenControls}
+              title="Controls Tutorial"
+              className="p-1.5 text-gray-400 hover:text-white rounded-md hover:bg-white/10 transition-colors"
+            >
+              <Gamepad2 className="w-3.5 h-3.5 text-sky-400" />
+            </button>
+          )}
+
+          {onOpenMotion && (
+            <button
+              onClick={onOpenMotion}
+              title="Motion Preferences"
+              className="p-1.5 text-gray-400 hover:text-white rounded-md hover:bg-white/10 transition-colors"
+            >
+              <Activity className="w-3.5 h-3.5 text-amber-400" />
+            </button>
+          )}
+
+          <div className="h-4 w-px bg-white/10" />
+
           <button
             onClick={restoreDefaultLayout}
-            title="Reset Layout"
+            title="Reset Workspace Layout"
             className="p-1.5 text-gray-400 hover:text-white rounded-md hover:bg-white/10 transition-colors"
           >
             <RotateCcw className="w-3.5 h-3.5" />

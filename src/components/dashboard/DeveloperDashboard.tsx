@@ -54,7 +54,7 @@ export function DeveloperDashboard({
   const isOnline = typeof navigator !== 'undefined' ? navigator.onLine : true;
 
   return (
-    <div className="absolute left-6 top-20 z-50 w-[340px] animate-in fade-in slide-in-from-left-8 font-sans">
+    <div className="absolute left-[330px] top-12 z-40 w-[340px] animate-in fade-in slide-in-from-left-8 font-sans">
       <div className="rounded-2xl border border-white/10 bg-black/60 shadow-2xl backdrop-blur-2xl overflow-hidden flex flex-col max-h-[85vh]">
         {/* Header */}
         <div className="flex items-center justify-between px-5 py-4 border-b border-white/5">
