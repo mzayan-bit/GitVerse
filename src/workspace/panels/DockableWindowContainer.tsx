@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { usePanelStore, PanelInstance } from '../PanelController';
 import { PANEL_REGISTRY } from '../PanelRegistry';
 import {
@@ -7,9 +8,9 @@ import {
   Minimize2,
   X,
   Move,
-  LayoutLeft,
-  LayoutRight,
-  LayoutBottom,
+  PanelLeft,
+  PanelRight,
+  PanelBottom,
   ExternalLink,
 } from 'lucide-react';
 
@@ -94,21 +95,21 @@ export function DockableWindowContainer({
             title="Dock Left"
             className="p-1 text-gray-400 hover:text-white rounded transition-colors"
           >
-            <LayoutLeft className="w-3 h-3" />
+            <PanelLeft className="w-3 h-3" />
           </button>
           <button
             onClick={() => setDockPosition(panel.id, 'right')}
             title="Dock Right"
             className="p-1 text-gray-400 hover:text-white rounded transition-colors"
           >
-            <LayoutRight className="w-3 h-3" />
+            <PanelRight className="w-3 h-3" />
           </button>
           <button
             onClick={() => setDockPosition(panel.id, 'bottom')}
             title="Dock Bottom"
             className="p-1 text-gray-400 hover:text-white rounded transition-colors"
           >
-            <LayoutBottom className="w-3 h-3" />
+            <PanelBottom className="w-3 h-3" />
           </button>
           <button
             onClick={() => setDockPosition(panel.id, 'floating')}
