@@ -8,6 +8,7 @@ import {
   RotateCcw,
   X,
   Search,
+  Activity,
 } from 'lucide-react';
 import { useCameraRig, CameraMode } from '@/navigation/camera/CameraRig';
 import { useInteractionStore } from '@/navigation/interaction/InteractionStore';
@@ -15,6 +16,7 @@ import { AppearanceSettings } from '../appearance/AppearanceSettings';
 import { InteractiveMinimap } from './InteractiveMinimap';
 import { WorldSearchOverlay } from './WorldSearchOverlay';
 import { MovementTutorialModal } from './MovementTutorialModal';
+import { MotionPanel } from '../motion/MotionPanel';
 
 const MODE_CONFIG: Record<
   CameraMode,
@@ -35,6 +37,7 @@ export function NavigationHUD() {
   const [showSettings, setShowSettings] = useState(false);
   const [showSearch, setShowSearch] = useState(false);
   const [showTutorial, setShowTutorial] = useState(false);
+  const [showMotion, setShowMotion] = useState(false);
 
   const mode = useCameraRig((s) => s.mode);
   const bookmarks = useCameraRig((s) => s.bookmarks);
@@ -251,6 +254,14 @@ export function NavigationHUD() {
           <Gamepad2 className="w-3.5 h-3.5 text-sky-400" />
           <span>Controls</span>
         </button>
+
+        <button
+          onClick={() => setShowMotion(true)}
+          className="flex items-center gap-2 px-3.5 py-2 bg-black/70 backdrop-blur-2xl border border-white/10 hover:border-amber-500/50 rounded-xl text-xs text-gray-300 hover:text-white transition-all shadow-xl"
+        >
+          <Activity className="w-3.5 h-3.5 text-amber-400" />
+          <span>Motion</span>
+        </button>
       </div>
 
       {/* ── Interactive Minimap Widget ───────────────────────────── */}
@@ -267,6 +278,9 @@ export function NavigationHUD() {
         isOpen={showTutorial}
         onClose={() => setShowTutorial(false)}
       />
+
+      {/* ── Motion & Animation Settings Panel ──────────────────────── */}
+      <MotionPanel isOpen={showMotion} onClose={() => setShowMotion(false)} />
 
       {/* ── Settings Overlay ───────────────────────────────────────── */}
       {showSettings && (
