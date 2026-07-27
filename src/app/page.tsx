@@ -24,6 +24,7 @@ import { ObservabilityCommandCenter } from '@/components/observability/Observabi
 import { SimulationWorkspace } from '@/components/simulation/SimulationWorkspace';
 import { TeamWorkspace } from '@/components/collaboration/TeamWorkspace';
 import { NavigationHUD } from '@/components/navigation/NavigationHUD';
+import { ContextMenu } from '@/engine/interaction/ContextMenu';
 
 // Dynamically import the 3D canvas with SSR disabled
 const GitVerseCanvas = dynamic(() => import('@/components/canvas-wrapper'), {
@@ -237,8 +238,9 @@ export default function Home() {
           {/* Team Collaboration */}
           <TeamWorkspace />
 
-          {/* Navigation HUD */}
+          {/* Navigation HUD & Context Menu */}
           <NavigationHUD />
+          <ContextMenu />
         </>
       )}
 
