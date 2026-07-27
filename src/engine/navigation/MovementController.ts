@@ -1,4 +1,3 @@
-import * as THREE from 'three';
 import { useCameraRig, CameraMode } from '@/navigation/camera/CameraRig';
 import { MOVEMENT_PRESETS, MovementPresetConfig } from './MovementPresets';
 import { MovementPhysics } from './MovementPhysics';

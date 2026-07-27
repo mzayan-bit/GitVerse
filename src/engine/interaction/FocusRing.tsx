@@ -20,7 +20,7 @@ export function FocusRing({ position, radius = 25, entityId }: FocusRingProps) {
     (s) => s.hoveredTarget?.entityId === entityId
   );
 
-  useFrame((state, delta) => {
+  useFrame((_, delta) => {
     if (innerRingRef.current) {
       innerRingRef.current.rotation.z += delta * 0.8;
     }

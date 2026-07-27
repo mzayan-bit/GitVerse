@@ -2,9 +2,6 @@ import * as THREE from 'three';
 import { MovementPresetConfig } from './MovementPresets';
 
 export class FlightController {
-  private rotationEuler = new THREE.Euler(0, 0, 0, 'YXZ');
-  private quaternion = new THREE.Quaternion();
-
   public updateFlight(
     position: THREE.Vector3,
     target: THREE.Vector3,

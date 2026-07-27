@@ -10,7 +10,7 @@ export class OrbitController {
     pointerDelta: THREE.Vector2,
     wheelDelta: number,
     preset: MovementPresetConfig,
-    delta: number
+    _delta: number
   ): { nextPosition: THREE.Vector3; nextTarget: THREE.Vector3 } {
     // Offset vector from target to position
     const offset = position.clone().sub(target);
