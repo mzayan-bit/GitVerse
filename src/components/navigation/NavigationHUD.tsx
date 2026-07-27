@@ -7,10 +7,14 @@ import {
   ChevronRight,
   RotateCcw,
   X,
+  Search,
 } from 'lucide-react';
 import { useCameraRig, CameraMode } from '@/navigation/camera/CameraRig';
 import { useInteractionStore } from '@/navigation/interaction/InteractionStore';
 import { AppearanceSettings } from '../appearance/AppearanceSettings';
+import { InteractiveMinimap } from './InteractiveMinimap';
+import { WorldSearchOverlay } from './WorldSearchOverlay';
+import { MovementTutorialModal } from './MovementTutorialModal';
 
 const MODE_CONFIG: Record<
   CameraMode,
@@ -29,6 +33,8 @@ export function NavigationHUD() {
   const [showBookmarks, setShowBookmarks] = useState(false);
   const [showHistory, setShowHistory] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
+  const [showSearch, setShowSearch] = useState(false);
+  const [showTutorial, setShowTutorial] = useState(false);
 
   const mode = useCameraRig((s) => s.mode);
   const bookmarks = useCameraRig((s) => s.bookmarks);
@@ -224,6 +230,43 @@ export function NavigationHUD() {
           ))}
         </div>
       )}
+
+      {/* ── Action Buttons (Top/Floating) ─────────────────────────── */}
+      <div className="fixed top-6 left-6 z-40 flex items-center gap-2 pointer-events-auto">
+        <button
+          onClick={() => setShowSearch(true)}
+          className="flex items-center gap-2 px-3.5 py-2 bg-black/70 backdrop-blur-2xl border border-white/10 hover:border-indigo-500/50 rounded-xl text-xs text-gray-300 hover:text-white transition-all shadow-xl group"
+        >
+          <Search className="w-3.5 h-3.5 text-indigo-400 group-hover:scale-110 transition-transform" />
+          <span>Search Universe</span>
+          <kbd className="px-1.5 py-0.5 text-[9px] bg-white/10 rounded font-mono text-gray-400">
+            ⌘K
+          </kbd>
+        </button>
+
+        <button
+          onClick={() => setShowTutorial(true)}
+          className="flex items-center gap-2 px-3.5 py-2 bg-black/70 backdrop-blur-2xl border border-white/10 hover:border-sky-500/50 rounded-xl text-xs text-gray-300 hover:text-white transition-all shadow-xl"
+        >
+          <Gamepad2 className="w-3.5 h-3.5 text-sky-400" />
+          <span>Controls</span>
+        </button>
+      </div>
+
+      {/* ── Interactive Minimap Widget ───────────────────────────── */}
+      <InteractiveMinimap />
+
+      {/* ── Search Overlay ────────────────────────────────────────── */}
+      <WorldSearchOverlay
+        isOpen={showSearch}
+        onClose={() => setShowSearch(false)}
+      />
+
+      {/* ── Controls Tutorial Modal ───────────────────────────────── */}
+      <MovementTutorialModal
+        isOpen={showTutorial}
+        onClose={() => setShowTutorial(false)}
+      />
 
       {/* ── Settings Overlay ───────────────────────────────────────── */}
       {showSettings && (
