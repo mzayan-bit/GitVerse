@@ -1,5 +1,6 @@
 import { usePanelStore } from './PanelController';
 import { PANEL_REGISTRY, PanelType } from './PanelRegistry';
+import { PanelRenderer } from './PanelRenderer';
 import {
   LayoutGrid,
   RotateCcw,
@@ -8,6 +9,7 @@ import {
   Activity,
   SlidersHorizontal,
   Terminal,
+  Sparkles,
 } from 'lucide-react';
 
 interface WorkspaceLayoutProps {
@@ -35,6 +37,12 @@ export function WorkspaceLayout({
 
   const leftPanels = panels.filter((p) => p.dockPosition === 'left');
   const rightPanels = panels.filter((p) => p.dockPosition === 'right');
+  const floatingPanels = panels.filter((p) => p.dockPosition === 'floating');
+
+  const activeLeftPanel =
+    leftPanels.find((p) => p.id === activeDockTab.left) || leftPanels[0];
+  const activeRightPanel =
+    rightPanels.find((p) => p.id === activeDockTab.right) || rightPanels[0];
 
   return (
     <div className="relative w-full h-full overflow-hidden select-none">
@@ -50,6 +58,14 @@ export function WorkspaceLayout({
 
           {/* Quick Panel Openers */}
           <div className="flex items-center gap-1">
+            <button
+              onClick={() => openPanel('cosmos')}
+              className="px-2.5 py-1 text-[11px] font-semibold text-cyan-300 hover:text-cyan-200 bg-cyan-500/10 border border-cyan-500/30 hover:bg-cyan-500/20 rounded-md transition-colors flex items-center gap-1"
+            >
+              <Sparkles className="w-3 h-3 text-cyan-400" />
+              <span>Cosmos</span>
+            </button>
+
             {(
               [
                 'explorer',
@@ -147,6 +163,11 @@ export function WorkspaceLayout({
         {children}
       </div>
 
+      {/* Floating Windows Layer */}
+      {floatingPanels.map((p) => (
+        <PanelRenderer key={p.id} panel={p} />
+      ))}
+
       {/* Left Dock Panel Bar */}
       {leftPanels.length > 0 && (
         <aside className="absolute top-10 bottom-6 left-0 w-80 z-30 bg-black/85 backdrop-blur-2xl border-r border-white/10 flex flex-col pointer-events-auto shadow-2xl">
@@ -157,7 +178,7 @@ export function WorkspaceLayout({
                 key={p.id}
                 onClick={() => setActiveDockTab('left', p.id)}
                 className={`px-3 py-2 text-xs font-medium border-b-2 transition-all flex items-center gap-2 whitespace-nowrap ${
-                  activeDockTab.left === p.id
+                  activeLeftPanel?.id === p.id
                     ? 'border-indigo-500 text-indigo-300 bg-white/5'
                     : 'border-transparent text-gray-400 hover:text-white'
                 }`}
@@ -165,6 +186,10 @@ export function WorkspaceLayout({
                 <span>{PANEL_REGISTRY[p.type].title}</span>
               </button>
             ))}
+          </div>
+
+          <div className="flex-1 overflow-hidden p-2">
+            {activeLeftPanel && <PanelRenderer panel={activeLeftPanel} />}
           </div>
         </aside>
       )}
@@ -179,7 +204,7 @@ export function WorkspaceLayout({
                 key={p.id}
                 onClick={() => setActiveDockTab('right', p.id)}
                 className={`px-3 py-2 text-xs font-medium border-b-2 transition-all flex items-center gap-2 whitespace-nowrap ${
-                  activeDockTab.right === p.id
+                  activeRightPanel?.id === p.id
                     ? 'border-indigo-500 text-indigo-300 bg-white/5'
                     : 'border-transparent text-gray-400 hover:text-white'
                 }`}
@@ -187,6 +212,10 @@ export function WorkspaceLayout({
                 <span>{PANEL_REGISTRY[p.type].title}</span>
               </button>
             ))}
+          </div>
+
+          <div className="flex-1 overflow-hidden p-2">
+            {activeRightPanel && <PanelRenderer panel={activeRightPanel} />}
           </div>
         </aside>
       )}
