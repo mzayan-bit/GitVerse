@@ -1,0 +1,9 @@
+export { ShaderRegistry } from './ShaderRegistry';
+export { ShaderComposer } from './ShaderComposer';
+export { ShaderHotReload } from './ShaderHotReload';
+export { MaterialProfiles } from './MaterialProfiles';
+export { ShaderDebugger } from './ShaderDebugger';
+export { createWarpTravelMaterial } from './effects/WarpTravelShader';
+export { createEnergyStreamMaterial } from './effects/EnergyStreamShader';
+export { createAuroraMaterial } from './effects/AuroraShader';
+export { createSelectionHaloMaterial } from './effects/SelectionHaloShader';
