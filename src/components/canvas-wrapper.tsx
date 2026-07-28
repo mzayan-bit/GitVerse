@@ -23,6 +23,7 @@ import { RepositorySceneRenderer } from '@/repository-scene/RepositorySceneRende
 import { UnifiedCameraSystem } from '@/navigation/camera/UnifiedCameraSystem';
 import { InteractionEffects } from '@/navigation/interaction/InteractionEffects';
 import { AdaptivePerformanceManager } from '@/rendering/optimization/AdaptivePerformanceManager';
+import { ProceduralSpaceEnvironment } from '@/rendering/environment';
 
 function ActiveSolarSystemWrapper() {
   const { focusedSystemId, galaxyConfig } = useGalaxyManager();
@@ -85,6 +86,9 @@ export default function GitVerseCanvas() {
               <EnvironmentSetup />
               <Lighting />
               <SceneFog />
+
+              {/* Procedural Space Environment & World Systems */}
+              <ProceduralSpaceEnvironment />
 
               {/* Universe */}
               <StarManager />
