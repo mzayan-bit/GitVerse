@@ -3,7 +3,6 @@ import { DockableWindowContainer } from './panels/DockableWindowContainer';
 import { RepositoryExplorerPanel } from './panels/RepositoryExplorerPanel';
 import { UniverseInspectorPanel } from './panels/UniverseInspectorPanel';
 import { KnowledgeGraphPanel } from './panels/KnowledgeGraphPanel';
-import { AIAssistantPanel } from './panels/AIAssistantPanel';
 import { SimulationPanel } from './panels/SimulationPanel';
 import { MetricsPanel } from './panels/MetricsPanel';
 import { TimelinePanel } from './panels/TimelinePanel';
@@ -14,6 +13,7 @@ import { InvestigationsPanel } from './panels/InvestigationsPanel';
 import { PropertiesInspectorPanel } from './panels/PropertiesInspectorPanel';
 import { CosmosControlPanel } from './panels/CosmosControlPanel';
 import { GraphicsControlPanel } from './panels/GraphicsControlPanel';
+import { SpatialAICopilotPanel } from './panels/SpatialAICopilotPanel';
 
 interface PanelRendererProps {
   panel: PanelInstance;
@@ -33,7 +33,7 @@ export function PanelRenderer({ panel }: PanelRendererProps) {
       case 'graph':
         return <KnowledgeGraphPanel />;
       case 'ai':
-        return <AIAssistantPanel />;
+        return <SpatialAICopilotPanel />;
       case 'simulation':
         return <SimulationPanel />;
       case 'metrics':
