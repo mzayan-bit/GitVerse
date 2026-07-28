@@ -123,7 +123,7 @@ export class PlanetFactory {
         'staging',
         'active',
         'failed',
-      ]);
+      ]) as SatelliteData['type'];
       satellites.push({
         id: `${repo.id}-deploy-${j}`,
         name: `deploy-v1.${j}`,

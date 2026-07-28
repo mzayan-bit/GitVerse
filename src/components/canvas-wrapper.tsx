@@ -24,6 +24,7 @@ import { UnifiedCameraSystem } from '@/navigation/camera/UnifiedCameraSystem';
 import { InteractionEffects } from '@/navigation/interaction/InteractionEffects';
 import { AdaptivePerformanceManager } from '@/rendering/optimization/AdaptivePerformanceManager';
 import { ProceduralSpaceEnvironment } from '@/rendering/environment';
+import { UniverseStreamingEngine } from '@/rendering/optimization/UniverseStreamingEngine';
 
 function ActiveSolarSystemWrapper() {
   const { focusedSystemId, galaxyConfig } = useGalaxyManager();
@@ -94,6 +95,9 @@ export default function GitVerseCanvas() {
               <StarManager />
               <NebulaManager />
               <DynamicEffectsManager />
+
+              {/* Procedural Universe Streaming & LOD Engine */}
+              <UniverseStreamingEngine />
 
               {/* Galaxy Engine (Procedural Demo) */}
               <ProceduralBackground />

@@ -111,7 +111,7 @@ export class StarSystemGenerator {
     id: string,
     teamName: string,
     type: StarType,
-    seed: SeedManager
+    _seed: SeedManager
   ): StarData {
     switch (type) {
       case 'O':
