@@ -10,6 +10,7 @@ import {
   SlidersHorizontal,
   Terminal,
   Sparkles,
+  Monitor,
 } from 'lucide-react';
 
 interface WorkspaceLayoutProps {
@@ -64,6 +65,14 @@ export function WorkspaceLayout({
             >
               <Sparkles className="w-3 h-3 text-cyan-400" />
               <span>Cosmos</span>
+            </button>
+
+            <button
+              onClick={() => openPanel('graphics')}
+              className="px-2.5 py-1 text-[11px] font-semibold text-indigo-300 hover:text-indigo-200 bg-indigo-500/10 border border-indigo-500/30 hover:bg-indigo-500/20 rounded-md transition-colors flex items-center gap-1"
+            >
+              <Monitor className="w-3 h-3 text-indigo-400" />
+              <span>Graphics</span>
             </button>
 
             {(

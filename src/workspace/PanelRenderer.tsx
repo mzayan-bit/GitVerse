@@ -13,6 +13,7 @@ import { BookmarksPanel } from './panels/BookmarksPanel';
 import { InvestigationsPanel } from './panels/InvestigationsPanel';
 import { PropertiesInspectorPanel } from './panels/PropertiesInspectorPanel';
 import { CosmosControlPanel } from './panels/CosmosControlPanel';
+import { GraphicsControlPanel } from './panels/GraphicsControlPanel';
 
 interface PanelRendererProps {
   panel: PanelInstance;
@@ -21,6 +22,8 @@ interface PanelRendererProps {
 export function PanelRenderer({ panel }: PanelRendererProps) {
   const renderContent = () => {
     switch (panel.type) {
+      case 'graphics':
+        return <GraphicsControlPanel />;
       case 'cosmos':
         return <CosmosControlPanel />;
       case 'explorer':

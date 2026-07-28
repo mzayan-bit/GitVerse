@@ -11,7 +11,8 @@ export type PanelType =
   | 'bookmarks'
   | 'investigations'
   | 'properties'
-  | 'cosmos';
+  | 'cosmos'
+  | 'graphics';
 
 export interface PanelMetadata {
   type: PanelType;
@@ -23,6 +24,14 @@ export interface PanelMetadata {
 }
 
 export const PANEL_REGISTRY: Record<PanelType, PanelMetadata> = {
+  graphics: {
+    type: 'graphics',
+    title: 'Graphics Control Center',
+    iconName: 'Monitor',
+    defaultDock: 'right',
+    defaultWidth: 350,
+    defaultHeight: 560,
+  },
   cosmos: {
     type: 'cosmos',
     title: 'Cosmos Control Center',
