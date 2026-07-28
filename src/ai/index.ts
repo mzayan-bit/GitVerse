@@ -21,3 +21,5 @@ export { ActionDispatcher } from './ActionDispatcher';
 export { ResponsePlanner } from './ResponsePlanner';
 export type { PlannedResponse } from './ResponsePlanner';
 export { CopilotEngine } from './CopilotEngine';
+export { ArchitectureReviewEngine } from './architecture';
+export type { ArchitectureReport, LayerViolation } from './architecture';
