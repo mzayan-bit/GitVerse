@@ -13,6 +13,8 @@ import {
   Monitor,
   Package,
 } from 'lucide-react';
+import { SpotlightOverlay } from '@/demo/onboarding/SpotlightOverlay';
+import { PresentationBar } from '@/demo/onboarding/PresentationBar';
 
 interface WorkspaceLayoutProps {
   children: React.ReactNode;
@@ -248,6 +250,10 @@ export function WorkspaceLayout({
           <span>GitVerse Modular Workspace v1.0</span>
         </div>
       </footer>
+
+      {/* Guided Tour & Presentation Overlays */}
+      <SpotlightOverlay />
+      <PresentationBar />
     </div>
   );
 }
