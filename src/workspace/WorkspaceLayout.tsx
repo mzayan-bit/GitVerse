@@ -1,22 +1,25 @@
+import { useState, useEffect } from 'react';
 import { usePanelStore } from './PanelController';
 import { PANEL_REGISTRY, PanelType } from './PanelRegistry';
 import { PanelRenderer } from './PanelRenderer';
 import {
-  LayoutGrid,
-  RotateCcw,
   Search,
-  Gamepad2,
+  Bot,
+  Compass,
+  Network,
   Activity,
-  SlidersHorizontal,
-  Terminal,
-  Sparkles,
-  Monitor,
   Package,
+  Sparkles,
   Play,
-  Rocket,
+  RotateCcw,
 } from 'lucide-react';
 import { SpotlightOverlay } from '@/demo/onboarding/SpotlightOverlay';
 import { PresentationBar } from '@/demo/onboarding/PresentationBar';
+import { ContextualInspectorDrawer } from './ContextualInspectorDrawer';
+import {
+  WorkspaceModeController,
+  WorkspaceMode,
+} from './WorkspaceModeController';
 
 interface WorkspaceLayoutProps {
   children: React.ReactNode;
@@ -30,16 +33,32 @@ interface WorkspaceLayoutProps {
 export function WorkspaceLayout({
   children,
   onOpenSearch,
-  onOpenControls,
-  onOpenMotion,
-  onToggleIntegration,
   onToggleCommandCenter,
 }: WorkspaceLayoutProps) {
+  const modeController = WorkspaceModeController.getInstance();
+  const [currentMode, setCurrentMode] = useState<WorkspaceMode>(
+    modeController.getMode()
+  );
+
   const panels = usePanelStore((s) => s.panels);
   const activeDockTab = usePanelStore((s) => s.activeDockTab);
   const openPanel = usePanelStore((s) => s.openPanel);
   const setActiveDockTab = usePanelStore((s) => s.setActiveDockTab);
   const restoreDefaultLayout = usePanelStore((s) => s.restoreDefaultLayout);
+
+  useEffect(() => {
+    return modeController.subscribe((mode) => {
+      setCurrentMode(mode);
+    });
+  }, [modeController]);
+
+  const handleSelectMode = (mode: WorkspaceMode) => {
+    modeController.setMode(mode);
+    const modeInfo = WorkspaceModeController.MODES[mode];
+    if (modeInfo.primaryPanels.length > 0) {
+      openPanel(modeInfo.primaryPanels[0] as PanelType);
+    }
+  };
 
   const leftPanels = panels.filter((p) => p.dockPosition === 'left');
   const rightPanels = panels.filter((p) => p.dockPosition === 'right');
@@ -51,153 +70,122 @@ export function WorkspaceLayout({
     rightPanels.find((p) => p.id === activeDockTab.right) || rightPanels[0];
 
   return (
-    <div className="relative w-full h-full overflow-hidden select-none">
-      {/* Top Workspace Toolbar */}
-      <header className="absolute top-0 left-0 right-0 h-10 z-40 bg-black/85 backdrop-blur-2xl border-b border-white/10 flex items-center justify-between px-4 text-white">
-        <div className="flex items-center gap-3">
-          <div className="flex items-center gap-1.5 font-bold text-xs tracking-wider uppercase text-indigo-400">
-            <LayoutGrid className="w-4 h-4" />
-            <span>Workspace</span>
+    <div className="relative w-full h-full overflow-hidden select-none font-sans bg-black">
+      {/* Calm Next-Gen Top Header */}
+      <header className="absolute top-0 left-0 right-0 h-11 z-40 bg-black/85 backdrop-blur-2xl border-b border-white/10 flex items-center justify-between px-4 text-white">
+        {/* Left Brand & Workspace Modes */}
+        <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 font-bold text-xs tracking-wider text-white">
+            <Sparkles className="w-4 h-4 text-indigo-400" />
+            <span>GitVerse</span>
+            <span className="px-1.5 py-0.2 rounded bg-indigo-500/20 text-indigo-300 font-mono text-[9px] border border-indigo-500/30">
+              v1.0 GA
+            </span>
           </div>
 
           <div className="h-4 w-px bg-white/10" />
 
-          {/* Quick Panel Openers */}
-          <div className="flex items-center gap-1">
+          {/* 4 Core Workspace Modes */}
+          <div className="flex items-center gap-1 p-0.5 rounded-lg bg-white/5 border border-white/10">
             <button
-              onClick={() => openPanel('cosmos')}
-              className="px-2.5 py-1 text-[11px] font-semibold text-cyan-300 hover:text-cyan-200 bg-cyan-500/10 border border-cyan-500/30 hover:bg-cyan-500/20 rounded-md transition-colors flex items-center gap-1"
+              onClick={() => handleSelectMode('EXPLORE')}
+              className={`px-3 py-1 rounded-md text-[11px] font-medium transition-all flex items-center gap-1.5 ${
+                currentMode === 'EXPLORE'
+                  ? 'bg-indigo-600 text-white shadow-[0_0_12px_rgba(99,102,241,0.4)] font-semibold'
+                  : 'text-gray-400 hover:text-white'
+              }`}
             >
-              <Sparkles className="w-3 h-3 text-cyan-400" />
-              <span>Cosmos</span>
+              <Compass className="w-3.5 h-3.5" />
+              <span>Explore</span>
             </button>
 
             <button
-              onClick={() => openPanel('graphics')}
-              className="px-2.5 py-1 text-[11px] font-semibold text-indigo-300 hover:text-indigo-200 bg-indigo-500/10 border border-indigo-500/30 hover:bg-indigo-500/20 rounded-md transition-colors flex items-center gap-1"
+              onClick={() => handleSelectMode('ARCHITECTURE')}
+              className={`px-3 py-1 rounded-md text-[11px] font-medium transition-all flex items-center gap-1.5 ${
+                currentMode === 'ARCHITECTURE'
+                  ? 'bg-indigo-600 text-white shadow-[0_0_12px_rgba(99,102,241,0.4)] font-semibold'
+                  : 'text-gray-400 hover:text-white'
+              }`}
             >
-              <Monitor className="w-3 h-3 text-indigo-400" />
-              <span>Graphics</span>
+              <Network className="w-3.5 h-3.5" />
+              <span>Architecture</span>
             </button>
 
             <button
-              onClick={() => openPanel('marketplace')}
-              className="px-2.5 py-1 text-[11px] font-semibold text-purple-300 hover:text-purple-200 bg-purple-500/10 border border-purple-500/30 hover:bg-purple-500/20 rounded-md transition-colors flex items-center gap-1"
+              onClick={() => handleSelectMode('OPERATIONS')}
+              className={`px-3 py-1 rounded-md text-[11px] font-medium transition-all flex items-center gap-1.5 ${
+                currentMode === 'OPERATIONS'
+                  ? 'bg-indigo-600 text-white shadow-[0_0_12px_rgba(99,102,241,0.4)] font-semibold'
+                  : 'text-gray-400 hover:text-white'
+              }`}
             >
-              <Package className="w-3 h-3 text-purple-400" />
-              <span>Marketplace</span>
+              <Activity className="w-3.5 h-3.5" />
+              <span>Operations</span>
             </button>
 
             <button
-              onClick={() => openPanel('demo')}
-              className="px-2.5 py-1 text-[11px] font-semibold text-emerald-300 hover:text-emerald-200 bg-emerald-500/10 border border-emerald-500/30 hover:bg-emerald-500/20 rounded-md transition-colors flex items-center gap-1 shadow-[0_0_10px_rgba(16,185,129,0.3)]"
+              onClick={() => handleSelectMode('EXTENSIONS')}
+              className={`px-3 py-1 rounded-md text-[11px] font-medium transition-all flex items-center gap-1.5 ${
+                currentMode === 'EXTENSIONS'
+                  ? 'bg-indigo-600 text-white shadow-[0_0_12px_rgba(99,102,241,0.4)] font-semibold'
+                  : 'text-gray-400 hover:text-white'
+              }`}
             >
-              <Play className="w-3 h-3 text-emerald-400 fill-emerald-400" />
-              <span>Demo 60s</span>
+              <Package className="w-3.5 h-3.5" />
+              <span>Extensions</span>
             </button>
-
-            <button
-              onClick={() => openPanel('release')}
-              className="px-2.5 py-1 text-[11px] font-semibold text-amber-300 hover:text-amber-200 bg-amber-500/10 border border-amber-500/30 hover:bg-amber-500/20 rounded-md transition-colors flex items-center gap-1 shadow-[0_0_10px_rgba(245,158,11,0.3)]"
-            >
-              <Rocket className="w-3 h-3 text-amber-400" />
-              <span>v1.0 GA</span>
-            </button>
-
-            {(
-              [
-                'explorer',
-                'inspector',
-                'graph',
-                'ai',
-                'simulation',
-                'metrics',
-              ] as PanelType[]
-            ).map((type) => (
-              <button
-                key={type}
-                onClick={() => openPanel(type)}
-                className="px-2.5 py-1 text-[11px] font-medium text-gray-300 hover:text-white hover:bg-white/10 rounded-md transition-colors capitalize"
-              >
-                {PANEL_REGISTRY[type].title.split(' ')[0]}
-              </button>
-            ))}
-          </div>
-
-          <div className="h-4 w-px bg-white/10 mx-1" />
-
-          {/* Quick Tool Triggers */}
-          <div className="flex items-center gap-1">
-            {onToggleIntegration && (
-              <button
-                onClick={onToggleIntegration}
-                className="flex items-center gap-1 px-2 py-1 text-[11px] text-gray-300 hover:text-white hover:bg-white/10 rounded-md transition-colors"
-              >
-                <SlidersHorizontal className="w-3 h-3 text-indigo-400" />
-                <span>Integration</span>
-              </button>
-            )}
-            {onToggleCommandCenter && (
-              <button
-                onClick={onToggleCommandCenter}
-                className="flex items-center gap-1 px-2 py-1 text-[11px] text-gray-300 hover:text-white hover:bg-white/10 rounded-md transition-colors"
-              >
-                <Terminal className="w-3 h-3 text-emerald-400" />
-                <span>Command Center</span>
-              </button>
-            )}
           </div>
         </div>
 
-        {/* Right Section Tools */}
+        {/* Center / Right Quick Tools & Search */}
         <div className="flex items-center gap-2">
-          {onOpenSearch && (
-            <button
-              onClick={onOpenSearch}
-              className="flex items-center gap-1.5 px-2.5 py-1 text-[11px] bg-white/5 border border-white/10 hover:border-indigo-500/50 rounded-md text-gray-300 hover:text-white transition-all"
-            >
-              <Search className="w-3 h-3 text-indigo-400" />
-              <span>Search</span>
-              <kbd className="px-1 py-0.2 text-[9px] bg-white/10 rounded font-mono text-gray-400">
-                ⌘K
-              </kbd>
-            </button>
-          )}
+          {/* Command Palette Button */}
+          <button
+            onClick={onOpenSearch || onToggleCommandCenter}
+            className="flex items-center gap-2 px-3 py-1 text-[11px] bg-white/5 hover:bg-white/10 border border-white/10 hover:border-indigo-500/50 rounded-lg text-gray-300 hover:text-white transition-all w-60"
+          >
+            <Search className="w-3.5 h-3.5 text-indigo-400" />
+            <span className="flex-1 text-left text-gray-400">
+              Search commands or entities...
+            </span>
+            <kbd className="px-1.5 py-0.5 text-[9px] bg-white/10 rounded font-mono text-gray-400 border border-white/10">
+              ⌘K
+            </kbd>
+          </button>
 
-          {onOpenControls && (
-            <button
-              onClick={onOpenControls}
-              title="Controls Tutorial"
-              className="p-1.5 text-gray-400 hover:text-white rounded-md hover:bg-white/10 transition-colors"
-            >
-              <Gamepad2 className="w-3.5 h-3.5 text-sky-400" />
-            </button>
-          )}
+          {/* AI Copilot Pill */}
+          <button
+            onClick={() => openPanel('ai')}
+            className="flex items-center gap-1.5 px-2.5 py-1 text-[11px] font-semibold text-purple-300 bg-purple-500/10 border border-purple-500/30 hover:bg-purple-500/20 rounded-lg transition-all"
+          >
+            <Bot className="w-3.5 h-3.5 text-purple-400" />
+            <span>Spatial AI</span>
+          </button>
 
-          {onOpenMotion && (
-            <button
-              onClick={onOpenMotion}
-              title="Motion Preferences"
-              className="p-1.5 text-gray-400 hover:text-white rounded-md hover:bg-white/10 transition-colors"
-            >
-              <Activity className="w-3.5 h-3.5 text-amber-400" />
-            </button>
-          )}
+          {/* Recruiter Keynote 60s Tour */}
+          <button
+            onClick={() => openPanel('demo')}
+            className="flex items-center gap-1.5 px-2.5 py-1 text-[11px] font-semibold text-emerald-300 bg-emerald-500/10 border border-emerald-500/30 hover:bg-emerald-500/20 rounded-lg transition-all shadow-[0_0_10px_rgba(16,185,129,0.3)]"
+          >
+            <Play className="w-3.5 h-3.5 text-emerald-400 fill-emerald-400" />
+            <span>Keynote Tour</span>
+          </button>
 
-          <div className="h-4 w-px bg-white/10" />
+          <div className="h-4 w-px bg-white/10 mx-1" />
 
+          {/* Layout Reset */}
           <button
             onClick={restoreDefaultLayout}
             title="Reset Workspace Layout"
-            className="p-1.5 text-gray-400 hover:text-white rounded-md hover:bg-white/10 transition-colors"
+            className="p-1.5 text-gray-400 hover:text-white rounded-lg hover:bg-white/10 transition-colors"
           >
             <RotateCcw className="w-3.5 h-3.5" />
           </button>
         </div>
       </header>
 
-      {/* Main 3D Canvas / Content Area */}
-      <div className="absolute inset-0 pt-10 pb-6 pointer-events-auto">
+      {/* Main 3D Viewport Area */}
+      <div className="absolute inset-0 pt-11 pb-6 pointer-events-auto">
         {children}
       </div>
 
@@ -208,8 +196,7 @@ export function WorkspaceLayout({
 
       {/* Left Dock Panel Bar */}
       {leftPanels.length > 0 && (
-        <aside className="absolute top-10 bottom-6 left-0 w-80 z-30 bg-black/85 backdrop-blur-2xl border-r border-white/10 flex flex-col pointer-events-auto shadow-2xl">
-          {/* Dock Tabs */}
+        <aside className="absolute top-11 bottom-6 left-0 w-80 z-30 bg-black/85 backdrop-blur-2xl border-r border-white/10 flex flex-col pointer-events-auto shadow-2xl">
           <div className="flex border-b border-white/10 bg-white/5 overflow-x-auto custom-scrollbar">
             {leftPanels.map((p) => (
               <button
@@ -234,8 +221,7 @@ export function WorkspaceLayout({
 
       {/* Right Dock Panel Bar */}
       {rightPanels.length > 0 && (
-        <aside className="absolute top-10 bottom-6 right-0 w-88 z-30 bg-black/85 backdrop-blur-2xl border-l border-white/10 flex flex-col pointer-events-auto shadow-2xl">
-          {/* Dock Tabs */}
+        <aside className="absolute top-11 bottom-6 right-0 w-88 z-30 bg-black/85 backdrop-blur-2xl border-l border-white/10 flex flex-col pointer-events-auto shadow-2xl">
           <div className="flex border-b border-white/10 bg-white/5 overflow-x-auto custom-scrollbar">
             {rightPanels.map((p) => (
               <button
@@ -261,15 +247,18 @@ export function WorkspaceLayout({
       {/* Bottom Status Bar */}
       <footer className="absolute bottom-0 left-0 right-0 h-6 z-40 bg-black/90 backdrop-blur-2xl border-t border-white/10 flex items-center justify-between px-4 text-[10px] text-gray-400 font-mono">
         <div className="flex items-center gap-3">
-          <span className="text-emerald-400 font-bold">READY</span>
+          <span className="text-emerald-400 font-bold">
+            MODE: {currentMode}
+          </span>
           <span>Panels: {panels.length} Active</span>
         </div>
         <div>
-          <span>GitVerse Modular Workspace v1.0</span>
+          <span>GitVerse v1.0 GA Platform</span>
         </div>
       </footer>
 
-      {/* Guided Tour & Presentation Overlays */}
+      {/* Contextual Overlays */}
+      <ContextualInspectorDrawer />
       <SpotlightOverlay />
       <PresentationBar />
     </div>

@@ -3,16 +3,26 @@ import {
   Command as CommandIcon,
   Navigation,
   Bot,
-  Cpu,
   LayoutGrid,
   Palette,
   BarChart2,
   X,
   CornerDownLeft,
+  Compass,
+  Network,
+  Activity,
+  Package,
+  Sparkles,
+  Play,
+  Rocket,
 } from 'lucide-react';
 import { usePanelStore } from '../PanelController';
 import { useThemeManager } from '@/rendering/themes/ThemeManager';
 import { useCameraRig } from '@/navigation/camera/CameraRig';
+import {
+  WorkspaceModeController,
+  WorkspaceMode,
+} from '../WorkspaceModeController';
 
 export interface CommandPaletteProps {
   isOpen: boolean;
@@ -26,46 +36,93 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
   const openPanel = usePanelStore((s) => s.openPanel);
   const setTheme = useThemeManager.getState().setTheme;
   const setMode = useCameraRig.getState().setMode;
+  const modeController = WorkspaceModeController.getInstance();
+
+  const handleSwitchMode = (mode: WorkspaceMode) => {
+    modeController.setMode(mode);
+  };
 
   const defaultCommands = [
     {
-      id: 'cmd-explore',
-      category: 'Workspace',
-      title: 'Open Repository Explorer Panel',
-      icon: <LayoutGrid className="w-4 h-4 text-indigo-400" />,
-      action: () => openPanel('explorer'),
+      id: 'cmd-mode-explore',
+      category: 'Workspace Modes',
+      title: 'Switch Mode: Explore 3D Universe',
+      icon: <Compass className="w-4 h-4 text-cyan-400" />,
+      action: () => handleSwitchMode('EXPLORE'),
+    },
+    {
+      id: 'cmd-mode-architecture',
+      category: 'Workspace Modes',
+      title: 'Switch Mode: Architecture & Knowledge Graph',
+      icon: <Network className="w-4 h-4 text-purple-400" />,
+      action: () => handleSwitchMode('ARCHITECTURE'),
+    },
+    {
+      id: 'cmd-mode-operations',
+      category: 'Workspace Modes',
+      title: 'Switch Mode: Engineering Operations & Telemetry',
+      icon: <Activity className="w-4 h-4 text-emerald-400" />,
+      action: () => handleSwitchMode('OPERATIONS'),
+    },
+    {
+      id: 'cmd-mode-extensions',
+      category: 'Workspace Modes',
+      title: 'Switch Mode: Extensions & MCP Ecosystem',
+      icon: <Package className="w-4 h-4 text-indigo-400" />,
+      action: () => handleSwitchMode('EXTENSIONS'),
+    },
+    {
+      id: 'cmd-demo-quick',
+      category: 'Keynote Showcase',
+      title: 'Launch 60-Second Recruiter Keynote Showcase',
+      icon: <Play className="w-4 h-4 text-emerald-400 fill-emerald-400" />,
+      action: () => openPanel('demo'),
+    },
+    {
+      id: 'cmd-release-center',
+      category: 'Release Center',
+      title: 'Open GitVerse v1.0 GA Release Center',
+      icon: <Rocket className="w-4 h-4 text-amber-400" />,
+      action: () => openPanel('release'),
     },
     {
       id: 'cmd-ai',
-      category: 'AI & Copilot',
-      title: 'Ask AI Copilot Assistant',
+      category: 'Spatial AI',
+      title: 'Ask Spatial AI Copilot Assistant',
       icon: <Bot className="w-4 h-4 text-purple-400" />,
       action: () => openPanel('ai'),
     },
     {
-      id: 'cmd-sim',
-      category: 'Simulation',
-      title: 'Run Chaos Impact Simulation',
-      icon: <Cpu className="w-4 h-4 text-emerald-400" />,
-      action: () => openPanel('simulation'),
+      id: 'cmd-cosmos',
+      category: 'Graphics & Cosmos',
+      title: 'Open Cosmos Control Center',
+      icon: <Sparkles className="w-4 h-4 text-cyan-400" />,
+      action: () => openPanel('cosmos'),
+    },
+    {
+      id: 'cmd-explore',
+      category: 'Workspace Panels',
+      title: 'Open Repository Explorer',
+      icon: <LayoutGrid className="w-4 h-4 text-indigo-400" />,
+      action: () => openPanel('explorer'),
     },
     {
       id: 'cmd-metrics',
       category: 'Dashboards',
-      title: 'Open OpenTelemetry Metrics Panel',
+      title: 'Open Telemetry & Observability',
       icon: <BarChart2 className="w-4 h-4 text-sky-400" />,
       action: () => openPanel('metrics'),
     },
     {
       id: 'cmd-fly-mode',
-      category: 'Navigation',
+      category: 'Camera & Navigation',
       title: 'Switch Camera to 6DoF Flight Mode',
       icon: <Navigation className="w-4 h-4 text-amber-400" />,
       action: () => setMode('fly'),
     },
     {
       id: 'cmd-orbit-mode',
-      category: 'Navigation',
+      category: 'Camera & Navigation',
       title: 'Switch Camera to Orbit Mode',
       icon: <Navigation className="w-4 h-4 text-indigo-400" />,
       action: () => setMode('orbit'),
@@ -132,7 +189,7 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-start justify-center pt-20 bg-black/70 backdrop-blur-md pointer-events-auto">
+    <div className="fixed inset-0 z-50 flex items-start justify-center pt-20 bg-black/70 backdrop-blur-md pointer-events-auto select-none font-sans">
       <div className="w-full max-w-2xl bg-black/90 backdrop-blur-2xl border border-white/10 rounded-2xl shadow-2xl overflow-hidden flex flex-col animate-in fade-in zoom-in-95 duration-200">
         {/* Search Header */}
         <div className="flex items-center px-4 py-3.5 border-b border-white/10 bg-white/5 gap-3">
@@ -142,7 +199,7 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
             autoFocus
             value={query}
             onChange={(e) => handleQueryChange(e.target.value)}
-            placeholder="Type a command or search actions (e.g. 'Explore', 'Theme', 'Flight')..."
+            placeholder="Search commands, modes, actions, or jump to 3D entities (⌘K)..."
             className="flex-1 bg-transparent text-sm text-white placeholder-gray-500 focus:outline-none"
           />
           <kbd className="px-2 py-0.5 text-[10px] bg-white/10 rounded font-mono text-gray-400">
