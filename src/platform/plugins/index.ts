@@ -1,4 +1,4 @@
-export { PluginManifest } from './PluginManifest';
+export type { PluginManifest } from './PluginManifest';
 export type { PluginPermission, PluginAuthor } from './PluginManifest';
 export { PluginPermissions } from './PluginPermissions';
 export { PluginLifecycle } from './PluginLifecycle';
@@ -15,3 +15,7 @@ export { PluginRegistry } from './PluginRegistry';
 export type { RegisteredPlugin } from './PluginRegistry';
 export { PluginLoader } from './PluginLoader';
 export { PluginManager } from './PluginManager';
+export { PluginScaffold } from './devtools/PluginScaffold';
+export { PluginValidator } from './devtools/PluginValidator';
+export { ExtensionLogger } from './devtools/ExtensionLogger';
+export { PluginDiagnostics } from './devtools/PluginDiagnostics';
