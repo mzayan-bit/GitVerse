@@ -13,6 +13,7 @@ import {
   Monitor,
   Package,
   Play,
+  Rocket,
 } from 'lucide-react';
 import { SpotlightOverlay } from '@/demo/onboarding/SpotlightOverlay';
 import { PresentationBar } from '@/demo/onboarding/PresentationBar';
@@ -93,6 +94,14 @@ export function WorkspaceLayout({
             >
               <Play className="w-3 h-3 text-emerald-400 fill-emerald-400" />
               <span>Demo 60s</span>
+            </button>
+
+            <button
+              onClick={() => openPanel('release')}
+              className="px-2.5 py-1 text-[11px] font-semibold text-amber-300 hover:text-amber-200 bg-amber-500/10 border border-amber-500/30 hover:bg-amber-500/20 rounded-md transition-colors flex items-center gap-1 shadow-[0_0_10px_rgba(245,158,11,0.3)]"
+            >
+              <Rocket className="w-3 h-3 text-amber-400" />
+              <span>v1.0 GA</span>
             </button>
 
             {(

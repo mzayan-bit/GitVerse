@@ -14,7 +14,8 @@ export type PanelType =
   | 'cosmos'
   | 'graphics'
   | 'marketplace'
-  | 'demo';
+  | 'demo'
+  | 'release';
 
 export interface PanelMetadata {
   type: PanelType;
@@ -26,6 +27,14 @@ export interface PanelMetadata {
 }
 
 export const PANEL_REGISTRY: Record<PanelType, PanelMetadata> = {
+  release: {
+    type: 'release',
+    title: 'GitVerse v1.0 Release Center',
+    iconName: 'Rocket',
+    defaultDock: 'right',
+    defaultWidth: 400,
+    defaultHeight: 580,
+  },
   demo: {
     type: 'demo',
     title: 'Demo Launcher & Keynote Hub',

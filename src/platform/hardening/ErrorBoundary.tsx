@@ -1,3 +1,4 @@
+import { Component, ErrorInfo, ReactNode } from 'react';
 import { RefreshCcw, ShieldAlert } from 'lucide-react';
 
 interface Props {

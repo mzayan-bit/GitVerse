@@ -1,43 +1,63 @@
-# GitVerse
+# GitVerse — Spatial 3D Software Engineering Universe & Architecture Intelligence Platform
 
-> Explore GitHub repositories as planets in a beautiful universe.
+[![Build Status](https://img.shields.io/github/actions/workflow/status/mzayan-bit/GitVerse/ci-cd.yml?branch=main&style=flat-square)](https://github.com/mzayan-bit/GitVerse/actions)
+[![Version](https://img.shields.io/badge/version-v1.0--GA-emerald?style=flat-square)](https://github.com/mzayan-bit/GitVerse)
+[![License](https://img.shields.io/badge/license-MIT-blue?style=flat-square)](LICENSE)
+[![Next.js](https://img.shields.io/badge/Next.js-16.2.10-black?style=flat-square&logo=nextdotjs)](https://nextjs.org)
+[![Three.js](https://img.shields.io/badge/Three.js-r174-black?style=flat-square&logo=threedotjs)](https://threejs.org)
 
-GitVerse is a cinematic web application that transforms GitHub repositories into interactive planets inside a beautiful universe. Visualize code, contributors, and activity like never before.
+**GitVerse** is an enterprise-grade 3D spatial engineering platform that visualizes software organizations, repository architectures, knowledge graphs, and CI/CD pipelines as living, interactive cosmic universes.
 
-## Tech Stack
+---
 
-- **Framework**: [Next.js 15](https://nextjs.org/) (App Router)
-- **Language**: [TypeScript](https://www.typescriptlang.org/) (Strict)
-- **Styling**: [Tailwind CSS v4](https://tailwindcss.com/)
-- **UI Components**: [shadcn/ui](https://ui.shadcn.com/)
-- **Icons**: [Lucide React](https://lucide.dev/)
-- **Theming**: [next-themes](https://github.com/pacocoursey/next-themes)
+## 🌟 Key Features
 
-## Getting Started
+- **Procedural 3D Galaxy Engine**: Render organizations as spiral galaxies, teams as star systems, repositories as planets, branches as moons, and deployments as orbiting satellites.
+- **Next-Gen Graphics Pipeline**: PBR materials, ACES filmic tone mapping, soft shadow mapping, volumetric noise nebulae, and real-time frame telemetry.
+- **Spatial AI Copilot & Voice Commands**: Interact naturally via text or voice ("Take me to authentication", "Why is production slow?", "Find circular dependencies").
+- **Enterprise Plugin SDK & MCP Ecosystem**: Pluggable extension framework with 16 connectors (GitHub, GitLab, Jira, Linear, Slack, Kubernetes, Prometheus, Grafana).
+- **Interactive Onboarding & Keynote Mode**: 60-second recruiter quick tour and 10 pre-loaded enterprise demo worlds (Netflix, Spotify, Uber, OpenAI, Stripe).
+- **Platform Hardening & Observability**: OpenTelemetry distributed tracing, state persistence, error boundary crash isolation, and security audit suite.
+
+---
+
+## 🚀 Quick Start (Local Development)
 
 ```bash
+# Clone repository
+git clone https://github.com/mzayan-bit/GitVerse.git
+cd GitVerse
+
 # Install dependencies
 npm install
 
-# Start development server
+# Run local dev server
 npm run dev
-
-# Build for production
-npm run build
 ```
 
-## Scripts
+Open [http://localhost:3000](http://localhost:3000) in your browser. Click **Demo 60s** in the top bar for an instant keynote walkthrough.
 
-| Script               | Description                  |
-| -------------------- | ---------------------------- |
-| `npm run dev`        | Start development server     |
-| `npm run build`      | Create production build      |
-| `npm run start`      | Start production server      |
-| `npm run lint`       | Run ESLint                   |
-| `npm run format`     | Format code with Prettier    |
-| `npm run type-check` | Run TypeScript type checking |
-| `npm run validate`   | Run all checks               |
+---
 
-## License
+## 🐳 Docker Deployment
 
-MIT
+```bash
+# Production Docker Compose
+docker-compose up --build -d
+```
+
+---
+
+## 🛠️ Verification Suite
+
+```bash
+npm run type-check   # Type-check TypeScript
+npm run lint         # Run ESLint assertions
+npm run build        # Build Next.js production bundle
+```
+
+---
+
+## 📜 License
+
+MIT License. Copyright (c) 2026 GitVerse Core Engineering Team.

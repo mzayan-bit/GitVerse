@@ -17,6 +17,7 @@ import { SpatialAICopilotPanel } from './panels/SpatialAICopilotPanel';
 
 import { ExtensionMarketplacePanel } from './panels/ExtensionMarketplacePanel';
 
+import { ReleaseCenterPanel } from './panels/ReleaseCenterPanel';
 import { DemoLauncherPanel } from './panels/DemoLauncherPanel';
 
 interface PanelRendererProps {
@@ -26,6 +27,8 @@ interface PanelRendererProps {
 export function PanelRenderer({ panel }: PanelRendererProps) {
   const renderContent = () => {
     switch (panel.type) {
+      case 'release':
+        return <ReleaseCenterPanel />;
       case 'demo':
         return <DemoLauncherPanel />;
       case 'marketplace':
