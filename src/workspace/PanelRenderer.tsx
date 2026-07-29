@@ -15,6 +15,8 @@ import { CosmosControlPanel } from './panels/CosmosControlPanel';
 import { GraphicsControlPanel } from './panels/GraphicsControlPanel';
 import { SpatialAICopilotPanel } from './panels/SpatialAICopilotPanel';
 
+import { ExtensionMarketplacePanel } from './panels/ExtensionMarketplacePanel';
+
 interface PanelRendererProps {
   panel: PanelInstance;
 }
@@ -22,6 +24,8 @@ interface PanelRendererProps {
 export function PanelRenderer({ panel }: PanelRendererProps) {
   const renderContent = () => {
     switch (panel.type) {
+      case 'marketplace':
+        return <ExtensionMarketplacePanel />;
       case 'graphics':
         return <GraphicsControlPanel />;
       case 'cosmos':

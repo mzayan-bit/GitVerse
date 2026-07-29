@@ -12,7 +12,8 @@ export type PanelType =
   | 'investigations'
   | 'properties'
   | 'cosmos'
-  | 'graphics';
+  | 'graphics'
+  | 'marketplace';
 
 export interface PanelMetadata {
   type: PanelType;
@@ -24,6 +25,14 @@ export interface PanelMetadata {
 }
 
 export const PANEL_REGISTRY: Record<PanelType, PanelMetadata> = {
+  marketplace: {
+    type: 'marketplace',
+    title: 'Extension Marketplace',
+    iconName: 'Package',
+    defaultDock: 'right',
+    defaultWidth: 400,
+    defaultHeight: 580,
+  },
   graphics: {
     type: 'graphics',
     title: 'Graphics Control Center',
