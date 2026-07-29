@@ -6,7 +6,7 @@ export interface DemoBranch {
 }
 
 export class BranchFactory {
-  public static getBranches(repoName: string): DemoBranch[] {
+  public static getBranches(_repoName: string): DemoBranch[] {
     return [
       { name: 'main', isDefault: true, aheadBy: 0, behindBy: 0 },
       {

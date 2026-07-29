@@ -13,7 +13,8 @@ export type PanelType =
   | 'properties'
   | 'cosmos'
   | 'graphics'
-  | 'marketplace';
+  | 'marketplace'
+  | 'demo';
 
 export interface PanelMetadata {
   type: PanelType;
@@ -25,6 +26,14 @@ export interface PanelMetadata {
 }
 
 export const PANEL_REGISTRY: Record<PanelType, PanelMetadata> = {
+  demo: {
+    type: 'demo',
+    title: 'Demo Launcher & Keynote Hub',
+    iconName: 'Play',
+    defaultDock: 'right',
+    defaultWidth: 380,
+    defaultHeight: 560,
+  },
   marketplace: {
     type: 'marketplace',
     title: 'Extension Marketplace',

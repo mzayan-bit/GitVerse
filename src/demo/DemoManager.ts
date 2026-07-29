@@ -27,7 +27,7 @@ export class DemoManager {
 
     // Trigger procedural 3D galaxy regeneration with unique seed
     const engine = GalaxyEngine.getInstance();
-    engine.generateGalaxy(org.seed);
+    engine.reseedUniverse(org.seed);
   }
 
   public getActiveOrgRepos(): DemoRepo[] {
