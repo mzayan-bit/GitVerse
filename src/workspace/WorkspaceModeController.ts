@@ -1,5 +1,5 @@
 export type WorkspaceMode =
-  'EXPLORE' | 'ARCHITECTURE' | 'OPERATIONS' | 'EXTENSIONS';
+  'EXPLORE' | 'ANALYZE' | 'AI' | 'PRESENTATION' | 'DEV';
 
 export interface WorkspaceModeInfo {
   id: WorkspaceMode;
@@ -17,33 +17,41 @@ export class WorkspaceModeController {
   public static MODES: Record<WorkspaceMode, WorkspaceModeInfo> = {
     EXPLORE: {
       id: 'EXPLORE',
-      name: 'Explore 3D',
+      name: 'Explore Universe',
       iconName: 'Compass',
-      description: 'Immersive 3D universe exploration with clean floating HUD',
-      primaryPanels: ['cosmos', 'graphics'],
+      description:
+        'Explore the 3D universe, star systems, and repository planets',
+      primaryPanels: ['cosmos', 'explorer'],
     },
-    ARCHITECTURE: {
-      id: 'ARCHITECTURE',
-      name: 'Architecture',
+    ANALYZE: {
+      id: 'ANALYZE',
+      name: 'Analyze Graph',
       iconName: 'Network',
       description:
-        'System dependency mesh, risk scoring, and layer violation analysis',
+        'Architecture analysis, dependency mesh, and impact wave scoring',
       primaryPanels: ['graph', 'inspector'],
     },
-    OPERATIONS: {
-      id: 'OPERATIONS',
-      name: 'Operations',
+    AI: {
+      id: 'AI',
+      name: 'Spatial AI',
+      iconName: 'Bot',
+      description: 'Natural language spatial copilot and voice assistant',
+      primaryPanels: ['ai'],
+    },
+    PRESENTATION: {
+      id: 'PRESENTATION',
+      name: 'Presentation',
+      iconName: 'Video',
+      description: 'Cinematic camera tours and Keynote storytelling',
+      primaryPanels: ['demo'],
+    },
+    DEV: {
+      id: 'DEV',
+      name: 'Dev & Operations',
       iconName: 'Activity',
       description:
-        'Telemetry metrics, CI/CD deployments, and incident monitoring',
+        'Telemetry metrics, CI/CD deployments, and performance diagnostics',
       primaryPanels: ['metrics', 'activity'],
-    },
-    EXTENSIONS: {
-      id: 'EXTENSIONS',
-      name: 'Extensions',
-      iconName: 'Package',
-      description: 'Marketplace plugins, MCP connectors, and developer tools',
-      primaryPanels: ['marketplace'],
     },
   };
 
