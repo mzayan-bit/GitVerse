@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/purity */
-import { useRef, useMemo } from 'react';
+import { useRef, useMemo, useEffect } from 'react';
 import { useFrame } from '@react-three/fiber';
 import * as THREE from 'three';
 
@@ -8,13 +8,13 @@ interface CometShowerProps {
 }
 
 export function CometShower({ count = 5 }: CometShowerProps) {
-  const groupRef = useRef<THREE.Group>(null);
+  const meshRef = useRef<THREE.InstancedMesh>(null);
+  const dummy = useMemo(() => new THREE.Object3D(), []);
 
   const comets = useMemo(() => {
     const items = [];
     for (let i = 0; i < count; i++) {
       items.push({
-        id: i,
         position: new THREE.Vector3(
           (Math.random() - 0.5) * 4000,
           (Math.random() - 0.5) * 2000,
@@ -31,8 +31,20 @@ export function CometShower({ count = 5 }: CometShowerProps) {
     return items;
   }, [count]);
 
+  useEffect(() => {
+    if (!meshRef.current) return;
+    comets.forEach((c, i) => {
+      dummy.position.copy(c.position);
+      dummy.scale.setScalar(3);
+      dummy.updateMatrix();
+      meshRef.current?.setMatrixAt(i, dummy.matrix);
+    });
+    meshRef.current.instanceMatrix.needsUpdate = true;
+  }, [comets, dummy]);
+
   useFrame((_, delta) => {
-    comets.forEach((c) => {
+    if (!meshRef.current) return;
+    comets.forEach((c, i) => {
       c.position.addScaledVector(c.direction, c.speed * delta);
       if (c.position.length() > 6000) {
         c.position.set(
@@ -41,39 +53,17 @@ export function CometShower({ count = 5 }: CometShowerProps) {
           (Math.random() - 0.5) * 3000
         );
       }
+      dummy.position.copy(c.position);
+      dummy.updateMatrix();
+      meshRef.current?.setMatrixAt(i, dummy.matrix);
     });
-
-    if (groupRef.current) {
-      groupRef.current.children.forEach((child, idx) => {
-        const c = comets[idx];
-        if (c && child) {
-          child.position.copy(c.position);
-        }
-      });
-    }
+    meshRef.current.instanceMatrix.needsUpdate = true;
   });
 
   return (
-    <group ref={groupRef}>
-      {comets.map((c) => (
-        <group key={c.id} position={c.position}>
-          {/* Head */}
-          <mesh>
-            <sphereGeometry args={[4, 16, 16]} />
-            <meshBasicMaterial color="#ffffff" />
-          </mesh>
-          {/* Glow */}
-          <mesh>
-            <sphereGeometry args={[8, 16, 16]} />
-            <meshBasicMaterial
-              color="#00f0ff"
-              transparent
-              opacity={0.6}
-              blending={THREE.AdditiveBlending}
-            />
-          </mesh>
-        </group>
-      ))}
-    </group>
+    <instancedMesh ref={meshRef} args={[undefined, undefined, count]}>
+      <sphereGeometry args={[1, 8, 8]} />
+      <meshBasicMaterial color="#7df4ff" toneMapped={false} />
+    </instancedMesh>
   );
 }

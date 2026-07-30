@@ -1,4 +1,4 @@
-import { ACESFilmicToneMapping, SRGBColorSpace, PCFSoftShadowMap } from 'three';
+import { ACESFilmicToneMapping, SRGBColorSpace } from 'three';
 import type {
   RendererConfig,
   CameraConfig,
@@ -14,13 +14,12 @@ import type {
 // ---------------------------------------------------------------------------
 
 export const DEFAULT_RENDERER_CONFIG: RendererConfig = {
-  dpr: [1, 1.5],
+  dpr: [1, 1],
   antialias: true,
   toneMapping: ACESFilmicToneMapping,
   toneMappingExposure: 1.0,
   outputColorSpace: SRGBColorSpace,
-  shadows: true,
-  shadowMapType: PCFSoftShadowMap,
+  shadows: false,
   powerPreference: 'high-performance',
 };
 

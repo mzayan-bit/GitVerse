@@ -34,8 +34,8 @@ export function ProceduralPlanetMesh({ planet }: ProceduralPlanetMeshProps) {
     <group position={planet.position}>
       {/* Central Planet Sphere */}
       <group ref={planetRef}>
-        <mesh castShadow receiveShadow>
-          <sphereGeometry args={[planet.baseRadius, 32, 32]} />
+        <mesh>
+          <sphereGeometry args={[planet.baseRadius, 16, 16]} />
           <meshStandardMaterial
             color={planet.color}
             roughness={0.5}
