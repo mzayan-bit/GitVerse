@@ -67,8 +67,8 @@ export class PlanetFactory {
 
     // Planet Radius based on stars & complexity
     const baseRadius = Math.max(
-      12,
-      Math.min(65, 10 + Math.sqrt(starCount) * 1.5 + complexity * 2)
+      10,
+      Math.min(30, 8 + Math.sqrt(starCount) * 0.8 + complexity * 1.2)
     );
 
     // Colors driven by Health & Language

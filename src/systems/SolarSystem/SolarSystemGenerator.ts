@@ -106,8 +106,11 @@ export class SolarSystemGenerator {
       // 4. Generate the Planet Config using the mapped seed and size
       const planetConfig = PlanetFactory.create(visualProps.biomeSeed);
 
-      // Apply mapped properties
-      planetConfig.terrain.baseRadius = visualProps.size * 10; // Scale it up for visibility
+      // Apply mapped properties with balanced scale
+      planetConfig.terrain.baseRadius = Math.max(
+        12,
+        Math.min(35, visualProps.size * 1.5)
+      );
       planetConfig.atmosphere.color = visualProps.baseColor;
       planetConfig.terrain.displacementStrength +=
         visualProps.craterDensity * 2.0;
