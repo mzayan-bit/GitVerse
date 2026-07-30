@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import {
   Home,
   Compass,
@@ -8,6 +8,7 @@ import {
   Settings,
   ChevronLeft,
   ChevronRight,
+  EyeOff,
 } from 'lucide-react';
 import {
   WorkspaceModeController,
@@ -20,6 +21,7 @@ interface LeftSidebarProps {
 
 export function LeftSidebar({ onOpenPanel }: LeftSidebarProps) {
   const [isCollapsed, setIsCollapsed] = useState(false);
+  const [isHidden, setIsHidden] = useState(false);
   const modeController = WorkspaceModeController.getInstance();
   const [activeMode, setActiveMode] = useState<WorkspaceMode>(
     modeController.getMode()
@@ -49,9 +51,21 @@ export function LeftSidebar({ onOpenPanel }: LeftSidebarProps) {
     }
   };
 
+  if (isHidden) {
+    return (
+      <button
+        onClick={() => setIsHidden(false)}
+        className="fixed top-14 left-3 z-40 p-2 rounded-xl bg-black/80 backdrop-blur-xl border border-white/10 text-gray-300 hover:text-white transition-all shadow-xl"
+        title="Show Sidebar"
+      >
+        <ChevronRight className="w-4 h-4 text-purple-400" />
+      </button>
+    );
+  }
+
   return (
     <aside
-      className={`absolute top-12 bottom-6 left-0 z-40 bg-[#0B0F17]/90 backdrop-blur-2xl border-r border-white/10 flex flex-col justify-between py-3 transition-all duration-300 font-sans select-none ${
+      className={`fixed top-12 bottom-6 left-0 z-40 bg-[#0B0F17]/95 backdrop-blur-2xl border-r border-white/10 flex flex-col justify-between py-3 transition-all duration-300 font-sans select-none shadow-2xl ${
         isCollapsed ? 'w-14' : 'w-52'
       }`}
     >
@@ -78,21 +92,32 @@ export function LeftSidebar({ onOpenPanel }: LeftSidebarProps) {
         })}
       </div>
 
-      {/* Collapse Toggle Button */}
-      <div className="px-2 pt-3 border-t border-white/10">
+      {/* Collapse & Hide Buttons */}
+      <div className="px-2 pt-3 border-t border-white/10 space-y-1">
         <button
           onClick={() => setIsCollapsed(!isCollapsed)}
-          className="w-full flex items-center justify-center p-2 rounded-xl bg-white/5 hover:bg-white/10 text-gray-400 hover:text-white transition-colors"
+          className="w-full flex items-center justify-center p-2 rounded-xl bg-white/5 hover:bg-white/10 text-gray-400 hover:text-white transition-colors text-xs"
           title={isCollapsed ? 'Expand Sidebar' : 'Collapse Sidebar'}
         >
           {isCollapsed ? (
             <ChevronRight className="w-4 h-4" />
           ) : (
-            <div className="flex items-center justify-between w-full text-xs font-mono px-1">
+            <div className="flex items-center justify-between w-full font-mono px-1">
               <span>Collapse</span>
               <ChevronLeft className="w-4 h-4" />
             </div>
           )}
+        </button>
+
+        <button
+          onClick={() => setIsHidden(true)}
+          className="w-full flex items-center justify-center p-2 rounded-xl bg-red-500/10 hover:bg-red-500/20 text-red-300 transition-colors text-xs"
+          title="Hide Sidebar Completely"
+        >
+          <div className="flex items-center justify-between w-full font-mono px-1">
+            <span>Hide Nav</span>
+            <EyeOff className="w-3.5 h-3.5" />
+          </div>
         </button>
       </div>
     </aside>

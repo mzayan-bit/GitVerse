@@ -22,14 +22,14 @@ export function TopNavBar({ onOpenSearch, onLaunchDemo }: TopNavBarProps) {
   };
 
   return (
-    <header className="absolute top-0 left-0 right-0 h-12 z-40 bg-[#0B0F17]/90 backdrop-blur-2xl border-b border-white/10 flex items-center justify-between px-4 text-white font-sans select-none">
+    <header className="fixed top-0 left-0 right-0 h-12 z-40 bg-[#0B0F17]/95 backdrop-blur-2xl border-b border-white/10 flex items-center justify-between px-4 text-white font-sans select-none">
       {/* Left: Brand Logo & Title */}
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-3 shrink-0">
         <div className="flex items-center gap-2 font-bold text-sm text-white">
           <div className="p-1 rounded-lg bg-gradient-to-tr from-purple-600 to-cyan-400 text-white shadow-[0_0_12px_rgba(139,92,246,0.5)]">
             <Sparkles className="w-4 h-4 fill-white" />
           </div>
-          <span className="tracking-tight">GitVerse</span>
+          <span className="tracking-tight hidden sm:inline">GitVerse</span>
           <span className="px-1.5 py-0.2 rounded bg-purple-500/20 text-purple-300 font-mono text-[9px] border border-purple-500/30">
             v1.0 GA
           </span>
@@ -39,21 +39,21 @@ export function TopNavBar({ onOpenSearch, onLaunchDemo }: TopNavBarProps) {
       {/* Center: Global Search Bar (⌘K) */}
       <button
         onClick={onOpenSearch}
-        className="flex items-center gap-2.5 px-3.5 py-1.5 text-xs bg-white/5 hover:bg-white/10 border border-white/10 hover:border-purple-500/50 rounded-xl text-gray-300 hover:text-white transition-all w-full max-w-md shadow-inner"
+        className="flex items-center gap-2 px-3 py-1.5 text-xs bg-white/5 hover:bg-white/10 border border-white/10 hover:border-purple-500/50 rounded-xl text-gray-300 hover:text-white transition-all w-full max-w-sm mx-4 shadow-inner"
       >
-        <Search className="w-3.5 h-3.5 text-purple-400" />
-        <span className="flex-1 text-left text-gray-400 text-[11px]">
-          Search repositories, services, dependencies (⌘K)...
+        <Search className="w-3.5 h-3.5 text-purple-400 shrink-0" />
+        <span className="flex-1 text-left text-gray-400 text-[11px] truncate">
+          Search universe (⌘K)...
         </span>
-        <kbd className="px-1.5 py-0.5 text-[9px] bg-white/10 rounded font-mono text-gray-400 border border-white/10">
+        <kbd className="px-1.5 py-0.5 text-[9px] bg-white/10 rounded font-mono text-gray-400 border border-white/10 shrink-0">
           ⌘K
         </kbd>
       </button>
 
       {/* Right: Mode Switcher, Quick Tour & Avatar */}
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-2 shrink-0">
         {/* Mode Quick Selector Dropdown */}
-        <div className="flex items-center gap-1 p-0.5 rounded-xl bg-white/5 border border-white/10 text-[11px]">
+        <div className="flex items-center gap-0.5 p-0.5 rounded-xl bg-white/5 border border-white/10 text-[11px]">
           {(
             [
               'EXPLORE',
@@ -66,7 +66,7 @@ export function TopNavBar({ onOpenSearch, onLaunchDemo }: TopNavBarProps) {
             <button
               key={mode}
               onClick={() => handleSelectMode(mode)}
-              className={`px-2.5 py-1 rounded-lg font-medium transition-all ${
+              className={`px-2 py-1 rounded-lg font-medium transition-all ${
                 currentMode === mode
                   ? 'bg-purple-600 text-white shadow-[0_0_10px_rgba(139,92,246,0.4)] font-semibold'
                   : 'text-gray-400 hover:text-white'
@@ -81,14 +81,14 @@ export function TopNavBar({ onOpenSearch, onLaunchDemo }: TopNavBarProps) {
         {onLaunchDemo && (
           <button
             onClick={onLaunchDemo}
-            className="flex items-center gap-1.5 px-3 py-1 text-xs font-semibold text-emerald-300 bg-emerald-500/10 border border-emerald-500/30 hover:bg-emerald-500/20 rounded-xl transition-all shadow-[0_0_12px_rgba(16,185,129,0.3)]"
+            className="hidden md:flex items-center gap-1.5 px-2.5 py-1 text-xs font-semibold text-emerald-300 bg-emerald-500/10 border border-emerald-500/30 hover:bg-emerald-500/20 rounded-xl transition-all shadow-[0_0_12px_rgba(16,185,129,0.3)]"
           >
             <Play className="w-3.5 h-3.5 text-emerald-400 fill-emerald-400" />
-            <span>60s Tour</span>
+            <span>Keynote</span>
           </button>
         )}
 
-        <div className="h-4 w-px bg-white/10" />
+        <div className="h-4 w-px bg-white/10 hidden sm:block" />
 
         {/* Notification Bell */}
         <button className="p-1.5 rounded-lg text-gray-400 hover:text-white hover:bg-white/10 transition-colors relative">
