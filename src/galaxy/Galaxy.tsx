@@ -37,14 +37,12 @@ export function Galaxy() {
         geometryData.positions[i * 3 + 2]
       );
 
-      // Add random rotation and scale for variety
-      matrix.scale(
-        new THREE.Vector3(
-          geometryData.sizes[i],
-          geometryData.sizes[i],
-          geometryData.sizes[i]
-        )
+      // Scale nodes properly so they don't clip into camera
+      const scaledSize = Math.max(
+        2,
+        Math.min(25, geometryData.sizes[i] * 0.05)
       );
+      matrix.scale(new THREE.Vector3(scaledSize, scaledSize, scaledSize));
 
       meshRef.current.setMatrixAt(i, matrix);
 
@@ -84,7 +82,7 @@ export function Galaxy() {
               const { setFocusedSystemId, setCameraMode } =
                 useGalaxyManager.getState();
               setFocusedSystemId(system.id);
-              setCameraMode('galaxy-follow'); // Will zoom in and transition
+              setCameraMode('galaxy-follow');
             }
           }
         }}
@@ -95,12 +93,11 @@ export function Galaxy() {
           document.body.style.cursor = 'auto';
         }}
       >
-        <icosahedronGeometry args={[5, 0]} />
-        <meshBasicMaterial
-          vertexColors={false} // We use instanceColor
+        <sphereGeometry args={[1, 32, 32]} />
+        <meshStandardMaterial
+          roughness={0.3}
+          metalness={0.7}
           toneMapped={false}
-          transparent={true}
-          opacity={0.9}
         />
       </instancedMesh>
       <GraphEdges />

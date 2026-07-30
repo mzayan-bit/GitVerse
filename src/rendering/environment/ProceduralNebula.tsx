@@ -10,9 +10,9 @@ export function ProceduralNebula() {
     return new THREE.ShaderMaterial({
       uniforms: {
         uTime: { value: 0 },
-        uColorA: { value: new THREE.Color('#00f0ff') },
-        uColorB: { value: new THREE.Color('#bf5af2') },
-        uColorC: { value: new THREE.Color('#090f13') },
+        uColorA: { value: new THREE.Color('#3b0764') }, // Deep indigo purple
+        uColorB: { value: new THREE.Color('#082f49') }, // Deep space navy cyan
+        uColorC: { value: new THREE.Color('#030712') }, // Pitch black void
       },
       vertexShader: `
         varying vec2 vUv;
@@ -61,14 +61,14 @@ export function ProceduralNebula() {
         }
 
         void main() {
-          vec3 p = vPosition * 0.0003 + vec3(uTime * 0.02, uTime * 0.01, 0.0);
+          vec3 p = vPosition * 0.00015 + vec3(uTime * 0.005, uTime * 0.003, 0.0);
           float n = fbm(p);
           float n2 = fbm(p * 1.5 + vec3(1.7, 9.2, 0.5));
 
           vec3 color = mix(uColorA, uColorB, n);
-          color = mix(color, uColorC, n2 * 0.7);
+          color = mix(color, uColorC, n2 * 0.8);
 
-          float alpha = smoothstep(0.2, 0.7, n) * 0.35;
+          float alpha = smoothstep(0.3, 0.8, n) * 0.15;
           gl_FragColor = vec4(color, alpha);
         }
       `,
@@ -90,7 +90,7 @@ export function ProceduralNebula() {
 
   return (
     <mesh ref={meshRef} material={shaderMaterial}>
-      <sphereGeometry args={[9000, 32, 32]} />
+      <sphereGeometry args={[15000, 128, 128]} />
     </mesh>
   );
 }

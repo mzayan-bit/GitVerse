@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Search, Bell, Sparkles, User, Play } from 'lucide-react';
+import { Search, Bell, Sparkles, Play } from 'lucide-react';
 import {
   WorkspaceModeController,
   WorkspaceMode,
@@ -22,11 +22,11 @@ export function TopNavBar({ onOpenSearch, onLaunchDemo }: TopNavBarProps) {
   };
 
   return (
-    <header className="fixed top-0 left-0 right-0 h-12 z-40 bg-[#0B0F17]/95 backdrop-blur-2xl border-b border-white/10 flex items-center justify-between px-4 text-white font-sans select-none shadow-2xl">
+    <header className="fixed top-0 left-0 right-0 h-12 z-50 bg-[#0B0F17] border-b border-white/10 flex items-center justify-between px-4 text-white font-sans select-none shadow-2xl">
       {/* Left: Brand Logo & Compact Search */}
       <div className="flex items-center gap-4 shrink-0">
         <div className="flex items-center gap-2 font-bold text-sm text-white cursor-pointer">
-          <div className="p-1 rounded-lg bg-gradient-to-tr from-purple-600 to-cyan-400 text-white shadow-[0_0_12px_rgba(139,92,246,0.5)]">
+          <div className="p-1.5 rounded-lg bg-gradient-to-tr from-purple-600 to-cyan-400 text-white shadow-[0_0_12px_rgba(139,92,246,0.5)]">
             <Sparkles className="w-4 h-4 fill-white" />
           </div>
           <span className="tracking-tight font-extrabold text-white text-base">
@@ -43,9 +43,7 @@ export function TopNavBar({ onOpenSearch, onLaunchDemo }: TopNavBarProps) {
           className="flex items-center gap-2 px-3 py-1.5 text-xs bg-white/5 hover:bg-white/10 border border-white/10 hover:border-purple-500/50 rounded-xl text-gray-300 hover:text-white transition-all shadow-inner"
         >
           <Search className="w-3.5 h-3.5 text-purple-400" />
-          <span className="hidden sm:inline text-gray-400 text-[11px]">
-            Search (⌘K)...
-          </span>
+          <span className="text-gray-400 text-[11px]">Search (⌘K)...</span>
           <kbd className="px-1.5 py-0.5 text-[9px] bg-white/10 rounded font-mono text-gray-400 border border-white/10">
             ⌘K
           </kbd>
@@ -53,7 +51,7 @@ export function TopNavBar({ onOpenSearch, onLaunchDemo }: TopNavBarProps) {
       </div>
 
       {/* Center: Prominent Experience Mode Switcher (Pills) */}
-      <div className="flex items-center gap-1 p-1 rounded-2xl bg-black/60 border border-white/10 text-xs shadow-inner">
+      <div className="flex items-center gap-1 p-1 rounded-2xl bg-black/80 border border-white/15 text-xs shadow-inner">
         {(
           ['EXPLORE', 'ANALYZE', 'AI', 'PRESENTATION', 'DEV'] as WorkspaceMode[]
         ).map((mode) => (
@@ -74,7 +72,7 @@ export function TopNavBar({ onOpenSearch, onLaunchDemo }: TopNavBarProps) {
       </div>
 
       {/* Right: Quick Demo & User Avatar */}
-      <div className="flex items-center gap-2 shrink-0">
+      <div className="flex items-center gap-3 shrink-0">
         {onLaunchDemo && (
           <button
             onClick={onLaunchDemo}
@@ -85,7 +83,7 @@ export function TopNavBar({ onOpenSearch, onLaunchDemo }: TopNavBarProps) {
           </button>
         )}
 
-        <div className="h-4 w-px bg-white/10 hidden sm:block" />
+        <div className="h-4 w-px bg-white/10" />
 
         {/* Notification Bell */}
         <button className="p-1.5 rounded-lg text-gray-400 hover:text-white hover:bg-white/10 transition-colors relative">
@@ -95,8 +93,8 @@ export function TopNavBar({ onOpenSearch, onLaunchDemo }: TopNavBarProps) {
 
         {/* User Avatar */}
         <div className="w-7 h-7 rounded-full bg-gradient-to-tr from-purple-500 to-indigo-600 p-0.5 cursor-pointer hover:scale-105 transition-transform">
-          <div className="w-full h-full rounded-full bg-black flex items-center justify-center text-white">
-            <User className="w-3.5 h-3.5" />
+          <div className="w-full h-full rounded-full bg-black flex items-center justify-center text-white font-bold text-xs">
+            Z
           </div>
         </div>
       </div>

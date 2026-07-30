@@ -55,7 +55,7 @@ export function LeftSidebar({ onOpenPanel }: LeftSidebarProps) {
     return (
       <button
         onClick={() => setIsHidden(false)}
-        className="fixed top-14 left-3 z-40 p-2 rounded-xl bg-black/80 backdrop-blur-xl border border-white/10 text-gray-300 hover:text-white transition-all shadow-xl"
+        className="fixed top-14 left-3 z-40 p-2 rounded-xl bg-[#0B0F17]/90 backdrop-blur-xl border border-white/10 text-gray-300 hover:text-white transition-all shadow-xl"
         title="Show Sidebar"
       >
         <ChevronRight className="w-4 h-4 text-purple-400" />
@@ -92,7 +92,7 @@ export function LeftSidebar({ onOpenPanel }: LeftSidebarProps) {
         })}
       </div>
 
-      {/* Collapse & Hide Buttons */}
+      {/* Collapse & Hide Controls */}
       <div className="px-2 pt-3 border-t border-white/10 space-y-1">
         <button
           onClick={() => setIsCollapsed(!isCollapsed)}
@@ -111,8 +111,8 @@ export function LeftSidebar({ onOpenPanel }: LeftSidebarProps) {
 
         <button
           onClick={() => setIsHidden(true)}
-          className="w-full flex items-center justify-center p-2 rounded-xl bg-red-500/10 hover:bg-red-500/20 text-red-300 transition-colors text-xs"
-          title="Hide Sidebar Completely"
+          className="w-full flex items-center justify-center p-2 rounded-xl bg-white/5 hover:bg-white/10 text-gray-400 hover:text-white transition-colors text-xs"
+          title="Hide Sidebar"
         >
           <div className="flex items-center justify-between w-full font-mono px-1">
             <span>Hide Nav</span>
