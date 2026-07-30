@@ -68,7 +68,7 @@ interface CameraStore extends CameraRigState {
   resetCamera: () => void;
 }
 
-const DEFAULT_POSITION = new THREE.Vector3(0, 800, 1800);
+const DEFAULT_POSITION = new THREE.Vector3(0, 1200, 2400);
 const DEFAULT_TARGET = new THREE.Vector3(0, 0, 0);
 
 export const useCameraRig = create<CameraStore>((set, get) => ({

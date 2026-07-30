@@ -49,7 +49,7 @@ export class OrbitController {
 
   public resetCamera(): { position: THREE.Vector3; target: THREE.Vector3 } {
     return {
-      position: new THREE.Vector3(0, 800, 1800),
+      position: new THREE.Vector3(0, 1200, 2400),
       target: new THREE.Vector3(0, 0, 0),
     };
   }
