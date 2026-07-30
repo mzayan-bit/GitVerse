@@ -20,6 +20,8 @@ import { ExtensionMarketplacePanel } from './panels/ExtensionMarketplacePanel';
 import { ReleaseCenterPanel } from './panels/ReleaseCenterPanel';
 import { DemoLauncherPanel } from './panels/DemoLauncherPanel';
 
+import { SettingsPanel } from './panels/SettingsPanel';
+
 interface PanelRendererProps {
   panel: PanelInstance;
 }
@@ -27,6 +29,8 @@ interface PanelRendererProps {
 export function PanelRenderer({ panel }: PanelRendererProps) {
   const renderContent = () => {
     switch (panel.type) {
+      case 'settings':
+        return <SettingsPanel />;
       case 'release':
         return <ReleaseCenterPanel />;
       case 'demo':
