@@ -1,4 +1,5 @@
 import { MovementController } from '@/engine/navigation/MovementController';
+import { WorkspaceModeController } from '@/workspace/WorkspaceModeController';
 import * as THREE from 'three';
 
 export interface PresentationBookmark {
@@ -6,6 +7,7 @@ export interface PresentationBookmark {
   name: string;
   cameraPos: [number, number, number];
   targetPos: [number, number, number];
+  mode: 'EXPLORE' | 'ANALYZE' | 'AI' | 'PRESENTATION' | 'DEV';
   narrative: string;
 }
 
@@ -17,31 +19,62 @@ export class PresentationModeController {
   private currentBookmarkIndex = 0;
   private timerSeconds = 0;
   private intervalId: NodeJS.Timeout | null = null;
+  private autoAdvanceId: NodeJS.Timeout | null = null;
 
   public bookmarks: PresentationBookmark[] = [
     {
-      id: 'scene-overview',
-      name: '1. Galactic Overview',
-      cameraPos: [0, 800, 1500],
+      id: 'scene-galaxy',
+      name: '1. Galactic Engineering Universe',
+      cameraPos: [0, 900, 1600],
       targetPos: [0, 0, 0],
+      mode: 'EXPLORE',
       narrative:
-        'Welcome to the 3D Engineering Galaxy. Here, microservice architectures form spiral solar systems.',
+        'Welcome to GitVerse. Microservices and software repositories mapped into a living 3D galaxy.',
     },
     {
-      id: 'scene-core',
-      name: '2. Core Service Cluster',
-      cameraPos: [200, 120, 300],
+      id: 'scene-core-cluster',
+      name: '2. Microservice Star Constellation',
+      cameraPos: [150, 100, 250],
       targetPos: [0, 0, 0],
+      mode: 'EXPLORE',
       narrative:
-        'Zooming into the Core API Gateway. Notice the atmosphere glowing cyan indicating 99.4% health score.',
+        'Zooming into core services. Visual atmosphere indicates real-time operational health and telemetry.',
     },
     {
-      id: 'scene-graph',
-      name: '3. Knowledge Graph Mesh',
-      cameraPos: [-300, 250, 450],
+      id: 'scene-knowledge-graph',
+      name: '3. Architecture Knowledge Mesh',
+      cameraPos: [-250, 200, 400],
       targetPos: [0, 0, 0],
+      mode: 'ANALYZE',
       narrative:
-        'Knowledge graph dependency links glowing brightly across team boundaries.',
+        'Knowledge graph mesh tracing cross-service dependencies, impact propagation, and risk scores.',
+    },
+    {
+      id: 'scene-spatial-ai',
+      name: '4. Spatial AI Copilot Engine',
+      cameraPos: [100, 300, 500],
+      targetPos: [0, 0, 0],
+      mode: 'AI',
+      narrative:
+        'Natural language Spatial AI reasoning over circular dependencies, bottlenecks, and security posture.',
+    },
+    {
+      id: 'scene-telemetry',
+      name: '5. Production Dev & Operations',
+      cameraPos: [0, 450, 700],
+      targetPos: [0, 0, 0],
+      mode: 'DEV',
+      narrative:
+        'Real-time CI/CD deployment pipelines, build telemetry, and live observability metrics.',
+    },
+    {
+      id: 'scene-conclusion',
+      name: '6. Live Enterprise Platform GA',
+      cameraPos: [0, 600, 1100],
+      targetPos: [0, 0, 0],
+      mode: 'PRESENTATION',
+      narrative:
+        'GitVerse transforms complex engineering systems into intuitive, interactive spatial software intelligence.',
     },
   ];
 
@@ -54,13 +87,16 @@ export class PresentationModeController {
 
   public startPresentation(): void {
     this.isPresenting = true;
+    this.isAutoPlaying = true;
     this.timerSeconds = 0;
-    if (!this.intervalId) {
-      this.intervalId = setInterval(() => {
-        this.timerSeconds++;
-      }, 1000);
-    }
+
+    if (this.intervalId) clearInterval(this.intervalId);
+    this.intervalId = setInterval(() => {
+      this.timerSeconds++;
+    }, 1000);
+
     this.jumpToBookmark(0);
+    this.scheduleNextAutoAdvance();
   }
 
   public stopPresentation(): void {
@@ -70,6 +106,10 @@ export class PresentationModeController {
       clearInterval(this.intervalId);
       this.intervalId = null;
     }
+    if (this.autoAdvanceId) {
+      clearTimeout(this.autoAdvanceId);
+      this.autoAdvanceId = null;
+    }
   }
 
   public jumpToBookmark(index: number): void {
@@ -77,10 +117,18 @@ export class PresentationModeController {
     this.currentBookmarkIndex = index;
     const bm = this.bookmarks[index];
 
+    // Switch workspace mode
+    WorkspaceModeController.getInstance().setMode(bm.mode);
+
+    // Fly camera smoothly
     MovementController.getInstance().flyToTarget({
       entityPosition: new THREE.Vector3(...bm.targetPos),
       paddingFactor: 2.0,
     });
+
+    if (this.isAutoPlaying) {
+      this.scheduleNextAutoAdvance();
+    }
   }
 
   public nextScene(): void {
@@ -97,10 +145,29 @@ export class PresentationModeController {
 
   public toggleAutoPlay(): void {
     this.isAutoPlaying = !this.isAutoPlaying;
+    if (this.isAutoPlaying) {
+      this.scheduleNextAutoAdvance();
+    } else if (this.autoAdvanceId) {
+      clearTimeout(this.autoAdvanceId);
+      this.autoAdvanceId = null;
+    }
+  }
+
+  private scheduleNextAutoAdvance(): void {
+    if (this.autoAdvanceId) clearTimeout(this.autoAdvanceId);
+    this.autoAdvanceId = setTimeout(() => {
+      if (this.isPresenting && this.isAutoPlaying) {
+        this.nextScene();
+      }
+    }, 8000);
   }
 
   public getIsPresenting(): boolean {
     return this.isPresenting;
+  }
+
+  public getIsAutoPlaying(): boolean {
+    return this.isAutoPlaying;
   }
 
   public getCurrentBookmark(): PresentationBookmark {

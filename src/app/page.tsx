@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Loader2 } from 'lucide-react';
 import dynamic from 'next/dynamic';
@@ -20,6 +20,10 @@ import { CommandPalette } from '@/workspace/command/CommandPalette';
 import { MovementTutorialModal } from '@/components/navigation/MovementTutorialModal';
 import { MotionPanel } from '@/components/motion/MotionPanel';
 import { MotionProvider } from '@/components/motion/MotionProvider';
+import {
+  SampleUniverseBuilder,
+  SAMPLE_REPOSITORIES,
+} from '@/universe/SampleUniverseBuilder';
 
 // Dynamically import the 3D canvas with SSR disabled
 const GitVerseCanvas = dynamic(() => import('@/components/canvas-wrapper'), {
@@ -43,12 +47,17 @@ export default function Home() {
   const [showTutorial, setShowTutorial] = useState(false);
   const [showMotion, setShowMotion] = useState(false);
 
-  // Data States
-  const [repositories, setRepositories] = useState<RepositoryDomainModel[]>([]);
+  // Data States initialized with SAMPLE_REPOSITORIES for instant 3D demo readiness
+  const [repositories, setRepositories] =
+    useState<RepositoryDomainModel[]>(SAMPLE_REPOSITORIES);
   const [clientMetrics, setClientMetrics] = useState<ClientMetrics>();
   const [rateLimit, setRateLimit] = useState<GitHubRateLimitResponse>();
 
   const hasImported = repositories.length > 0;
+
+  useEffect(() => {
+    SampleUniverseBuilder.loadSampleUniverse();
+  }, []);
 
   // Repository Scene State
   const repoSceneMode = useRepositoryScene((s) => s.mode);

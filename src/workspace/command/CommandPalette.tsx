@@ -23,6 +23,7 @@ import {
   WorkspaceModeController,
   WorkspaceMode,
 } from '../WorkspaceModeController';
+import { PresentationModeController } from '@/demo/onboarding/PresentationModeController';
 
 export interface CommandPaletteProps {
   isOpen: boolean;
@@ -72,11 +73,13 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
       action: () => handleSwitchMode('AI'),
     },
     {
-      id: 'cmd-demo-quick',
+      id: 'cmd-demo-keynote',
       category: 'Keynote Showcase',
-      title: 'Launch 60-Second Recruiter Keynote Showcase',
+      title: 'Launch WWDC-Style Automatic Keynote Showcase Tour',
       icon: <Play className="w-4 h-4 text-emerald-400 fill-emerald-400" />,
-      action: () => openPanel('demo'),
+      action: () => {
+        PresentationModeController.getInstance().startPresentation();
+      },
     },
     {
       id: 'cmd-release-center',
@@ -189,7 +192,12 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-start justify-center pt-20 bg-black/70 backdrop-blur-md pointer-events-auto select-none font-sans">
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-label="Universal Command Palette"
+      className="fixed inset-0 z-50 flex items-start justify-center pt-20 bg-black/70 backdrop-blur-md pointer-events-auto select-none font-sans"
+    >
       <div className="w-full max-w-2xl bg-black/90 backdrop-blur-2xl border border-white/10 rounded-2xl shadow-2xl overflow-hidden flex flex-col animate-in fade-in zoom-in-95 duration-200">
         {/* Search Header */}
         <div className="flex items-center px-4 py-3.5 border-b border-white/10 bg-white/5 gap-3">
@@ -200,6 +208,7 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
             value={query}
             onChange={(e) => handleQueryChange(e.target.value)}
             placeholder="Search commands, modes, actions, or jump to 3D entities (⌘K)..."
+            aria-label="Search Command Palette"
             className="flex-1 bg-transparent text-sm text-white placeholder-gray-500 focus:outline-none"
           />
           <kbd className="px-2 py-0.5 text-[10px] bg-white/10 rounded font-mono text-gray-400">
@@ -207,6 +216,7 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
           </kbd>
           <button
             onClick={onClose}
+            aria-label="Close Command Palette"
             className="p-1 text-gray-400 hover:text-white rounded-md transition-colors"
           >
             <X className="w-4 h-4" />
