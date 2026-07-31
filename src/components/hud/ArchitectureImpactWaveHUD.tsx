@@ -1,5 +1,4 @@
-import { useState } from 'react';
-import { Activity, GitCommit, ArrowUpRight, X } from 'lucide-react';
+import { Activity, GitCommit, ArrowUpRight } from 'lucide-react';
 
 interface ArchitectureImpactWaveHUDProps {
   serviceName?: string;
@@ -16,12 +15,8 @@ export function ArchitectureImpactWaveHUD({
   affectedServices = 22,
   riskLevel = 'MEDIUM',
 }: ArchitectureImpactWaveHUDProps) {
-  const [isVisible, setIsVisible] = useState(true);
-
-  if (!isVisible) return null;
-
   return (
-    <div className="fixed bottom-10 right-4 z-30 w-80 p-4 rounded-2xl bg-[#0B0F17]/90 backdrop-blur-2xl border border-cyan-500/30 shadow-[0_0_30px_rgba(34,211,238,0.2)] text-white text-xs font-sans select-none animate-in fade-in slide-in-from-right-4 duration-300">
+    <div className="fixed bottom-12 right-6 z-40 w-80 p-4 rounded-2xl bg-black/85 backdrop-blur-2xl border border-cyan-500/30 shadow-[0_0_30px_rgba(34,211,238,0.2)] text-white text-xs font-sans select-none animate-in fade-in slide-in-from-right-4 duration-300">
       {/* Header */}
       <div className="flex items-center justify-between border-b border-white/10 pb-2.5 mb-3">
         <div className="flex items-center gap-2">
@@ -37,29 +32,22 @@ export function ArchitectureImpactWaveHUD({
             </span>
           </div>
         </div>
-        <div className="flex items-center gap-2">
-          <span
-            className={`px-2 py-0.5 rounded text-[10px] font-bold font-mono border ${
-              riskLevel === 'CRITICAL'
-                ? 'bg-red-500/20 text-red-300 border-red-500/40'
-                : riskLevel === 'MEDIUM'
-                  ? 'bg-amber-500/20 text-amber-300 border-amber-500/40'
-                  : 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40'
-            }`}
-          >
-            {riskLevel}
-          </span>
-          <button
-            onClick={() => setIsVisible(false)}
-            className="text-gray-400 hover:text-white p-1 transition-colors"
-          >
-            <X className="w-3.5 h-3.5" />
-          </button>
-        </div>
+        <span
+          className={`px-2 py-0.5 rounded text-[10px] font-bold font-mono border ${
+            riskLevel === 'CRITICAL'
+              ? 'bg-red-500/20 text-red-300 border-red-500/40'
+              : riskLevel === 'MEDIUM'
+                ? 'bg-amber-500/20 text-amber-300 border-amber-500/40'
+                : 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40'
+          }`}
+        >
+          {riskLevel} RISK
+        </span>
       </div>
 
-      {/* Ripple Wave Graphic */}
-      <div className="relative h-24 rounded-xl bg-gradient-to-b from-cyan-950/30 to-black/60 border border-cyan-500/20 flex items-center justify-center overflow-hidden mb-3">
+      {/* Ripple Wave Graphic Placeholder */}
+      <div className="relative h-28 rounded-xl bg-gradient-to-b from-cyan-950/30 to-black/60 border border-cyan-500/20 flex items-center justify-center overflow-hidden mb-3">
+        {/* Pulsing Ripple Rings */}
         <div className="absolute w-20 h-20 rounded-full border border-cyan-400/40 animate-ping pointer-events-none" />
         <div className="absolute w-12 h-12 rounded-full border border-indigo-500/50 animate-pulse pointer-events-none" />
 

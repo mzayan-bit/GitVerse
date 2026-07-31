@@ -38,11 +38,33 @@ interface PanelState {
   restoreDefaultLayout: () => void;
 }
 
-const DEFAULT_PANELS: PanelInstance[] = [];
+const DEFAULT_PANELS: PanelInstance[] = [
+  {
+    id: 'panel-explorer',
+    type: 'explorer',
+    dockPosition: 'left',
+    isPinned: true,
+    isMinimized: false,
+    zIndex: 1,
+    bounds: { x: 80, y: 80, w: 320, h: 500 },
+  },
+  {
+    id: 'panel-inspector',
+    type: 'inspector',
+    dockPosition: 'right',
+    isPinned: true,
+    isMinimized: false,
+    zIndex: 2,
+    bounds: { x: 800, y: 80, w: 360, h: 520 },
+  },
+];
 
 export const usePanelStore = create<PanelState>((set, get) => ({
   panels: DEFAULT_PANELS,
-  activeDockTab: {},
+  activeDockTab: {
+    left: 'panel-explorer',
+    right: 'panel-inspector',
+  },
   highestZIndex: 10,
 
   openPanel: (type, requestedDock) => {

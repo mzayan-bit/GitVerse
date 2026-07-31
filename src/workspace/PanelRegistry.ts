@@ -15,8 +15,7 @@ export type PanelType =
   | 'graphics'
   | 'marketplace'
   | 'demo'
-  | 'release'
-  | 'settings';
+  | 'release';
 
 export interface PanelMetadata {
   type: PanelType;
@@ -28,14 +27,6 @@ export interface PanelMetadata {
 }
 
 export const PANEL_REGISTRY: Record<PanelType, PanelMetadata> = {
-  settings: {
-    type: 'settings',
-    title: 'Platform Settings & Preferences',
-    iconName: 'Settings',
-    defaultDock: 'right',
-    defaultWidth: 400,
-    defaultHeight: 560,
-  },
   release: {
     type: 'release',
     title: 'GitVerse v1.0 Release Center',

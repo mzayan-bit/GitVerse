@@ -55,9 +55,10 @@ export function Star({ config }: StarProps) {
       */}
       <pointLight
         color={config.color}
-        intensity={config.emission * 100}
-        distance={5000}
+        intensity={config.emission * 1000} // High intensity for physically correct lighting
+        distance={10000}
         decay={2}
+        castShadow
       />
     </group>
   );
