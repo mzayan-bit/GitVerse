@@ -216,8 +216,8 @@ export function UnifiedCameraSystem() {
     }
 
     // ── Smooth exponential interpolation ──────────────────────────────
-    const posAlpha = 1 - Math.pow(0.001, delta * 3.0);
-    const targetAlpha = 1 - Math.pow(0.001, delta * 4.0);
+    const posAlpha = 1 - Math.pow(0.0001, delta * 12.0);
+    const targetAlpha = 1 - Math.pow(0.0001, delta * 12.0);
 
     smoothPos.current.lerp(state.goalPosition, posAlpha);
     smoothTarget.current.lerp(state.goalTarget, targetAlpha);

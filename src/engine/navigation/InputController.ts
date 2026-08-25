@@ -71,7 +71,10 @@ export class InputController {
   }
 
   private onWheel(e: WheelEvent): void {
-    this.wheelDelta += e.deltaY;
+    let delta = e.deltaY;
+    if (e.deltaMode === 1) delta *= 16;
+    else if (e.deltaMode === 2) delta *= 100;
+    this.wheelDelta += delta;
   }
 
   public getMovementVector(speedMultiplier: number = 1): THREE.Vector3 {

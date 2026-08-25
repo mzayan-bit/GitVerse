@@ -1,11 +1,12 @@
-import { Search, Sparkles, User } from 'lucide-react';
+import { Search, Sparkles, User, Download } from 'lucide-react';
 import { WorkspaceModeController } from '@/workspace/WorkspaceModeController';
 
 interface TopNavBarProps {
   onOpenSearch?: () => void;
+  onOpenImport?: () => void;
 }
 
-export function TopNavBar({ onOpenSearch }: TopNavBarProps) {
+export function TopNavBar({ onOpenSearch, onOpenImport }: TopNavBarProps) {
   const modeController = WorkspaceModeController.getInstance();
   const activeModeInfo = modeController.getActiveModeInfo();
 
@@ -46,8 +47,19 @@ export function TopNavBar({ onOpenSearch }: TopNavBarProps) {
         </kbd>
       </button>
 
-      {/* Right: User Avatar */}
+      {/* Right: Import GitHub Repos & User Avatar */}
       <div className="flex items-center gap-3">
+        {onOpenImport && (
+          <button
+            onClick={onOpenImport}
+            className="flex items-center gap-1.5 px-3 py-1 text-xs font-semibold text-purple-300 bg-purple-600/20 hover:bg-purple-600/30 border border-purple-500/40 rounded-xl transition-all shadow-[0_0_12px_rgba(139,92,246,0.3)]"
+            title="Import Repositories from GitHub"
+          >
+            <Download className="w-3.5 h-3.5 text-purple-400" />
+            <span>Import Repos</span>
+          </button>
+        )}
+
         <div
           className="w-7 h-7 rounded-full bg-gradient-to-tr from-purple-500 to-indigo-600 p-0.5 cursor-pointer hover:scale-105 transition-transform"
           title="User Profile"

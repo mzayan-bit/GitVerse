@@ -6,15 +6,18 @@ import { LeftSidebar } from '@/components/layout/LeftSidebar';
 import { RightDrawer } from '@/components/layout/RightDrawer';
 import { SpotlightOverlay } from '@/demo/onboarding/SpotlightOverlay';
 import { PresentationBar } from '@/demo/onboarding/PresentationBar';
+import { ZoomControlsWidget } from '@/components/layout/ZoomControlsWidget';
 
 interface WorkspaceLayoutProps {
   children: React.ReactNode;
   onOpenSearch?: () => void;
+  onOpenImport?: () => void;
 }
 
 export function WorkspaceLayout({
   children,
   onOpenSearch,
+  onOpenImport,
 }: WorkspaceLayoutProps) {
   const panels = usePanelStore((s) => s.panels);
   const activeDockTab = usePanelStore((s) => s.activeDockTab);
@@ -31,7 +34,7 @@ export function WorkspaceLayout({
   return (
     <div className="relative w-full h-full overflow-hidden select-none font-sans bg-[#0B0F17]">
       {/* Zone 1: Top Navigation Bar */}
-      <TopNavBar onOpenSearch={onOpenSearch} />
+      <TopNavBar onOpenSearch={onOpenSearch} onOpenImport={onOpenImport} />
 
       {/* Zone 2: Left Icon Rail Navigation */}
       <LeftSidebar onOpenPanel={(pType) => openPanel(pType as PanelType)} />
@@ -97,6 +100,9 @@ export function WorkspaceLayout({
       {/* Guided Tour & Keynote Overlays */}
       <SpotlightOverlay />
       <PresentationBar />
+
+      {/* 3D Viewport Quick Zoom Controls */}
+      <ZoomControlsWidget />
     </div>
   );
 }

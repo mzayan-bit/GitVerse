@@ -28,9 +28,14 @@ import { PresentationModeController } from '@/demo/onboarding/PresentationModeCo
 export interface CommandPaletteProps {
   isOpen: boolean;
   onClose: () => void;
+  onOpenImport?: () => void;
 }
 
-export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
+export function CommandPalette({
+  isOpen,
+  onClose,
+  onOpenImport,
+}: CommandPaletteProps) {
   const [query, setQuery] = useState('');
   const [selectedIndex, setSelectedIndex] = useState(0);
 
@@ -44,6 +49,15 @@ export function CommandPalette({ isOpen, onClose }: CommandPaletteProps) {
   };
 
   const defaultCommands = [
+    {
+      id: 'cmd-import-repos',
+      category: 'GitHub Integration',
+      title: 'Import Repositories from GitHub Account / Org',
+      icon: <Rocket className="w-4 h-4 text-purple-400" />,
+      action: () => {
+        if (onOpenImport) onOpenImport();
+      },
+    },
     {
       id: 'cmd-mode-explore',
       category: 'Workspace Modes',

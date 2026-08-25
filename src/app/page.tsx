@@ -115,7 +115,10 @@ export default function Home() {
   return (
     <main className="relative h-screen w-full overflow-hidden bg-[#0B0F17] selection:bg-purple-500/30">
       <MotionProvider>
-        <WorkspaceLayout onOpenSearch={() => setShowSearch(true)}>
+        <WorkspaceLayout
+          onOpenSearch={() => setShowSearch(true)}
+          onOpenImport={handleEnter}
+        >
           {/* 3D Viewport Hero Canvas */}
           <div className="absolute inset-0 z-0 pointer-events-auto">
             <GitVerseCanvas />
@@ -196,6 +199,7 @@ export default function Home() {
           <CommandPalette
             isOpen={showSearch}
             onClose={() => setShowSearch(false)}
+            onOpenImport={handleEnter}
           />
 
           {/* Navigation & Movement Tutorial Modal */}

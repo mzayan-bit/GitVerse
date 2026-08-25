@@ -3,8 +3,6 @@ import { MovementPresetConfig } from './MovementPresets';
 
 export class OrbitController {
   private spherical = new THREE.Spherical();
-  private zoomVelocity = 0;
-  private dampingFactor = 0.88;
 
   public updateOrbit(
     position: THREE.Vector3,
@@ -27,18 +25,15 @@ export class OrbitController {
       );
     }
 
-    // Apply smooth inertia zoom from mouse wheel
+    // Apply fast, responsive & smooth percentage-based zoom
     if (Math.abs(wheelDelta) > 0.01) {
-      this.zoomVelocity += wheelDelta * preset.trackpadSensitivity * 0.05;
-    }
-
-    if (Math.abs(this.zoomVelocity) > 0.0001) {
-      this.spherical.radius *= 1 + this.zoomVelocity;
+      const zoomFactor =
+        Math.sign(wheelDelta) * Math.min(Math.abs(wheelDelta) * 0.0012, 0.2);
+      this.spherical.radius *= 1 + zoomFactor;
       this.spherical.radius = Math.max(
         10,
-        Math.min(5000, this.spherical.radius)
+        Math.min(15000, this.spherical.radius)
       );
-      this.zoomVelocity *= this.dampingFactor;
     }
 
     const nextOffset = new THREE.Vector3().setFromSpherical(this.spherical);
