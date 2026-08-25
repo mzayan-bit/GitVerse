@@ -23,7 +23,8 @@ export class InputController {
     window.addEventListener('pointerdown', this.onPointerDownBound);
     window.addEventListener('pointermove', this.onPointerMoveBound);
     window.addEventListener('pointerup', this.onPointerUpBound);
-    window.addEventListener('wheel', this.onWheelBound, { passive: true });
+    // Use passive: false to allow e.preventDefault() to block browser native page zoom
+    window.addEventListener('wheel', this.onWheelBound, { passive: false });
 
     this.listenersAttached = true;
   }
@@ -71,9 +72,24 @@ export class InputController {
   }
 
   private onWheel(e: WheelEvent): void {
+    const target = e.target as HTMLElement;
+    const isOverCanvas =
+      target?.tagName === 'CANVAS' || target?.closest('#canvas-wrapper');
+
+    // Prevent native browser web page zoom / page scroll when wheeling over 3D scene or pinch gesturing
+    if (isOverCanvas || e.ctrlKey || e.metaKey) {
+      e.preventDefault();
+    }
+
     let delta = e.deltaY;
-    if (e.deltaMode === 1) delta *= 16;
-    else if (e.deltaMode === 2) delta *= 100;
+    if (e.ctrlKey) {
+      // Trackpad pinch-to-zoom on macOS
+      delta *= 4;
+    } else if (e.deltaMode === 1) {
+      delta *= 16;
+    } else if (e.deltaMode === 2) {
+      delta *= 100;
+    }
     this.wheelDelta += delta;
   }
 
@@ -90,6 +106,14 @@ export class InputController {
       move.x += 1;
     if (this.activeKeys.has('e') || this.activeKeys.has('space')) move.y += 1;
     if (this.activeKeys.has('q')) move.y -= 1;
+
+    // Keyboard zoom shortcuts (+) and (-)
+    if (this.activeKeys.has('+') || this.activeKeys.has('=')) {
+      this.wheelDelta -= 60;
+    }
+    if (this.activeKeys.has('-') || this.activeKeys.has('_')) {
+      this.wheelDelta += 60;
+    }
 
     if (move.lengthSq() > 0) {
       move.normalize().multiplyScalar(mult);
