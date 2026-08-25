@@ -1,4 +1,12 @@
-import { Plus, Minus, RotateCcw } from 'lucide-react';
+import {
+  Plus,
+  Minus,
+  RotateCcw,
+  ArrowLeft,
+  ArrowRight,
+  ArrowUp,
+  ArrowDown,
+} from 'lucide-react';
 import { useCameraRig } from '@/navigation/camera/CameraRig';
 import * as THREE from 'three';
 
@@ -41,6 +49,34 @@ export function ZoomControlsWidget() {
     });
   };
 
+  const handleRotate = (
+    e: React.MouseEvent,
+    deltaTheta: number,
+    deltaPhi: number
+  ) => {
+    e.stopPropagation();
+    e.preventDefault();
+    const state = useCameraRig.getState();
+    const currentPos = state.goalPosition.clone();
+    const target = state.goalTarget.clone();
+    const offset = currentPos.sub(target);
+    const spherical = new THREE.Spherical().setFromVector3(offset);
+
+    spherical.theta += deltaTheta;
+    spherical.phi += deltaPhi;
+    spherical.phi = Math.max(0.05, Math.min(Math.PI - 0.05, spherical.phi));
+
+    const newOffset = new THREE.Vector3().setFromSpherical(spherical);
+    const newPos = target.clone().add(newOffset);
+
+    useCameraRig.setState({
+      position: newPos.clone(),
+      goalPosition: newPos.clone(),
+      target: target.clone(),
+      goalTarget: target.clone(),
+    });
+  };
+
   const handleReset = (e: React.MouseEvent) => {
     e.stopPropagation();
     e.preventDefault();
@@ -59,6 +95,7 @@ export function ZoomControlsWidget() {
       aria-label="3D Viewport Navigation Controls"
       className="fixed bottom-6 left-20 z-50 flex items-center gap-1.5 p-1.5 rounded-2xl bg-[#0B0F17]/95 backdrop-blur-2xl border border-white/20 shadow-[0_0_30px_rgba(0,0,0,0.8)] font-sans select-none pointer-events-auto"
     >
+      {/* Zoom Controls */}
       <button
         onClick={handleZoomIn}
         type="button"
@@ -81,6 +118,50 @@ export function ZoomControlsWidget() {
 
       <div className="h-4 w-px bg-white/20 mx-0.5" />
 
+      {/* Camera Angle Rotation Controls */}
+      <button
+        onClick={(e) => handleRotate(e, -0.2, 0)}
+        type="button"
+        aria-label="Rotate Left"
+        title="Rotate Left (←)"
+        className="p-2.5 rounded-xl bg-white/10 hover:bg-purple-600/50 active:bg-purple-600 text-white transition-all cursor-pointer shadow-sm"
+      >
+        <ArrowLeft className="w-4 h-4 text-purple-300" />
+      </button>
+
+      <button
+        onClick={(e) => handleRotate(e, 0.2, 0)}
+        type="button"
+        aria-label="Rotate Right"
+        title="Rotate Right (→)"
+        className="p-2.5 rounded-xl bg-white/10 hover:bg-purple-600/50 active:bg-purple-600 text-white transition-all cursor-pointer shadow-sm"
+      >
+        <ArrowRight className="w-4 h-4 text-purple-300" />
+      </button>
+
+      <button
+        onClick={(e) => handleRotate(e, 0, -0.15)}
+        type="button"
+        aria-label="Rotate Up"
+        title="Rotate Up (↑)"
+        className="p-2.5 rounded-xl bg-white/10 hover:bg-purple-600/50 active:bg-purple-600 text-white transition-all cursor-pointer shadow-sm"
+      >
+        <ArrowUp className="w-4 h-4 text-purple-300" />
+      </button>
+
+      <button
+        onClick={(e) => handleRotate(e, 0, 0.15)}
+        type="button"
+        aria-label="Rotate Down"
+        title="Rotate Down (↓)"
+        className="p-2.5 rounded-xl bg-white/10 hover:bg-purple-600/50 active:bg-purple-600 text-white transition-all cursor-pointer shadow-sm"
+      >
+        <ArrowDown className="w-4 h-4 text-purple-300" />
+      </button>
+
+      <div className="h-4 w-px bg-white/20 mx-0.5" />
+
+      {/* Reset Camera View */}
       <button
         onClick={handleReset}
         type="button"

@@ -55,13 +55,14 @@ export class InputController {
   }
 
   private onPointerDown(e: PointerEvent): void {
-    if ((e.target as HTMLElement)?.tagName === 'CANVAS') {
+    const target = e.target as HTMLElement;
+    if (target?.tagName === 'CANVAS' || target?.closest('#canvas-wrapper')) {
       this.isPointerDown = true;
     }
   }
 
   private onPointerMove(e: PointerEvent): void {
-    if (this.isPointerDown) {
+    if (this.isPointerDown || e.buttons > 0) {
       this.pointerDelta.x += e.movementX;
       this.pointerDelta.y += e.movementY;
     }
@@ -81,6 +82,12 @@ export class InputController {
       e.preventDefault();
     }
 
+    // Handle horizontal 2-finger or 3-finger trackpad swipes for angle rotation
+    if (Math.abs(e.deltaX) > Math.abs(e.deltaY) && Math.abs(e.deltaX) > 2) {
+      this.pointerDelta.x += e.deltaX * 0.5;
+      return;
+    }
+
     let delta = e.deltaY;
     if (e.ctrlKey) {
       // Trackpad pinch-to-zoom on macOS
@@ -97,15 +104,26 @@ export class InputController {
     const move = new THREE.Vector3();
     const mult = this.isShiftPressed ? speedMultiplier * 2.5 : speedMultiplier;
 
-    if (this.activeKeys.has('w') || this.activeKeys.has('arrowup')) move.z -= 1;
-    if (this.activeKeys.has('s') || this.activeKeys.has('arrowdown'))
-      move.z += 1;
-    if (this.activeKeys.has('a') || this.activeKeys.has('arrowleft'))
-      move.x -= 1;
-    if (this.activeKeys.has('d') || this.activeKeys.has('arrowright'))
-      move.x += 1;
+    if (this.activeKeys.has('w')) move.z -= 1;
+    if (this.activeKeys.has('s')) move.z += 1;
+    if (this.activeKeys.has('a')) move.x -= 1;
+    if (this.activeKeys.has('d')) move.x += 1;
     if (this.activeKeys.has('e') || this.activeKeys.has('space')) move.y += 1;
     if (this.activeKeys.has('q')) move.y -= 1;
+
+    // Arrow keys for fast camera angle rotation
+    if (this.activeKeys.has('arrowleft')) {
+      this.pointerDelta.x += 8;
+    }
+    if (this.activeKeys.has('arrowright')) {
+      this.pointerDelta.x -= 8;
+    }
+    if (this.activeKeys.has('arrowup')) {
+      this.pointerDelta.y += 8;
+    }
+    if (this.activeKeys.has('arrowdown')) {
+      this.pointerDelta.y -= 8;
+    }
 
     // Keyboard zoom shortcuts (+) and (-)
     if (this.activeKeys.has('+') || this.activeKeys.has('=')) {

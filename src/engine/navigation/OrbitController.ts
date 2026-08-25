@@ -15,10 +15,10 @@ export class OrbitController {
     const offset = position.clone().sub(target);
     this.spherical.setFromVector3(offset);
 
-    // Apply rotation from pointer drag
+    // Apply rotation from pointer drag / 3-finger slide / trackpad swipe
     if (pointerDelta.lengthSq() > 0) {
-      this.spherical.theta -= pointerDelta.x * preset.mouseSensitivity * 1.5;
-      this.spherical.phi -= pointerDelta.y * preset.mouseSensitivity * 1.5;
+      this.spherical.theta -= pointerDelta.x * preset.mouseSensitivity * 3.5;
+      this.spherical.phi -= pointerDelta.y * preset.mouseSensitivity * 3.5;
       this.spherical.phi = Math.max(
         0.05,
         Math.min(Math.PI - 0.05, this.spherical.phi)
